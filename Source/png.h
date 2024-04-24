@@ -386,10 +386,7 @@
  * version 1.0.1 it's    xxyyzz, where x=major, y=minor, z=release */
 #define PNG_LIBPNG_VER 10216 /* 1.2.16 */
 
-#ifndef PNG_VERSION_INFO_ONLY
-/* include the compression library's header */
 #include "zlib.h"
-#endif
 
 /* include all user configurable info, including optional assembler routines */
 #include "pngconf.h"
@@ -408,8 +405,6 @@
  */
 
 #define PNG_LIBPNG_BUILD_TYPE (PNG_LIBPNG_BUILD_BASE_TYPE)
-
-#ifndef PNG_VERSION_INFO_ONLY
 
 /* Inhibit C++ name-mangling for libpng functions but not for system calls. */
 #ifdef __cplusplus
@@ -2753,6 +2748,5 @@ PNG_EXTERN void png_read_push_finish_row PNGARG((png_structp png_ptr));
 }
 #endif
 
-#endif /* PNG_VERSION_INFO_ONLY */
 /* do not put anything past this line */
 #endif /* PNG_H */

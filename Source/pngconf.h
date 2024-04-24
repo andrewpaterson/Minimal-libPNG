@@ -19,8 +19,6 @@
 
 #define PNG_1_2_X
 
-#ifndef PNG_VERSION_INFO_ONLY
-
 /* End of material added to libpng-1.2.8 */
 
 /* This is the size of the compression buffer, and thus the size of
@@ -843,8 +841,5 @@ typedef z_stream*   png_zstreamp;
 
 #endif /* PNG_INTERNAL */
 #endif /* PNG_READ_SUPPORTED */
-
-/* Added at libpng-1.2.8 */
-#endif /* PNG_VERSION_INFO_ONLY */
 
 #endif /* PNGCONF_H */
