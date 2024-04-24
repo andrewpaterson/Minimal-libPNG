@@ -137,35 +137,6 @@ const char * zError(err)
 }
 
 
-#ifdef SYS16BIT
-
-#ifdef M_I86
-/* Microsoft C in 16-bit mode */
-
-#  define MY_ZCALLOC
-
-#if (!defined(_MSC_VER) || (_MSC_VER <= 600))
-#  define _halloc  halloc
-#  define _hfree   hfree
-#endif
-
-void * zcalloc (void * opaque, unsigned items, unsigned size)
-{
-    if (opaque) opaque = 0; /* to make compiler happy */
-    return _halloc((int32_t)items, size);
-}
-
-void  zcfree (void * opaque, void * ptr)
-{
-    if (opaque) opaque = 0; /* to make compiler happy */
-    _hfree(ptr);
-}
-
-#endif /* M_I86 */
-
-#endif /* SYS16BIT */
-
-
 #ifndef MY_ZCALLOC /* Any system without a special alloc function */
 
 #ifndef STDC

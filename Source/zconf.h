@@ -10,70 +10,23 @@
 #include "stdint.h"
 
 
-#if defined(_WINDOWS) && !defined(WINDOWS)
-#  define WINDOWS
-#endif
-#if defined(_WIN32) || defined(__WIN32__)
-#  ifndef WIN32
-#    define WIN32
-#  endif
-#endif
-#if (defined(OS2) || defined(WINDOWS)) && !defined(WIN32)
-#  if !defined(__GNUC__) && !defined(__FLAT__) && !defined(__386__)
-#    ifndef SYS16BIT
-#      define SYS16BIT
-#    endif
-#  endif
-#endif
-
 /*
  * Compile with -DMAXSEG_64K if the alloc function cannot allocate more
  * than 64k bytes at a time (needed on systems with 16-bit int).
  */
-#ifdef SYS16BIT
-#  define MAXSEG_64K
-#endif
+//#define MAXSEG_64K
 
-#ifdef __STDC_VERSION__
-#  ifndef STDC
-#    define STDC
-#  endif
-#  if __STDC_VERSION__ >= 199901L
-#    ifndef STDC99
-#      define STDC99
-#    endif
-#  endif
-#endif
-#if !defined(STDC) && (defined(__STDC__) || defined(__cplusplus))
-#  define STDC
-#endif
-#if !defined(STDC) && (defined(__GNUC__))
-#  define STDC
-#endif
-#if !defined(STDC) && (defined(WINDOWS) || defined(WIN32))
-#  define STDC
-#endif
-#if !defined(STDC) && (defined(OS2) || defined(__HOS_AIX__))
-#  define STDC
-#endif
+#define STDC
 
-/* Maximum value for memLevel in deflateInit2 */
-#ifndef MAX_MEM_LEVEL
-#  ifdef MAXSEG_64K
-#    define MAX_MEM_LEVEL 8
-#  else
-#    define MAX_MEM_LEVEL 9
-#  endif
-#endif
+#define MAX_MEM_LEVEL 8
+
 
 /* Maximum value for windowBits in deflateInit2 and inflateInit2.
  * WARNING: reducing MAX_WBITS makes minigzip unable to extract .gz files
  * created by gzip. (Files created by minigzip can still be extracted by
  * gzip.)
  */
-#ifndef MAX_WBITS
-#  define MAX_WBITS   15 /* 32K LZ77 window */
-#endif
+#define MAX_WBITS   15 /* 32K LZ77 window */
 
 /* The memory requirements for deflate are (in bytes):
             (1 << (windowBits+2)) +  (1 << (memLevel+9))
