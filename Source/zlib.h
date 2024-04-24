@@ -81,7 +81,7 @@ typedef void   (*free_func)  (void* opaque, void *address);
 struct internal_state;
 
 typedef struct z_stream_s {
-    uint8_t     *next_in;  /* next input byte */
+    uint8_t*       next_in;  /* next input byte */
     uint32_t    avail_in;  /* number of bytes available at next_in */
     uint32_t    total_in;  /* total nb of input bytes read so far */
 
@@ -89,16 +89,16 @@ typedef struct z_stream_s {
     uint32_t    avail_out; /* remaining free space at next_out */
     uint32_t    total_out; /* total nb of bytes output so far */
 
-    char        *msg;      /* last error message, NULL if no error */
+    char*       msg;      /* last error message, NULL if no error */
     struct internal_state *state; /* not visible by applications */
 
     alloc_func  zalloc;  /* used to allocate the internal state */
     free_func   zfree;   /* used to free the internal state */
-    void *      opaque;  /* private data object passed to zalloc and zfree */
+    void*      opaque;  /* private data object passed to zalloc and zfree */
 
-    int     data_type;  /* best guess about the data type: binary or text */
-    uint32_t   adler;      /* adler32 value of the uncompressed data */
-    uint32_t   reserved;   /* reserved for future use */
+    int         data_type;  /* best guess about the data type: binary or text */
+    uint32_t    adler;      /* adler32 value of the uncompressed data */
+    uint32_t    reserved;   /* reserved for future use */
 } z_stream;
 
 typedef z_stream *z_streamp;
@@ -108,19 +108,19 @@ typedef z_stream *z_streamp;
   for more details on the meanings of these fields.
 */
 typedef struct gz_header_s {
-    int     text;       /* true if compressed data believed to be text */
-    uint32_t   time;       /* modification time */
-    int     xflags;     /* extra flags (not used when writing a gzip file) */
-    int     os;         /* operating system */
-    uint8_t   *extra;     /* pointer to extra field or Z_NULL if none */
+    int         text;       /* true if compressed data believed to be text */
+    uint32_t    time;       /* modification time */
+    int         xflags;     /* extra flags (not used when writing a gzip file) */
+    int         os;         /* operating system */
+    uint8_t*    extra;     /* pointer to extra field or Z_NULL if none */
     uint32_t    extra_len;  /* extra field length (valid if extra != Z_NULL) */
     uint32_t    extra_max;  /* space at extra (only when reading header) */
-    uint8_t   *name;      /* pointer to zero-terminated file name or Z_NULL */
+    uint8_t*    name;      /* pointer to zero-terminated file name or Z_NULL */
     uint32_t    name_max;   /* space at name (only when reading header) */
-    uint8_t   *comment;   /* pointer to zero-terminated comment or Z_NULL */
+    uint8_t*    comment;   /* pointer to zero-terminated comment or Z_NULL */
     uint32_t    comm_max;   /* space at comment (only when reading header) */
-    int     hcrc;       /* true if there was or will be a header crc */
-    int     done;       /* true when done reading gzip header (not used
+    int         hcrc;       /* true if there was or will be a header crc */
+    int         done;       /* true when done reading gzip header (not used
                            when writing a gzip file) */
 } gz_header;
 
@@ -240,7 +240,7 @@ extern int deflateInit z_streamp strm, int level);
 */
 
 
-extern int deflate (z_streamp strm, int flush);
+extern int deflate(z_streamp strm, int flush);
 /*
     deflate compresses as much data as possible, and stops when the input
   buffer becomes empty or the output buffer becomes full. It may introduce some
@@ -1296,31 +1296,25 @@ extern uint32_t crc32_combine (uint32_t crc1, uint32_t crc2, int32_t len2);
 /* deflateInit and inflateInit are macros to allow checking the zlib version
  * and the compiler's view of z_stream:
  */
-extern int deflateInit_ (z_streamp strm, int level, const char *version, int stream_size);
-extern int inflateInit_ (z_streamp strm, const char *version, int stream_size);
-extern int deflateInit2_ (z_streamp strm, int  level, int  method, int windowBits, int memLevel, int strategy, const char *version, int stream_size);
-extern int inflateInit2_ (z_streamp strm, int  windowBits, const char *version, int stream_size);
-extern int inflateBackInit_ (z_streamp strm, int windowBits, uint8_t *window, const char *version, int stream_size);
-#define deflateInit(strm, level) \
-        deflateInit_((strm), (level),       ZLIB_VERSION, sizeof(z_stream))
-#define inflateInit(strm) \
-        inflateInit_((strm),                ZLIB_VERSION, sizeof(z_stream))
-#define deflateInit2(strm, level, method, windowBits, memLevel, strategy) \
-        deflateInit2_((strm),(level),(method),(windowBits),(memLevel),\
-                      (strategy),           ZLIB_VERSION, sizeof(z_stream))
-#define inflateInit2(strm, windowBits) \
-        inflateInit2_((strm), (windowBits), ZLIB_VERSION, sizeof(z_stream))
-#define inflateBackInit(strm, windowBits, window) \
-        inflateBackInit_((strm), (windowBits), (window), \
-        ZLIB_VERSION, sizeof(z_stream))
+extern int deflateInit_(z_streamp strm, int level, const char *version, int stream_size);
+extern int inflateInit_(z_streamp strm, const char *version, int stream_size);
+extern int deflateInit2_(z_streamp strm, int  level, int  method, int windowBits, int memLevel, int strategy, const char *version, int stream_size);
+extern int inflateInit2_(z_streamp strm, int  windowBits, const char *version, int stream_size);
+extern int inflateBackInit_(z_streamp strm, int windowBits, uint8_t *window, const char *version, int stream_size);
+#define deflateInit(strm, level) deflateInit_((strm), (level), ZLIB_VERSION, sizeof(z_stream))
+#define inflateInit(strm) inflateInit_((strm), ZLIB_VERSION, sizeof(z_stream))
+#define deflateInit2(strm, level, method, windowBits, memLevel, strategy) deflateInit2_((strm),(level),(method),(windowBits),(memLevel), (strategy), ZLIB_VERSION, sizeof(z_stream))
+#define inflateInit2(strm, windowBits) inflateInit2_((strm), (windowBits), ZLIB_VERSION, sizeof(z_stream))
+#define inflateBackInit(strm, windowBits, window) inflateBackInit_((strm), (windowBits), (window), ZLIB_VERSION, sizeof(z_stream))
 
 
-extern const char   * zError           (int);
-extern int            inflateSyncPoint (z_streamp z);
-extern const uint32_t * get_crc_table    (void);
+extern const char*      zError           (int);
+extern int              inflateSyncPoint (z_streamp z);
+extern const uint32_t*  get_crc_table    (void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __ZLIB_H__ */
+#endif // __ZLIB_H__
+

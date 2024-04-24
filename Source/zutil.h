@@ -28,12 +28,6 @@
 #endif
 /* compile with -Dlocal if your debugger can't find static symbols */
 
-typedef uint8_t  uch;
-typedef uch  uchf;
-typedef uint16_t ush;
-typedef ush  ushf;
-typedef uint32_t  ulg;
-
 extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 /* (size given to avoid silly warnings with Visual C++) */
 

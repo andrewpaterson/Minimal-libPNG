@@ -49,23 +49,6 @@
  * to define NO_MEMCPY in zutil.h.  If you don't need the mixed model,
  * just define  to be empty.
  */
-#ifdef SYS16BIT
-#  if defined(M_I86SM) || defined(M_I86MM)
-     /* MSC small or medium model */
-#    define SMALL_MEDIUM
-#    ifdef _MSC_VER
-#      define  _far
-#    else
-#      define  far
-#    endif
-#  endif
-#  if (defined(__SMALL__) || defined(__MEDIUM__))
-     /* Turbo C small or medium model */
-#    define SMALL_MEDIUM
-#    define  far
-#  endif
-#endif
-
 
 #ifndef SEEK_SET
 #  define SEEK_SET        0       /* Seek from beginning of file.  */
@@ -74,3 +57,4 @@
 #endif
 
 #endif // __ZCONF_H__
+

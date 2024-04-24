@@ -118,10 +118,10 @@ local  void check_match (deflate_state *s, IPos start, IPos match, int length);
  * found for specific files.
  */
 typedef struct config_s {
-   ush good_length; /* reduce lazy search above this match length */
-   ush max_lazy;    /* do not perform lazy search above this match length */
-   ush nice_length; /* quit search above this match length */
-   ush max_chain;
+   uint16_t good_length; /* reduce lazy search above this match length */
+   uint16_t max_lazy;    /* do not perform lazy search above this match length */
+   uint16_t nice_length; /* quit search above this match length */
+   uint16_t max_chain;
    compress_func func;
 } config;
 
@@ -225,7 +225,7 @@ int deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     int wrap = 1;
     static const char my_version[] = ZLIB_VERSION;
 
-    ushf *overlay;
+    uint16_t *overlay;
     /* We overlay pending_buf and d_buf+l_buf. This works since the average
      * output size for (length,distance) codes is <= 24 bits.
      */
@@ -287,9 +287,9 @@ int deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 
     s->lit_bufsize = 1 << (memLevel + 6); /* 16K elements by default */
 
-    overlay = (ushf *) ZALLOC(strm, s->lit_bufsize, sizeof(ush)+2);
-    s->pending_buf = (uchf *) overlay;
-    s->pending_buf_size = (ulg)s->lit_bufsize * (sizeof(ush)+2L);
+    overlay = (uint16_t *) ZALLOC(strm, s->lit_bufsize, sizeof(uint16_t)+2);
+    s->pending_buf = (uint8_t *) overlay;
+    s->pending_buf_size = (uint32_t)s->lit_bufsize * (sizeof(uint16_t)+2L);
 
     if (s->window == Z_NULL || s->prev == Z_NULL || s->head == Z_NULL ||
         s->pending_buf == Z_NULL) {
@@ -298,8 +298,8 @@ int deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
         deflateEnd (strm);
         return Z_MEM_ERROR;
     }
-    s->d_buf = overlay + s->lit_bufsize/sizeof(ush);
-    s->l_buf = s->pending_buf + (1+sizeof(ush))*s->lit_bufsize;
+    s->d_buf = overlay + s->lit_bufsize/sizeof(uint16_t);
+    s->l_buf = s->pending_buf + (1+sizeof(uint16_t))*s->lit_bufsize;
 
     s->level = level;
     s->strategy = strategy;
@@ -405,7 +405,7 @@ int deflatePrime (strm, bits, value)
 {
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
     strm->state->bi_valid = bits;
-    strm->state->bi_buf = (ush)(value & ((1 << bits) - 1));
+    strm->state->bi_buf = (uint16_t)(value & ((1 << bits) - 1));
     return Z_OK;
 }
 
@@ -546,7 +546,7 @@ local void flush_pending(strm)
 }
 
 /* ========================================================================= */
-int deflate (strm, flush)
+int deflate(strm, flush)
     z_streamp strm;
     int flush;
 {
@@ -897,7 +897,7 @@ int deflateCopy (dest, source)
 #else
     deflate_state *ds;
     deflate_state *ss;
-    ushf *overlay;
+    uint16_t *overlay;
 
 
     if (source == Z_NULL || dest == Z_NULL || source->state == Z_NULL) {
@@ -917,8 +917,8 @@ int deflateCopy (dest, source)
     ds->window = (uint8_t *) ZALLOC(dest, ds->w_size, 2*sizeof(uint8_t));
     ds->prev   = (Posf *)  ZALLOC(dest, ds->w_size, sizeof(Pos));
     ds->head   = (Posf *)  ZALLOC(dest, ds->hash_size, sizeof(Pos));
-    overlay = (ushf *) ZALLOC(dest, ds->lit_bufsize, sizeof(ush)+2);
-    ds->pending_buf = (uchf *) overlay;
+    overlay = (uint16_t *) ZALLOC(dest, ds->lit_bufsize, sizeof(uint16_t)+2);
+    ds->pending_buf = (uint8_t *) overlay;
 
     if (ds->window == Z_NULL || ds->prev == Z_NULL || ds->head == Z_NULL ||
         ds->pending_buf == Z_NULL) {
@@ -932,8 +932,8 @@ int deflateCopy (dest, source)
     zmemcpy(ds->pending_buf, ss->pending_buf, (uint32_t)ds->pending_buf_size);
 
     ds->pending_out = ds->pending_buf + (ss->pending_out - ss->pending_buf);
-    ds->d_buf = overlay + ds->lit_bufsize/sizeof(ush);
-    ds->l_buf = ds->pending_buf + (1+sizeof(ush))*ds->lit_bufsize;
+    ds->d_buf = overlay + ds->lit_bufsize/sizeof(uint16_t);
+    ds->l_buf = ds->pending_buf + (1+sizeof(uint16_t))*ds->lit_bufsize;
 
     ds->l_desc.dyn_tree = ds->dyn_ltree;
     ds->d_desc.dyn_tree = ds->dyn_dtree;
@@ -983,7 +983,7 @@ local int read_buf(strm, buf, size)
 local void lm_init (s)
     deflate_state *s;
 {
-    s->window_size = (ulg)2L*s->w_size;
+    s->window_size = (uint32_t)2L*s->w_size;
 
     CLEAR_HASH(s);
 
@@ -1044,8 +1044,8 @@ local uint32_t longest_match(s, cur_match)
      * Try with and without -DUNALIGNED_OK to check.
      */
     register uint8_t *strend = s->window + s->strstart + MAX_MATCH - 1;
-    register ush scan_start = *(ushf*)scan;
-    register ush scan_end   = *(ushf*)(scan+best_len-1);
+    register uint16_t scan_start = *(uint16_t*)scan;
+    register uint16_t scan_end   = *(uint16_t*)(scan+best_len-1);
 #else
     register uint8_t *strend = s->window + s->strstart + MAX_MATCH;
     register uint8_t scan_end1  = scan[best_len-1];
@@ -1066,7 +1066,7 @@ local uint32_t longest_match(s, cur_match)
      */
     if ((uint32_t)nice_match > s->lookahead) nice_match = s->lookahead;
 
-    Assert((ulg)s->strstart <= s->window_size-MIN_LOOKAHEAD, "need lookahead");
+    Assert((uint32_t)s->strstart <= s->window_size-MIN_LOOKAHEAD, "need lookahead");
 
     do {
         Assert(cur_match < s->strstart, "no future");
@@ -1084,8 +1084,8 @@ local uint32_t longest_match(s, cur_match)
         /* This code assumes sizeof(uint16_t) == 2. Do not use
          * UNALIGNED_OK if your compiler uses a different size.
          */
-        if (*(ushf*)(match+best_len-1) != scan_end ||
-            *(ushf*)match != scan_start) continue;
+        if (*(uint16_t*)(match+best_len-1) != scan_end ||
+            *(uint16_t*)match != scan_start) continue;
 
         /* It is not necessary to compare scan[2] and match[2] since they are
          * always equal when the other bytes match, given that the hash keys
@@ -1099,10 +1099,10 @@ local uint32_t longest_match(s, cur_match)
         Assert(scan[2] == match[2], "scan[2]?");
         scan++, match++;
         do {
-        } while (*(ushf*)(scan+=2) == *(ushf*)(match+=2) &&
-                 *(ushf*)(scan+=2) == *(ushf*)(match+=2) &&
-                 *(ushf*)(scan+=2) == *(ushf*)(match+=2) &&
-                 *(ushf*)(scan+=2) == *(ushf*)(match+=2) &&
+        } while (*(uint16_t*)(scan+=2) == *(uint16_t*)(match+=2) &&
+                 *(uint16_t*)(scan+=2) == *(uint16_t*)(match+=2) &&
+                 *(uint16_t*)(scan+=2) == *(uint16_t*)(match+=2) &&
+                 *(uint16_t*)(scan+=2) == *(uint16_t*)(match+=2) &&
                  scan < strend);
         /* The funny "do {}" generates better code on most compilers */
 
@@ -1151,7 +1151,7 @@ local uint32_t longest_match(s, cur_match)
             best_len = len;
             if (len >= nice_match) break;
 #ifdef UNALIGNED_OK
-            scan_end = *(ushf*)(scan+best_len-1);
+            scan_end = *(uint16_t*)(scan+best_len-1);
 #else
             scan_end1  = scan[best_len-1];
             scan_end   = scan[best_len];
@@ -1183,7 +1183,7 @@ local uint32_t longest_match_fast(s, cur_match)
      */
     Assert(s->hash_bits >= 8 && MAX_MATCH == 258, "Code too clever");
 
-    Assert((ulg)s->strstart <= s->window_size-MIN_LOOKAHEAD, "need lookahead");
+    Assert((uint32_t)s->strstart <= s->window_size-MIN_LOOKAHEAD, "need lookahead");
 
     Assert(cur_match < s->strstart, "no future");
 
@@ -1269,7 +1269,7 @@ local void fill_window(s)
     uint32_t wsize = s->w_size;
 
     do {
-        more = (unsigned)(s->window_size -(ulg)s->lookahead -(ulg)s->strstart);
+        more = (unsigned)(s->window_size -(uint32_t)s->lookahead -(uint32_t)s->strstart);
 
         /* Deal with !@#$% 64K limit: */
         if (sizeof(int) <= 2) {
@@ -1362,7 +1362,7 @@ local void fill_window(s)
    _tr_flush_block(s, (s->block_start >= 0L ? \
                    (char *)&s->window[(unsigned)s->block_start] : \
                    (char *)Z_NULL), \
-                (ulg)((int32_t)s->strstart - s->block_start), \
+                (uint32_t)((int32_t)s->strstart - s->block_start), \
                 (eof)); \
    s->block_start = s->strstart; \
    flush_pending(s->strm); \
@@ -1391,8 +1391,8 @@ local block_state deflate_stored(s, flush)
     /* Stored blocks are limited to 0xffff bytes, pending_buf is limited
      * to pending_buf_size, and each stored block has a 5 byte header:
      */
-    ulg max_block_size = 0xffff;
-    ulg max_start;
+    uint32_t max_block_size = 0xffff;
+    uint32_t max_start;
 
     if (max_block_size > s->pending_buf_size - 5) {
         max_block_size = s->pending_buf_size - 5;
@@ -1418,7 +1418,7 @@ local block_state deflate_stored(s, flush)
 
         /* Emit a stored block if pending_buf will be full: */
         max_start = s->block_start + max_block_size;
-        if (s->strstart == 0 || (ulg)s->strstart >= max_start) {
+        if (s->strstart == 0 || (uint32_t)s->strstart >= max_start) {
             /* strstart == 0 is possible when wraparound on 16-bit machine */
             s->lookahead = (uint32_t)(s->strstart - max_start);
             s->strstart = (uint32_t)max_start;
