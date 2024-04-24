@@ -26,7 +26,7 @@
    buffering if you are using unbuffered reads.  This should never be asked
    to read more then 64K on a 16 bit machine. */
 void /* PRIVATE */
-png_read_data(png_structp png_ptr, png_bytep data, size_t length)
+png_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    png_debug1(4,"reading %d bytes\n", (int)length);
    if (png_ptr->read_data_fn != NULL)
@@ -42,7 +42,7 @@ png_read_data(png_structp png_ptr, png_bytep data, size_t length)
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
 void PNGAPI
-png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
+png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    size_t check;
 
@@ -51,7 +51,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
     * instead of an int, which is what fread() actually returns.
     */
    check = (size_t)fread(data, (size_t)1, length,
-      (png_FILE_p)png_ptr->io_ptr);
+      (FILE*)png_ptr->io_ptr);
 
    if (check != length)
       png_error(png_ptr, "Read Error");
@@ -66,17 +66,17 @@ png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
 #define MIN(a,b) (a <= b ? a : b)
 
 static void PNGAPI
-png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
+png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    int check;
    uint8_t *n_data;
-   png_FILE_p io_ptr;
+   FILE* io_ptr;
 
    if(png_ptr == NULL) return;
    /* Check if data really is near. If so, use usual code. */
    n_data = (uint8_t *)CVT_PTR_NOCHECK(data);
-   io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
-   if ((png_bytep)n_data == data)
+   io_ptr = (FILE*)CVT_PTR(png_ptr->io_ptr);
+   if ((uint8_t*)n_data == data)
    {
       check = fread(n_data, 1, length, io_ptr);
    }
@@ -120,7 +120,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
                   To exit and output any fatal error messages the new write
                   function should call png_error(png_ptr, "Error msg"). */
 void PNGAPI
-png_set_read_fn(png_structp png_ptr, png_voidp io_ptr,
+png_set_read_fn(png_structp png_ptr, void* io_ptr,
    png_rw_ptr read_data_fn)
 {
    if(png_ptr == NULL) return;

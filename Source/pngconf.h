@@ -212,12 +212,6 @@
  * If you do not want to use const, define PNG_NO_CONST here.
  */
 
-#ifndef PNG_NO_CONST
-#  define PNG_CONST const
-#else
-#  define PNG_CONST
-#endif
-
 /* The following defines give you the ability to remove code from the
  * library that you will not be using.  I wish I could figure out how to
  * automate this, but I can't do that without making it seriously hard
@@ -637,21 +631,6 @@
    to fixed-point with a multiple of 100,000, e.g., int_gamma */
 typedef int32_t png_fixed_point;
 
-/* Add typedefs for pointers */
-typedef void            *png_voidp;
-typedef uint8_t        *png_bytep;
-typedef uint32_t     *png_uint_32p;
-typedef int32_t      *png_int_32p;
-typedef uint16_t     *png_uint_16p;
-typedef int16_t      *png_int_16p;
-typedef PNG_CONST char  *png_const_charp;
-typedef char            *png_charp;
-typedef png_fixed_point *png_fixed_point_p;
-
-#ifndef PNG_NO_STDIO
-typedef FILE                * png_FILE_p;
-#endif
-
 #ifdef PNG_FLOATING_POINT_SUPPORTED
 typedef double          *png_doublep;
 #endif
@@ -662,7 +641,7 @@ typedef uint32_t     **png_uint_32pp;
 typedef int32_t      **png_int_32pp;
 typedef uint16_t     **png_uint_16pp;
 typedef int16_t      **png_int_16pp;
-typedef PNG_CONST char  **png_const_charpp;
+typedef const char  **png_const_charpp;
 typedef char            **png_charpp;
 typedef png_fixed_point **png_fixed_point_pp;
 #ifdef PNG_FLOATING_POINT_SUPPORTED

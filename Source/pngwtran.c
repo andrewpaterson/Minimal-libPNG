@@ -84,7 +84,7 @@ png_do_write_transformations(png_structp png_ptr)
  * should be 1 (this only happens on grayscale and paletted images).
  */
 void /* PRIVATE */
-png_do_pack(png_row_infop row_info, png_bytep row, uint32_t bit_depth)
+png_do_pack(png_row_infop row_info, uint8_t* row, uint32_t bit_depth)
 {
    png_debug(1, "in png_do_pack\n");
    if (row_info->bit_depth == 8 &&
@@ -97,7 +97,8 @@ png_do_pack(png_row_infop row_info, png_bytep row, uint32_t bit_depth)
       {
          case 1:
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             int mask, v;
             uint32_t i;
             uint32_t row_width = row_info->width;
@@ -128,7 +129,8 @@ png_do_pack(png_row_infop row_info, png_bytep row, uint32_t bit_depth)
          }
          case 2:
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             int shift, v;
             uint32_t i;
             uint32_t row_width = row_info->width;
@@ -160,7 +162,8 @@ png_do_pack(png_row_infop row_info, png_bytep row, uint32_t bit_depth)
          }
          case 4:
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             int shift, v;
             uint32_t i;
             uint32_t row_width = row_info->width;
@@ -210,7 +213,7 @@ png_do_pack(png_row_infop row_info, png_bytep row, uint32_t bit_depth)
  * data to 0 to 15.
  */
 void /* PRIVATE */
-png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
+png_do_shift(png_row_infop row_info, uint8_t* row, png_color_8p bit_depth)
 {
    png_debug(1, "in png_do_shift\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -251,7 +254,7 @@ png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
       /* with low row depths, could only be grayscale, so one channel */
       if (row_info->bit_depth < 8)
       {
-         png_bytep bp = row;
+         uint8_t* bp = row;
          uint32_t i;
          uint8_t mask;
          uint32_t row_bytes = row_info->rowbytes;
@@ -281,7 +284,7 @@ png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
       }
       else if (row_info->bit_depth == 8)
       {
-         png_bytep bp = row;
+         uint8_t* bp = row;
          uint32_t i;
          uint32_t istop = channels * row_info->width;
 
@@ -305,7 +308,7 @@ png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
       }
       else
       {
-         png_bytep bp;
+         uint8_t* bp;
          uint32_t i;
          uint32_t istop = channels * row_info->width;
 
@@ -334,7 +337,7 @@ png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
 
 #if defined(PNG_WRITE_SWAP_ALPHA_SUPPORTED)
 void /* PRIVATE */
-png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
+png_do_write_swap_alpha(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_write_swap_alpha\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -346,7 +349,8 @@ png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
          /* This converts from ARGB to RGBA */
          if (row_info->bit_depth == 8)
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
             for (i = 0, sp = dp = row; i < row_width; i++)
@@ -361,7 +365,8 @@ png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
          /* This converts from AARRGGBB to RRGGBBAA */
          else
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
 
@@ -386,7 +391,8 @@ png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
          /* This converts from AG to GA */
          if (row_info->bit_depth == 8)
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
 
@@ -400,7 +406,8 @@ png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
          /* This converts from AAGG to GGAA */
          else
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
 
@@ -422,7 +429,7 @@ png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
 
 #if defined(PNG_WRITE_INVERT_ALPHA_SUPPORTED)
 void /* PRIVATE */
-png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
+png_do_write_invert_alpha(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_write_invert_alpha\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -434,7 +441,8 @@ png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
          /* This inverts the alpha channel in RGBA */
          if (row_info->bit_depth == 8)
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
             for (i = 0, sp = dp = row; i < row_width; i++)
@@ -451,7 +459,8 @@ png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
          /* This inverts the alpha channel in RRGGBBAA */
          else
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
 
@@ -476,7 +485,8 @@ png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
          /* This inverts the alpha channel in GA */
          if (row_info->bit_depth == 8)
          {
-            png_bytep sp, dp;
+            uint8_t* sp; 
+            uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
 
@@ -489,7 +499,7 @@ png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
          /* This inverts the alpha channel in GGAA */
          else
          {
-            png_bytep sp, dp;
+            uint8_t* sp; uint8_t* dp;
             uint32_t i;
             uint32_t row_width = row_info->width;
 

@@ -11,8 +11,8 @@ bool LoadPNG(char* file_name)
 	png_structp			png_ptr;
 	png_infop			info_ptr;
 	unsigned int		sig_read = 0;
-	FILE* fp;
-	png_bytep* row_pointers;
+	FILE*				fp;
+	uint8_t**			row_pointers;
 	int					iWidth;
 	int					iHeight;
 

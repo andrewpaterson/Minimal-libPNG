@@ -26,7 +26,7 @@
    to write more than 64K on a 16 bit machine.  */
 
 void /* PRIVATE */
-png_write_data(png_structp png_ptr, png_bytep data, size_t length)
+png_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    if (png_ptr->write_data_fn != NULL )
       (*(png_ptr->write_data_fn))(png_ptr, data, length);
@@ -41,12 +41,12 @@ png_write_data(png_structp png_ptr, png_bytep data, size_t length)
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
 void PNGAPI
-png_default_write_data(png_structp png_ptr, png_bytep data, size_t length)
+png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    uint32_t check;
 
    if(png_ptr == NULL) return;
-   check = (uint32_t)fwrite(data, 1, length, (png_FILE_p)(png_ptr->io_ptr));
+   check = (uint32_t)fwrite(data, 1, length, (FILE*)(png_ptr->io_ptr));
    if (check != length)
       png_error(png_ptr, "Write Error");
 }
@@ -60,17 +60,17 @@ png_default_write_data(png_structp png_ptr, png_bytep data, size_t length)
 #define MIN(a,b) (a <= b ? a : b)
 
 void PNGAPI
-png_default_write_data(png_structp png_ptr, png_bytep data, size_t length)
+png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    uint32_t check;
-   uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "png_bytep" */
-   png_FILE_p io_ptr;
+   uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "uint8_t*" */
+   FILE* io_ptr;
 
    if(png_ptr == NULL) return;
    /* Check if data really is near. If so, use usual code. */
    near_data = (uint8_t *)CVT_PTR_NOCHECK(data);
-   io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
-   if ((png_bytep)near_data == data)
+   io_ptr = (FILE*)CVT_PTR(png_ptr->io_ptr);
+   if ((uint8_t*)near_data == data)
    {
       check = fwrite(near_data, 1, length, io_ptr);
    }
@@ -116,9 +116,9 @@ png_flush(png_structp png_ptr)
 void PNGAPI
 png_default_flush(png_structp png_ptr)
 {
-   png_FILE_p io_ptr;
+   FILE* io_ptr;
    if(png_ptr == NULL) return;
-   io_ptr = (png_FILE_p)CVT_PTR((png_ptr->io_ptr));
+   io_ptr = (FILE*)CVT_PTR((png_ptr->io_ptr));
    if (io_ptr != NULL)
       fflush(io_ptr);
 }
@@ -148,7 +148,7 @@ png_default_flush(png_structp png_ptr)
                    time, output_flush_fn will be ignored, although it must be
                    supplied for compatibility. */
 void PNGAPI
-png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
+png_set_write_fn(png_structp png_ptr, void* io_ptr,
    png_rw_ptr write_data_fn, png_flush_ptr output_flush_fn)
 {
    if(png_ptr == NULL) return;
@@ -187,7 +187,7 @@ png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
 
 #if defined(USE_FAR_KEYWORD)
 #if defined(_MSC_VER)
-void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
+void *png_far_to_near(png_structp png_ptr,void* ptr, int check)
 {
    void *near_ptr;
    void *far_ptr;
@@ -199,7 +199,7 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    return(near_ptr);
 }
 #  else
-void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
+void *png_far_to_near(png_structp png_ptr,void* ptr, int check)
 {
    void *near_ptr;
    void *far_ptr;

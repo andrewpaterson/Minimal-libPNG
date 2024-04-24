@@ -18,8 +18,7 @@
 
 /* Create a PNG structure for reading, and allocate any memory needed. */
 png_structp PNGAPI
-png_create_read_struct(png_const_charp user_png_ver, png_voidp error_ptr,
-   png_error_ptr error_fn, png_error_ptr warn_fn)
+png_create_read_struct(const char* user_png_ver, void* error_ptr,png_error_ptr error_fn, png_error_ptr warn_fn)
 {
 
 #ifdef PNG_USER_MEM_SUPPORTED
@@ -29,8 +28,7 @@ png_create_read_struct(png_const_charp user_png_ver, png_voidp error_ptr,
 
 /* Alternate create PNG structure for reading, and allocate any memory needed. */
 png_structp PNGAPI
-png_create_read_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
-   png_error_ptr error_fn, png_error_ptr warn_fn, png_voidp mem_ptr,
+png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr error_fn, png_error_ptr warn_fn, void* mem_ptr,
    png_malloc_ptr malloc_fn, png_free_ptr free_fn)
 {
 #endif /* PNG_USER_MEM_SUPPORTED */
@@ -48,7 +46,7 @@ png_create_read_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
    png_debug(1, "in png_create_read_struct\n");
 #ifdef PNG_USER_MEM_SUPPORTED
    png_ptr = (png_structp)png_create_struct_2(PNG_STRUCT_PNG,
-      (png_malloc_ptr)malloc_fn, (png_voidp)mem_ptr);
+      (png_malloc_ptr)malloc_fn, (void*)mem_ptr);
 #else
    png_ptr = (png_structp)png_create_struct(PNG_STRUCT_PNG);
 #endif
@@ -77,10 +75,10 @@ png_create_read_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       png_free(png_ptr, png_ptr->zbuf);
       png_ptr->zbuf=NULL;
 #ifdef PNG_USER_MEM_SUPPORTED
-      png_destroy_struct_2((png_voidp)png_ptr,
-         (png_free_ptr)free_fn, (png_voidp)mem_ptr);
+      png_destroy_struct_2((void*)png_ptr,
+         (png_free_ptr)free_fn, (void*)mem_ptr);
 #else
-      png_destroy_struct((png_voidp)png_ptr);
+      png_destroy_struct((void*)png_ptr);
 #endif
       return (NULL);
    }
@@ -135,7 +133,7 @@ png_create_read_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
 
    /* initialize zbuf - compression buffer */
    png_ptr->zbuf_size = PNG_ZBUF_SIZE;
-   png_ptr->zbuf = (png_bytep)png_malloc(png_ptr,
+   png_ptr->zbuf = (uint8_t*)png_malloc(png_ptr,
      (uint32_t)png_ptr->zbuf_size);
    png_ptr->zstream.zalloc = png_zalloc;
    png_ptr->zstream.zfree = png_zfree;
@@ -184,8 +182,7 @@ png_read_init(png_structp png_ptr)
 }
 
 void PNGAPI
-png_read_init_2(png_structp png_ptr, png_const_charp user_png_ver,
-   size_t png_struct_size, size_t png_info_size)
+png_read_init_2(png_structp png_ptr, const char* user_png_ver, size_t png_struct_size, size_t png_info_size)
 {
    /* We only come here via pre-1.0.12-compiled applications */
    if(png_ptr == NULL) return;
@@ -229,8 +226,7 @@ png_read_init_2(png_structp png_ptr, png_const_charp user_png_ver,
 #endif /* PNG_1_0_X || PNG_1_2_X */
 
 void PNGAPI
-png_read_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
-   size_t png_struct_size)
+png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struct_size)
 {
 #ifdef PNG_SETJMP_SUPPORTED
    jmp_buf tmp_jmp;  /* to save current jump buffer */
@@ -287,7 +283,7 @@ png_read_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
 
    /* initialize zbuf - compression buffer */
    png_ptr->zbuf_size = PNG_ZBUF_SIZE;
-   png_ptr->zbuf = (png_bytep)png_malloc(png_ptr,
+   png_ptr->zbuf = (uint8_t*)png_malloc(png_ptr,
      (uint32_t)png_ptr->zbuf_size);
    png_ptr->zstream.zalloc = png_zalloc;
    png_ptr->zstream.zfree = png_zfree;
@@ -387,7 +383,7 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
       /* This should be a binary subdivision search or a hash for
        * matching the chunk name rather than a linear search.
        */
-      if (!png_memcmp(png_ptr->chunk_name, (png_bytep)png_IDAT, 4))
+      if (!png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
         if(png_ptr->mode & PNG_AFTER_IDAT)
           png_ptr->mode |= PNG_HAVE_CHUNK_AFTER_IDAT;
 
@@ -494,7 +490,7 @@ png_start_read_image(png_structp png_ptr)
 
 #ifndef PNG_NO_SEQUENTIAL_READ_SUPPORTED
 void PNGAPI
-png_read_row(png_structp png_ptr, png_bytep row, png_bytep dsp_row)
+png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
 {
 #ifdef PNG_USE_LOCAL_ARRAYS
    PNG_IDAT;
@@ -753,22 +749,22 @@ png_read_rows(png_structp png_ptr, png_bytepp row,
    if (rp != NULL && dp != NULL)
       for (i = 0; i < num_rows; i++)
       {
-         png_bytep rptr = *rp++;
-         png_bytep dptr = *dp++;
+         uint8_t* rptr = *rp++;
+         uint8_t* dptr = *dp++;
 
          png_read_row(png_ptr, rptr, dptr);
       }
    else if(rp != NULL)
       for (i = 0; i < num_rows; i++)
       {
-         png_bytep rptr = *rp;
+         uint8_t* rptr = *rp;
          png_read_row(png_ptr, rptr, png_bytep_NULL);
          rp++;
       }
    else if(dp != NULL)
       for (i = 0; i < num_rows; i++)
       {
-         png_bytep dptr = *dp;
+         uint8_t* dptr = *dp;
          png_read_row(png_ptr, png_bytep_NULL, dptr);
          dp++;
       }
@@ -943,7 +939,7 @@ png_destroy_read_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr,
    png_infop info_ptr = NULL, end_info_ptr = NULL;
 #ifdef PNG_USER_MEM_SUPPORTED
    png_free_ptr free_fn;
-   png_voidp mem_ptr;
+   void* mem_ptr;
 #endif
 
    png_debug(1, "in png_destroy_read_struct\n");
@@ -966,10 +962,10 @@ png_destroy_read_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr,
    if (info_ptr != NULL)
    {
 #ifdef PNG_USER_MEM_SUPPORTED
-      png_destroy_struct_2((png_voidp)info_ptr, (png_free_ptr)free_fn,
-          (png_voidp)mem_ptr);
+      png_destroy_struct_2((void*)info_ptr, (png_free_ptr)free_fn,
+          (void*)mem_ptr);
 #else
-      png_destroy_struct((png_voidp)info_ptr);
+      png_destroy_struct((void*)info_ptr);
 #endif
       *info_ptr_ptr = NULL;
    }
@@ -980,10 +976,10 @@ png_destroy_read_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr,
       png_free_data(png_ptr, end_info_ptr, PNG_FREE_TEXT, -1);
 #endif
 #ifdef PNG_USER_MEM_SUPPORTED
-      png_destroy_struct_2((png_voidp)end_info_ptr, (png_free_ptr)free_fn,
-         (png_voidp)mem_ptr);
+      png_destroy_struct_2((void*)end_info_ptr, (png_free_ptr)free_fn,
+         (void*)mem_ptr);
 #else
-      png_destroy_struct((png_voidp)end_info_ptr);
+      png_destroy_struct((void*)end_info_ptr);
 #endif
       *end_info_ptr_ptr = NULL;
    }
@@ -991,10 +987,10 @@ png_destroy_read_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr,
    if (png_ptr != NULL)
    {
 #ifdef PNG_USER_MEM_SUPPORTED
-      png_destroy_struct_2((png_voidp)png_ptr, (png_free_ptr)free_fn,
-          (png_voidp)mem_ptr);
+      png_destroy_struct_2((void*)png_ptr, (png_free_ptr)free_fn,
+          (void*)mem_ptr);
 #else
-      png_destroy_struct((png_voidp)png_ptr);
+      png_destroy_struct((void*)png_ptr);
 #endif
       *png_ptr_ptr = NULL;
    }
@@ -1009,7 +1005,7 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
 #endif
    png_error_ptr error_fn;
    png_error_ptr warning_fn;
-   png_voidp error_ptr;
+   void* error_ptr;
 #ifdef PNG_USER_MEM_SUPPORTED
    png_free_ptr free_fn;
 #endif
@@ -1120,7 +1116,7 @@ png_read_png(png_structp png_ptr, png_infop info_ptr,
     * PNG file before the first IDAT (image data chunk).
     */
    png_read_info(png_ptr, info_ptr);
-   if (info_ptr->height > PNG_UINT_32_MAX/sizeof(png_bytep))
+   if (info_ptr->height > PNG_UINT_32_MAX/sizeof(uint8_t*))
       png_error(png_ptr,"Image is too high to process with png_read_png()");
 
    /* -------------- image transformations start here ------------------- */
@@ -1215,13 +1211,13 @@ png_read_png(png_structp png_ptr, png_infop info_ptr,
    if(info_ptr->row_pointers == NULL)
    {
       info_ptr->row_pointers = (png_bytepp)png_malloc(png_ptr,
-         info_ptr->height * sizeof(png_bytep));
+         info_ptr->height * sizeof(uint8_t*));
 #ifdef PNG_FREE_ME_SUPPORTED
       info_ptr->free_me |= PNG_FREE_ROWS;
 #endif
       for (row = 0; row < (int)info_ptr->height; row++)
       {
-         info_ptr->row_pointers[row] = (png_bytep)png_malloc(png_ptr,
+         info_ptr->row_pointers[row] = (uint8_t*)png_malloc(png_ptr,
             png_get_rowbytes(png_ptr, info_ptr));
       }
    }

@@ -109,7 +109,7 @@ png_set_sig_bytes(png_structp png_ptr, int num_bytes)
  * PNG signature (this is the same behaviour as strcmp, memcmp, etc).
  */
 int PNGAPI
-png_sig_cmp(png_bytep sig, size_t start, size_t num_to_check)
+png_sig_cmp(uint8_t* sig, size_t start, size_t num_to_check)
 {
    uint8_t png_signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
    if (num_to_check > 8)
@@ -132,7 +132,7 @@ png_sig_cmp(png_bytep sig, size_t start, size_t num_to_check)
  * future - use png_sig_cmp().  Returns true (nonzero) if the file is a PNG.
  */
 int PNGAPI
-png_check_sig(png_bytep sig, int num)
+png_check_sig(uint8_t* sig, int num)
 {
   return ((int)!png_sig_cmp(sig, (size_t)0, (size_t)num));
 }
@@ -148,7 +148,7 @@ voidpf /* private */
 #endif
 png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
 {
-   png_voidp ptr;
+   void* ptr;
    png_structp p=(png_structp)png_ptr;
    uint32_t save_flags=p->flags;
    uint32_t num_bytes;
@@ -162,7 +162,7 @@ png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
    num_bytes = (uint32_t)items * size;
 
    p->flags|=PNG_FLAG_MALLOC_NULL_MEM_OK;
-   ptr = (png_voidp)png_malloc((png_structp)png_ptr, num_bytes);
+   ptr = (void*)png_malloc((png_structp)png_ptr, num_bytes);
    p->flags=save_flags;
 
 #if defined(PNG_1_0_X) && !defined(PNG_NO_ZALLOC_ZERO)
@@ -172,7 +172,7 @@ png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
    if (num_bytes > (uint32_t)0x8000L)
    {
       png_memset(ptr, 0, (size_t)0x8000L);
-      png_memset((png_bytep)ptr + (size_t)0x8000L, 0,
+      png_memset((uint8_t*)ptr + (size_t)0x8000L, 0,
          (size_t)(num_bytes - (uint32_t)0x8000L));
    }
    else
@@ -191,7 +191,7 @@ void /* private */
 #endif
 png_zfree(voidpf png_ptr, voidpf ptr)
 {
-   png_free((png_structp)png_ptr, (png_voidp)ptr);
+   png_free((png_structp)png_ptr, (void*)ptr);
 }
 
 /* Reset the CRC variable to 32 bits of 1's.  Care must be taken
@@ -209,7 +209,7 @@ png_reset_crc(png_structp png_ptr)
  * trouble of calculating it.
  */
 void /* PRIVATE */
-png_calculate_crc(png_structp png_ptr, png_bytep ptr, size_t length)
+png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length)
 {
    int need_crc = 1;
 
@@ -274,10 +274,10 @@ png_destroy_info_struct(png_structp png_ptr, png_infopp info_ptr_ptr)
       png_info_destroy(png_ptr, info_ptr);
 
 #ifdef PNG_USER_MEM_SUPPORTED
-      png_destroy_struct_2((png_voidp)info_ptr, png_ptr->free_fn,
+      png_destroy_struct_2((void*)info_ptr, png_ptr->free_fn,
           png_ptr->mem_ptr);
 #else
-      png_destroy_struct((png_voidp)info_ptr);
+      png_destroy_struct((void*)info_ptr);
 #endif
       *info_ptr_ptr = NULL;
    }
@@ -547,7 +547,7 @@ png_info_destroy(png_structp png_ptr, png_infop info_ptr)
  * functions.  The application should free any memory associated with this
  * pointer before png_write_destroy() or png_read_destroy() are called.
  */
-png_voidp PNGAPI
+void* PNGAPI
 png_get_io_ptr(png_structp png_ptr)
 {
    if(png_ptr == NULL) return (NULL);
@@ -563,34 +563,34 @@ png_get_io_ptr(png_structp png_ptr)
  * necessarily available.
  */
 void PNGAPI
-png_init_io(png_structp png_ptr, png_FILE_p fp)
+png_init_io(png_structp png_ptr, FILE* fp)
 {
    png_debug(1, "in png_init_io\n");
    if(png_ptr == NULL) return;
-   png_ptr->io_ptr = (png_voidp)fp;
+   png_ptr->io_ptr = (void*)fp;
 }
 #endif
 
 
 #if 0
 /* Signature string for a PNG file. */
-png_bytep PNGAPI
+uint8_t* PNGAPI
 png_sig_bytes(void)
 {
-   return ((png_bytep)"\211\120\116\107\015\012\032\012");
+   return ((uint8_t*)"\211\120\116\107\015\012\032\012");
 }
 #endif
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */
 
-png_charp PNGAPI
+char* PNGAPI
 png_get_copyright(png_structp png_ptr)
 {
    if (&png_ptr != NULL)  /* silence compiler warning about unused png_ptr */
-   return ((png_charp) "\n libpng version 1.2.16 - January 31, 2007\n\
+   return ((char*) "\n libpng version 1.2.16 - January 31, 2007\n\
    Copyright (c) 1998-2007 Glenn Randers-Pehrson\n\
    Copyright (c) 1996-1997 Andreas Dilger\n\
    Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.\n");
-   return ((png_charp) "");
+   return ((char*) "");
 }
 
 /* The following return the library version as a short string in the
@@ -601,41 +601,41 @@ png_get_copyright(png_structp png_ptr)
  * png_get_header_ver().  Due to the version_nn_nn_nn typedef guard,
  * it is guaranteed that png.c uses the correct version of png.h.
  */
-png_charp PNGAPI
+char* PNGAPI
 png_get_libpng_ver(png_structp png_ptr)
 {
    /* Version of *.c files used when building libpng */
    if (&png_ptr != NULL)  /* silence compiler warning about unused png_ptr */
-      return ((png_charp) PNG_LIBPNG_VER_STRING);
-   return ((png_charp) "");
+      return ((char*) PNG_LIBPNG_VER_STRING);
+   return ((char*) "");
 }
 
-png_charp PNGAPI
+char* PNGAPI
 png_get_header_ver(png_structp png_ptr)
 {
    /* Version of *.h files used when building libpng */
    if (&png_ptr != NULL)  /* silence compiler warning about unused png_ptr */
-      return ((png_charp) PNG_LIBPNG_VER_STRING);
-   return ((png_charp) "");
+      return ((char*) PNG_LIBPNG_VER_STRING);
+   return ((char*) "");
 }
 
-png_charp PNGAPI
+char* PNGAPI
 png_get_header_version(png_structp png_ptr)
 {
    /* Returns longer string containing both version and date */
    if (&png_ptr != NULL)  /* silence compiler warning about unused png_ptr */
-      return ((png_charp) PNG_HEADER_VERSION_STRING);
-   return ((png_charp) "");
+      return ((char*) PNG_HEADER_VERSION_STRING);
+   return ((char*) "");
 }
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 #ifdef PNG_HANDLE_AS_UNKNOWN_SUPPORTED
 int PNGAPI
-png_handle_as_unknown(png_structp png_ptr, png_bytep chunk_name)
+png_handle_as_unknown(png_structp png_ptr, uint8_t* chunk_name)
 {
    /* check chunk_name and return "keep" value if it's on the list, else 0 */
    int i;
-   png_bytep p;
+   uint8_t* p;
    if((png_ptr == NULL && chunk_name == NULL) || png_ptr->num_chunk_list <= 0)
       return 0;
    p=png_ptr->chunk_list+png_ptr->num_chunk_list*5-5;

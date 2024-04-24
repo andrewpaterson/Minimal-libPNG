@@ -23,7 +23,7 @@
 
 void 
 png_process_data(png_structp png_ptr, png_infop info_ptr,
-   png_bytep buffer, size_t buffer_size)
+   uint8_t* buffer, size_t buffer_size)
 {
    if(png_ptr == NULL) return;
    png_push_restore_buffer(png_ptr, buffer, buffer_size);
@@ -162,7 +162,7 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
       png_ptr->mode |= PNG_HAVE_CHUNK_HEADER;
    }
 
-   if (!png_memcmp(png_ptr->chunk_name, (png_bytep)png_IDAT, 4))
+   if (!png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
      if(png_ptr->mode & PNG_AFTER_IDAT)
         png_ptr->mode |= PNG_HAVE_CHUNK_AFTER_IDAT;
 
@@ -219,7 +219,7 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
       }
       png_handle_PLTE(png_ptr, info_ptr, png_ptr->push_length);
    }
-   else if (!png_memcmp(png_ptr->chunk_name, (png_bytep)png_IDAT, 4))
+   else if (!png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
    {
       /* If we reach an IDAT chunk, this means we have read all of the
        * header chunks, and we can start reading the image (or if this
@@ -395,9 +395,9 @@ png_push_crc_finish(png_structp png_ptr)
 }
 
 void 
-png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, size_t length)
+png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length)
 {
-   png_bytep ptr;
+   uint8_t* ptr;
 
    if(png_ptr == NULL) return;
    ptr = buffer;
@@ -441,8 +441,8 @@ png_push_save_buffer(png_structp png_ptr)
       if (png_ptr->save_buffer_ptr != png_ptr->save_buffer)
       {
          size_t i,istop;
-         png_bytep sp;
-         png_bytep dp;
+         uint8_t* sp;
+         uint8_t* dp;
 
          istop = png_ptr->save_buffer_size;
          for (i = 0, sp = png_ptr->save_buffer_ptr, dp = png_ptr->save_buffer;
@@ -456,7 +456,7 @@ png_push_save_buffer(png_structp png_ptr)
       png_ptr->save_buffer_max)
    {
       size_t new_max;
-      png_bytep old_buffer;
+      uint8_t* old_buffer;
 
       if (png_ptr->save_buffer_size > PNG_SIZE_MAX -
          (png_ptr->current_buffer_size + 256))
@@ -465,7 +465,7 @@ png_push_save_buffer(png_structp png_ptr)
       }
       new_max = png_ptr->save_buffer_size + png_ptr->current_buffer_size + 256;
       old_buffer = png_ptr->save_buffer;
-      png_ptr->save_buffer = (png_bytep)png_malloc(png_ptr,
+      png_ptr->save_buffer = (uint8_t*)png_malloc(png_ptr,
          (uint32_t)new_max);
       png_memcpy(png_ptr->save_buffer, old_buffer, png_ptr->save_buffer_size);
       png_free(png_ptr, old_buffer);
@@ -483,7 +483,7 @@ png_push_save_buffer(png_structp png_ptr)
 }
 
 void /* PRIVATE */
-png_push_restore_buffer(png_structp png_ptr, png_bytep buffer,
+png_push_restore_buffer(png_structp png_ptr, uint8_t* buffer,
    size_t buffer_length)
 {
    png_ptr->current_buffer = buffer;
@@ -514,7 +514,7 @@ png_push_read_IDAT(png_structp png_ptr)
       png_crc_read(png_ptr, png_ptr->chunk_name, 4);
       png_ptr->mode |= PNG_HAVE_CHUNK_HEADER;
 
-      if (png_memcmp(png_ptr->chunk_name, (png_bytep)png_IDAT, 4))
+      if (png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
       {
          png_ptr->process_mode = PNG_READ_CHUNK_MODE;
          if (!(png_ptr->flags & PNG_FLAG_ZLIB_FINISHED))
@@ -584,7 +584,7 @@ png_push_read_IDAT(png_structp png_ptr)
 }
 
 void /* PRIVATE */
-png_process_IDAT_data(png_structp png_ptr, png_bytep buffer,
+png_process_IDAT_data(png_structp png_ptr, uint8_t* buffer,
    size_t buffer_length)
 {
    int ret;
@@ -933,8 +933,8 @@ png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t
        }
 #endif
 
-       png_strcpy((png_charp)chunk.name, (png_charp)png_ptr->chunk_name);
-       chunk.data = (png_bytep)png_malloc(png_ptr, length);
+       png_strcpy((char*)chunk.name, (char*)png_ptr->chunk_name);
+       chunk.data = (uint8_t*)png_malloc(png_ptr, length);
        png_crc_read(png_ptr, chunk.data, length);
        chunk.size = length;
 #if defined(PNG_READ_USER_CHUNKS_SUPPORTED)
@@ -976,7 +976,7 @@ png_push_have_end(png_structp png_ptr, png_infop info_ptr)
 }
 
 void /* PRIVATE */
-png_push_have_row(png_structp png_ptr, png_bytep row)
+png_push_have_row(png_structp png_ptr, uint8_t* row)
 {
    if (png_ptr->row_fn != NULL)
       (*(png_ptr->row_fn))(png_ptr, row, png_ptr->row_number,
@@ -985,7 +985,7 @@ png_push_have_row(png_structp png_ptr, png_bytep row)
 
 void 
 png_progressive_combine_row (png_structp png_ptr,
-   png_bytep old_row, png_bytep new_row)
+   uint8_t* old_row, uint8_t* new_row)
 {
    if(png_ptr == NULL) return;
 #ifdef PNG_USE_LOCAL_ARRAYS
@@ -997,7 +997,7 @@ png_progressive_combine_row (png_structp png_ptr,
 }
 
 void 
-png_set_progressive_read_fn(png_structp png_ptr, png_voidp progressive_ptr,
+png_set_progressive_read_fn(png_structp png_ptr, void* progressive_ptr,
    png_progressive_info_ptr info_fn, png_progressive_row_ptr row_fn,
    png_progressive_end_ptr end_fn)
 {
@@ -1009,7 +1009,7 @@ png_set_progressive_read_fn(png_structp png_ptr, png_voidp progressive_ptr,
    png_set_read_fn(png_ptr, progressive_ptr, png_push_fill_buffer);
 }
 
-png_voidp 
+void* 
 png_get_progressive_ptr(png_structp png_ptr)
 {
    if(png_ptr == NULL) return (NULL);

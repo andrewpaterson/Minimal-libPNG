@@ -205,7 +205,7 @@ png_get_channels(png_structp png_ptr, png_infop info_ptr)
       return (0);
 }
 
-png_bytep PNGAPI
+uint8_t* PNGAPI
 png_get_signature(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -243,7 +243,7 @@ png_get_sPLT(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_hIST_SUPPORTED)
 uint32_t PNGAPI
-png_get_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p *hist)
+png_get_hIST(png_structp png_ptr, png_infop info_ptr, uint16_t* *hist)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_hIST)
       && hist != NULL)
@@ -305,9 +305,7 @@ png_get_IHDR(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_pCAL_SUPPORTED)
 uint32_t PNGAPI
-png_get_pCAL(png_structp png_ptr, png_infop info_ptr,
-   png_charp *purpose, int32_t *X0, int32_t *X1, int *type, int *nparams,
-   png_charp *units, png_charpp *params)
+png_get_pCAL(png_structp png_ptr, png_infop info_ptr, char** purpose, int32_t *X0, int32_t *X1, int *type, int *nparams, char** units, png_charpp *params)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_pCAL)
       && purpose != NULL && X0 != NULL && X1 != NULL && type != NULL &&
@@ -393,7 +391,7 @@ png_get_sBIT(png_structp png_ptr, png_infop info_ptr, png_color_8p *sig_bit)
 #if defined(PNG_tRNS_SUPPORTED)
 uint32_t PNGAPI
 png_get_tRNS(png_structp png_ptr, png_infop info_ptr,
-   png_bytep *trans, int *num_trans, png_color_16p *trans_values)
+   uint8_t* *trans, int *num_trans, png_color_16p *trans_values)
 {
    uint32_t retval = 0;
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_tRNS))
@@ -449,7 +447,7 @@ png_get_rgb_to_gray_status (png_structp png_ptr)
 #endif
 
 #if defined(PNG_USER_CHUNKS_SUPPORTED)
-png_voidp PNGAPI
+void* PNGAPI
 png_get_user_chunk_ptr(png_structp png_ptr)
 {
    return (png_ptr? png_ptr->user_chunk_ptr : NULL);

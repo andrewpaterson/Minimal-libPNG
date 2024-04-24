@@ -161,7 +161,7 @@ png_set_invert_mono(png_structp png_ptr)
 
 /* invert monochrome grayscale data */
 void /* PRIVATE */
-png_do_invert(png_row_infop row_info, png_bytep row)
+png_do_invert(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_invert\n");
   /* This test removed from libpng version 1.0.13 and 1.2.0:
@@ -173,7 +173,7 @@ png_do_invert(png_row_infop row_info, png_bytep row)
 #endif
    if (row_info->color_type == PNG_COLOR_TYPE_GRAY)
    {
-      png_bytep rp = row;
+      uint8_t* rp = row;
       uint32_t i;
       uint32_t istop = row_info->rowbytes;
 
@@ -186,7 +186,7 @@ png_do_invert(png_row_infop row_info, png_bytep row)
    else if (row_info->color_type == PNG_COLOR_TYPE_GRAY_ALPHA &&
       row_info->bit_depth == 8)
    {
-      png_bytep rp = row;
+      uint8_t* rp = row;
       uint32_t i;
       uint32_t istop = row_info->rowbytes;
 
@@ -199,7 +199,7 @@ png_do_invert(png_row_infop row_info, png_bytep row)
    else if (row_info->color_type == PNG_COLOR_TYPE_GRAY_ALPHA &&
       row_info->bit_depth == 16)
    {
-      png_bytep rp = row;
+      uint8_t* rp = row;
       uint32_t i;
       uint32_t istop = row_info->rowbytes;
 
@@ -216,7 +216,7 @@ png_do_invert(png_row_infop row_info, png_bytep row)
 #if defined(PNG_READ_SWAP_SUPPORTED) || defined(PNG_WRITE_SWAP_SUPPORTED)
 /* swaps byte order on 16 bit depth images */
 void /* PRIVATE */
-png_do_swap(png_row_infop row_info, png_bytep row)
+png_do_swap(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_swap\n");
    if (
@@ -225,7 +225,7 @@ png_do_swap(png_row_infop row_info, png_bytep row)
 #endif
        row_info->bit_depth == 16)
    {
-      png_bytep rp = row;
+      uint8_t* rp = row;
       uint32_t i;
       uint32_t istop= row_info->width * row_info->channels;
 
@@ -243,15 +243,15 @@ png_do_swap(png_row_infop row_info, png_bytep row)
     defined(PNG_READ_STRIP_ALPHA_SUPPORTED)
 /* remove filler or alpha byte(s) */
 void /* PRIVATE */
-png_do_strip_filler(png_row_infop row_info, png_bytep row, uint32_t flags)
+png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags)
 {
    png_debug(1, "in png_do_strip_filler\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
    if (row != NULL && row_info != NULL)
 #endif
    {
-      png_bytep sp=row;
-      png_bytep dp=row;
+      uint8_t* sp=row;
+      uint8_t* dp=row;
       uint32_t row_width=row_info->width;
       uint32_t i;
 
@@ -401,7 +401,7 @@ png_do_strip_filler(png_row_infop row_info, png_bytep row, uint32_t flags)
 #if defined(PNG_READ_BGR_SUPPORTED) || defined(PNG_WRITE_BGR_SUPPORTED)
 /* swaps red and blue bytes within a pixel */
 void /* PRIVATE */
-png_do_bgr(png_row_infop row_info, png_bytep row)
+png_do_bgr(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_bgr\n");
    if (
@@ -415,7 +415,7 @@ png_do_bgr(png_row_infop row_info, png_bytep row)
       {
          if (row_info->color_type == PNG_COLOR_TYPE_RGB)
          {
-            png_bytep rp;
+            uint8_t* rp;
             uint32_t i;
 
             for (i = 0, rp = row; i < row_width; i++, rp += 3)
@@ -427,7 +427,7 @@ png_do_bgr(png_row_infop row_info, png_bytep row)
          }
          else if (row_info->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
          {
-            png_bytep rp;
+            uint8_t* rp;
             uint32_t i;
 
             for (i = 0, rp = row; i < row_width; i++, rp += 4)
@@ -442,7 +442,7 @@ png_do_bgr(png_row_infop row_info, png_bytep row)
       {
          if (row_info->color_type == PNG_COLOR_TYPE_RGB)
          {
-            png_bytep rp;
+            uint8_t* rp;
             uint32_t i;
 
             for (i = 0, rp = row; i < row_width; i++, rp += 6)
@@ -457,7 +457,7 @@ png_do_bgr(png_row_infop row_info, png_bytep row)
          }
          else if (row_info->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
          {
-            png_bytep rp;
+            uint8_t* rp;
             uint32_t i;
 
             for (i = 0, rp = row; i < row_width; i++, rp += 8)
@@ -479,7 +479,7 @@ png_do_bgr(png_row_infop row_info, png_bytep row)
     defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_LEGACY_SUPPORTED)
 void PNGAPI
-png_set_user_transform_info(png_structp png_ptr, png_voidp
+png_set_user_transform_info(png_structp png_ptr, void*
    user_transform_ptr, int user_transform_depth, int user_transform_channels)
 {
    png_debug(1, "in png_set_user_transform_info\n");
@@ -501,12 +501,12 @@ png_set_user_transform_info(png_structp png_ptr, png_voidp
  * associated with this pointer before png_write_destroy and png_read_destroy
  * are called.
  */
-png_voidp PNGAPI
+void* PNGAPI
 png_get_user_transform_ptr(png_structp png_ptr)
 {
    if (png_ptr == NULL) return (NULL);
 #if defined(PNG_USER_TRANSFORM_PTR_SUPPORTED)
-   return ((png_voidp)png_ptr->user_transform_ptr);
+   return ((void*)png_ptr->user_transform_ptr);
 #endif
    return (NULL);
 }
