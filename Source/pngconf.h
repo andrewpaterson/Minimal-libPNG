@@ -579,11 +579,6 @@ typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* defined(PNG_1_2_X) */
 
-/* Do not use global arrays (helps with building DLL's)
- * They are no longer used in libpng itself, since version 1.0.5c,
- * but might be required for some pre-1.0.5c applications.
- */
-#define PNG_EXPORT_VAR(type) extern  type
 
 /* User may want to use these so they are not in PNG_INTERNAL. Any library
  * functions that are passed far data must be model independent.

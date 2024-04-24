@@ -422,18 +422,18 @@ extern "C" {
 /* Version information for C files, stored in png.c.  This had better match
  * the version above.
  */
-PNG_EXPORT_VAR (const char) png_libpng_ver[18];
+extern const char png_libpng_ver[18];
 
 /* This was removed in version 1.0.5c */
 /* Structures to facilitate easy interlacing.  See png.c for more details */
-PNG_EXPORT_VAR (const int) png_pass_start[7];
-PNG_EXPORT_VAR (const int) png_pass_inc[7];
-PNG_EXPORT_VAR (const int) png_pass_ystart[7];
-PNG_EXPORT_VAR (const int) png_pass_yinc[7];
-PNG_EXPORT_VAR (const int) png_pass_mask[7];
-PNG_EXPORT_VAR (const int) png_pass_dsp_mask[7];
+extern const int png_pass_start[7];
+extern const int png_pass_inc[7];
+extern const int png_pass_ystart[7];
+extern const int png_pass_yinc[7];
+extern const int png_pass_mask[7];
+extern const int png_pass_dsp_mask[7];
 /* This isn't currently used.  If you need it, see png.c for more details.
-PNG_EXPORT_VAR (const int) png_pass_height[7];
+extern const intpng_pass_height[7];
 */
 
 #endif /* PNG_NO_EXTERN */
@@ -2043,7 +2043,7 @@ extern void png_save_uint_16(uint8_t* buf, unsigned int i);
 /* variables declared in png.c - only it needs to define PNG_NO_EXTERN */
 #if !defined(PNG_NO_EXTERN) || defined(PNG_ALWAYS_EXTERN)
 /* place to hold the signature string for a PNG file. */
-   PNG_EXPORT_VAR (const uint8_t) png_sig[8];
+   extern const uint8_t png_sig[8];
 #endif /* PNG_NO_EXTERN */
 
 /* Constant strings for known chunk types.  If you need to add a chunk,
@@ -2072,27 +2072,27 @@ extern void png_save_uint_16(uint8_t* buf, unsigned int i);
 #define PNG_tRNS const uint8_t png_tRNS[5] = {116,  82,  78,  83, '\0'}
 #define PNG_zTXt const uint8_t png_zTXt[5] = {122,  84,  88, 116, '\0'}
 
-PNG_EXPORT_VAR (const uint8_t) png_IHDR[5];
-PNG_EXPORT_VAR (const uint8_t) png_IDAT[5];
-PNG_EXPORT_VAR (const uint8_t) png_IEND[5];
-PNG_EXPORT_VAR (const uint8_t) png_PLTE[5];
-PNG_EXPORT_VAR (const uint8_t) png_bKGD[5];
-PNG_EXPORT_VAR (const uint8_t) png_cHRM[5];
-PNG_EXPORT_VAR (const uint8_t) png_gAMA[5];
-PNG_EXPORT_VAR (const uint8_t) png_hIST[5];
-PNG_EXPORT_VAR (const uint8_t) png_iCCP[5];
-PNG_EXPORT_VAR (const uint8_t) png_iTXt[5];
-PNG_EXPORT_VAR (const uint8_t) png_oFFs[5];
-PNG_EXPORT_VAR (const uint8_t) png_pCAL[5];
-PNG_EXPORT_VAR (const uint8_t) png_sCAL[5];
-PNG_EXPORT_VAR (const uint8_t) png_pHYs[5];
-PNG_EXPORT_VAR (const uint8_t) png_sBIT[5];
-PNG_EXPORT_VAR (const uint8_t) png_sPLT[5];
-PNG_EXPORT_VAR (const uint8_t) png_sRGB[5];
-PNG_EXPORT_VAR (const uint8_t) png_tEXt[5];
-PNG_EXPORT_VAR (const uint8_t) png_tIME[5];
-PNG_EXPORT_VAR (const uint8_t) png_tRNS[5];
-PNG_EXPORT_VAR (const uint8_t) png_zTXt[5];
+extern const uint8_t png_IHDR[5];
+extern const uint8_t png_IDAT[5];
+extern const uint8_t png_IEND[5];
+extern const uint8_t png_PLTE[5];
+extern const uint8_t png_bKGD[5];
+extern const uint8_t png_cHRM[5];
+extern const uint8_t png_gAMA[5];
+extern const uint8_t png_hIST[5];
+extern const uint8_t png_iCCP[5];
+extern const uint8_t png_iTXt[5];
+extern const uint8_t png_oFFs[5];
+extern const uint8_t png_pCAL[5];
+extern const uint8_t png_sCAL[5];
+extern const uint8_t png_pHYs[5];
+extern const uint8_t png_sBIT[5];
+extern const uint8_t png_sPLT[5];
+extern const uint8_t png_sRGB[5];
+extern const uint8_t png_tEXt[5];
+extern const uint8_t png_tIME[5];
+extern const uint8_t png_tRNS[5];
+extern const uint8_t png_zTXt[5];
 
 #if defined(PNG_1_2_X)
 /* Initialize png_ptr struct for reading, and allocate any other memory.
