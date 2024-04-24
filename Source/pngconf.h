@@ -682,8 +682,8 @@ typedef z_stream*   png_zstreamp;
 #if defined(__CYGWIN__)
 #  undef
 #  define __cdecl
-#  undef PNG_IMPEXP
-#  define PNG_IMPEXP
+#  undef 
+#  define 
 #endif  
 
 /* If you define, e.g., with compiler option "-DPNGAPI=__stdcall",
@@ -699,16 +699,6 @@ typedef z_stream*   png_zstreamp;
 #  endif
 #endif
 
-#if !defined(PNG_IMPEXP) && !defined(PNG_NO_MODULEDEF)
-#  define PNG_IMPEXP
-#endif
-
-
-
-#ifndef PNG_IMPEXP
-#  define PNG_IMPEXP
-#endif
-
 #ifdef PNG_BUILDSYMS
 #  ifndef PNG_EXPORT
 #    define PNG_EXPORT(type,symbol) PNG_FUNCTION_EXPORT symbol END
@@ -721,12 +711,12 @@ typedef z_stream*   png_zstreamp;
 #endif
 
 #ifndef PNG_EXPORT
-#  define PNG_EXPORT(type,symbol) PNG_IMPEXP type symbol
+#  define PNG_EXPORT(type,symbol)  type symbol
 #endif
 
 #ifdef PNG_USE_GLOBAL_ARRAYS
 #  ifndef PNG_EXPORT_VAR
-#    define PNG_EXPORT_VAR(type) extern PNG_IMPEXP type
+#    define PNG_EXPORT_VAR(type) extern  type
 #  endif
 #endif
 
