@@ -20,7 +20,7 @@
 
 #if defined(PNG_hIST_SUPPORTED)
 void PNGAPI
-png_set_hIST(png_structp png_ptr, png_infop info_ptr, uint16_t* hist)
+png_set_hIST(png_structp png_ptr, png_info* info_ptr, uint16_t* hist)
 {
    int i;
 
@@ -62,7 +62,7 @@ png_set_hIST(png_structp png_ptr, png_infop info_ptr, uint16_t* hist)
 #endif
 
 void PNGAPI
-png_set_IHDR(png_structp png_ptr, png_infop info_ptr,
+png_set_IHDR(png_structp png_ptr, png_info* info_ptr,
    uint32_t width, uint32_t height, int bit_depth,
    int color_type, int interlace_type, int compression_type,
    int filter_type)
@@ -146,7 +146,7 @@ png_set_IHDR(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_pCAL_SUPPORTED)
 void PNGAPI
-png_set_pCAL(png_structp png_ptr, png_infop info_ptr, char* purpose, int32_t X0, int32_t X1, int type, int nparams, char* units, png_charpp params)
+png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0, int32_t X1, int type, int nparams, char* units, png_charpp params)
 {
    uint32_t length;
    int i;
@@ -213,7 +213,7 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr, char* purpose, int32_t X0,
 
 #if defined(PNG_pHYs_SUPPORTED)
 void PNGAPI
-png_set_pHYs(png_structp png_ptr, png_infop info_ptr,
+png_set_pHYs(png_structp png_ptr, png_info* info_ptr,
    uint32_t res_x, uint32_t res_y, int unit_type)
 {
    png_debug1(1, "in %s storage function\n", "pHYs");
@@ -228,7 +228,7 @@ png_set_pHYs(png_structp png_ptr, png_infop info_ptr,
 #endif
 
 void PNGAPI
-png_set_PLTE(png_structp png_ptr, png_infop info_ptr,
+png_set_PLTE(png_structp png_ptr, png_info* info_ptr,
    png_colorp palette, int num_palette)
 {
 
@@ -278,7 +278,7 @@ png_set_PLTE(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_sBIT_SUPPORTED)
 void PNGAPI
-png_set_sBIT(png_structp png_ptr, png_infop info_ptr,
+png_set_sBIT(png_structp png_ptr, png_info* info_ptr,
    png_color_8p sig_bit)
 {
    png_debug1(1, "in %s storage function\n", "sBIT");
@@ -292,7 +292,7 @@ png_set_sBIT(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_sRGB_SUPPORTED)
 void PNGAPI
-png_set_sRGB(png_structp png_ptr, png_infop info_ptr, int intent)
+png_set_sRGB(png_structp png_ptr, png_info* info_ptr, int intent)
 {
    png_debug1(1, "in %s storage function\n", "sRGB");
    if (png_ptr == NULL || info_ptr == NULL)
@@ -303,7 +303,7 @@ png_set_sRGB(png_structp png_ptr, png_infop info_ptr, int intent)
 }
 
 void PNGAPI
-png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_infop info_ptr,
+png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_info* info_ptr,
    int intent)
 {
    png_debug1(1, "in %s storage function\n", "sRGB_gAMA_and_cHRM");
@@ -316,7 +316,7 @@ png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_tRNS_SUPPORTED)
 void PNGAPI
-png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
+png_set_tRNS(png_structp png_ptr, png_info* info_ptr,
    uint8_t* trans, int num_trans, png_color_16p trans_values)
 {
    png_debug1(1, "in %s storage function\n", "tRNS");
@@ -360,7 +360,7 @@ png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
 #if defined(PNG_sPLT_SUPPORTED)
 void PNGAPI
 png_set_sPLT(png_structp png_ptr,
-             png_infop info_ptr, png_sPLT_tp entries, int nentries)
+             png_info* info_ptr, png_sPLT_tp entries, int nentries)
 {
     png_sPLT_tp np;
     int i;
@@ -410,7 +410,7 @@ png_set_sPLT(png_structp png_ptr,
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
 void PNGAPI
 png_set_unknown_chunks(png_structp png_ptr,
-   png_infop info_ptr, png_unknown_chunkp unknowns, int num_unknowns)
+   png_info* info_ptr, png_unknown_chunkp unknowns, int num_unknowns)
 {
     png_unknown_chunkp np;
     int i;
@@ -458,7 +458,7 @@ png_set_unknown_chunks(png_structp png_ptr,
 #endif
 }
 void PNGAPI
-png_set_unknown_chunk_location(png_structp png_ptr, png_infop info_ptr,
+png_set_unknown_chunk_location(png_structp png_ptr, png_info* info_ptr,
    int chunk, int location)
 {
    if(png_ptr != NULL && info_ptr != NULL && chunk >= 0 && chunk <
@@ -542,7 +542,7 @@ png_set_read_user_chunk_fn(png_structp png_ptr, void* user_chunk_ptr,
 
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
 void PNGAPI
-png_set_rows(png_structp png_ptr, png_infop info_ptr, png_bytepp row_pointers)
+png_set_rows(png_structp png_ptr, png_info* info_ptr, png_bytepp row_pointers)
 {
    png_debug1(1, "in %s storage function\n", "rows");
 
@@ -573,7 +573,7 @@ png_set_compression_buffer_size(png_structp png_ptr, uint32_t size)
 #endif
 
 void PNGAPI
-png_set_invalid(png_structp png_ptr, png_infop info_ptr, int mask)
+png_set_invalid(png_structp png_ptr, png_info* info_ptr, int mask)
 {
    if (png_ptr && info_ptr)
       info_ptr->valid &= ~(mask);

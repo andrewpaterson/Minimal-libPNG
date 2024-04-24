@@ -702,7 +702,7 @@ png_init_read_transformations(png_structp png_ptr)
  * assuming the transformations result in valid PNG data.
  */
 void /* PRIVATE */
-png_read_transform_info(png_structp png_ptr, png_infop info_ptr)
+png_read_transform_info(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_read_transform_info\n");
 #if defined(PNG_READ_EXPAND_SUPPORTED)

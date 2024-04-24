@@ -23,7 +23,7 @@ png_create_read_struct(const char* user_png_ver, void* error_ptr,png_error_ptr e
 
 #ifdef PNG_USER_MEM_SUPPORTED
    return (png_create_read_struct_2(user_png_ver, error_ptr, error_fn,
-      warn_fn, png_voidp_NULL, png_malloc_ptr_NULL, png_free_ptr_NULL));
+      warn_fn, (void*)NULL, (png_malloc_ptr)NULL, (png_free_ptr)NULL));
 }
 
 /* Alternate create PNG structure for reading, and allocate any memory needed. */
@@ -137,7 +137,7 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
    png_ptr->zstream.next_out = png_ptr->zbuf;
    png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
 
-   png_set_read_fn(png_ptr, png_voidp_NULL, png_rw_ptr_NULL);
+   png_set_read_fn(png_ptr, (void*)NULL, (png_rw_ptr)NULL);
 
 #ifdef PNG_SETJMP_SUPPORTED
 /* Applications that neglect to set up their own setjmp() and then encounter
@@ -281,7 +281,7 @@ png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struc
    png_ptr->zstream.next_out = png_ptr->zbuf;
    png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
 
-   png_set_read_fn(png_ptr, png_voidp_NULL, png_rw_ptr_NULL);
+   png_set_read_fn(png_ptr, (void*)NULL, (png_rw_ptr)NULL);
 }
 
 #ifndef PNG_NO_SEQUENTIAL_READ_SUPPORTED
@@ -738,14 +738,14 @@ png_read_rows(png_structp png_ptr, png_bytepp row,
       for (i = 0; i < num_rows; i++)
       {
          uint8_t* rptr = *rp;
-         png_read_row(png_ptr, rptr, png_bytep_NULL);
+         png_read_row(png_ptr, rptr, (uint8_t*)NULL);
          rp++;
       }
    else if(dp != NULL)
       for (i = 0; i < num_rows; i++)
       {
          uint8_t* dptr = *dp;
-         png_read_row(png_ptr, png_bytep_NULL, dptr);
+         png_read_row(png_ptr, (uint8_t*)NULL, dptr);
          dp++;
       }
 }
@@ -792,7 +792,7 @@ png_read_image(png_structp png_ptr, png_bytepp image)
       rp = image;
       for (i = 0; i < image_height; i++)
       {
-         png_read_row(png_ptr, *rp, png_bytep_NULL);
+         png_read_row(png_ptr, *rp, (uint8_t*)NULL);
          rp++;
       }
    }

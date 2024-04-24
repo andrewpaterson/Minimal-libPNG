@@ -22,7 +22,7 @@
 #define PNG_ERROR_MODE      8
 
 void 
-png_process_data(png_structp png_ptr, png_infop info_ptr,
+png_process_data(png_structp png_ptr, png_info* info_ptr,
    uint8_t* buffer, size_t buffer_size)
 {
    if(png_ptr == NULL) return;
@@ -38,7 +38,7 @@ png_process_data(png_structp png_ptr, png_infop info_ptr,
  * doing before we ran out of data...
  */
 void /* PRIVATE */
-png_process_some_data(png_structp png_ptr, png_infop info_ptr)
+png_process_some_data(png_structp png_ptr, png_info* info_ptr)
 {
    if(png_ptr == NULL) return;
    switch (png_ptr->process_mode)
@@ -78,7 +78,7 @@ png_process_some_data(png_structp png_ptr, png_infop info_ptr)
  * routine.
  */
 void /* PRIVATE */
-png_push_read_sig(png_structp png_ptr, png_infop info_ptr)
+png_push_read_sig(png_structp png_ptr, png_info* info_ptr)
 {
    size_t num_checked = png_ptr->sig_bytes,
              num_to_check = 8 - num_checked;
@@ -110,7 +110,7 @@ png_push_read_sig(png_structp png_ptr, png_infop info_ptr)
 }
 
 void /* PRIVATE */
-png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
+png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
 {
 #ifdef PNG_USE_LOCAL_ARRAYS
       PNG_IHDR;
@@ -687,7 +687,7 @@ png_push_process_row(png_structp png_ptr)
             {
                for (i = 0; i < 4 && png_ptr->pass == 2; i++)
                {
-                  png_push_have_row(png_ptr, png_bytep_NULL);
+                  png_push_have_row(png_ptr, (uint8_t*)NULL);
                   png_read_push_finish_row(png_ptr);
                }
             }
@@ -695,13 +695,13 @@ png_push_process_row(png_structp png_ptr)
             {
                for (i = 0; i < 2 && png_ptr->pass == 4; i++)
                {
-                  png_push_have_row(png_ptr, png_bytep_NULL);
+                  png_push_have_row(png_ptr, (uint8_t*)NULL);
                   png_read_push_finish_row(png_ptr);
                }
             }
             if (png_ptr->pass == 6 && png_ptr->height <= 4)
             {
-                png_push_have_row(png_ptr, png_bytep_NULL);
+                png_push_have_row(png_ptr, (uint8_t*)NULL);
                 png_read_push_finish_row(png_ptr);
             }
             break;
@@ -718,7 +718,7 @@ png_push_process_row(png_structp png_ptr)
             {
                for (i = 0; i < 4 && png_ptr->pass == 2; i++)
                {
-                  png_push_have_row(png_ptr, png_bytep_NULL);
+                  png_push_have_row(png_ptr, (uint8_t*)NULL);
                   png_read_push_finish_row(png_ptr);
                }
             }
@@ -734,14 +734,14 @@ png_push_process_row(png_structp png_ptr)
             }
             for (i = 0; i < 4 && png_ptr->pass == 2; i++)
             {
-               png_push_have_row(png_ptr, png_bytep_NULL);
+               png_push_have_row(png_ptr, (uint8_t*)NULL);
                png_read_push_finish_row(png_ptr);
             }
             if (png_ptr->pass == 4) /* pass 3 might be empty */
             {
                for (i = 0; i < 2 && png_ptr->pass == 4; i++)
                {
-                  png_push_have_row(png_ptr, png_bytep_NULL);
+                  png_push_have_row(png_ptr, (uint8_t*)NULL);
                   png_read_push_finish_row(png_ptr);
                }
             }
@@ -759,7 +759,7 @@ png_push_process_row(png_structp png_ptr)
             {
                for (i = 0; i < 2 && png_ptr->pass == 4; i++)
                {
-                  png_push_have_row(png_ptr, png_bytep_NULL);
+                  png_push_have_row(png_ptr, (uint8_t*)NULL);
                   png_read_push_finish_row(png_ptr);
                }
             }
@@ -775,12 +775,12 @@ png_push_process_row(png_structp png_ptr)
             }
             for (i = 0; i < 2 && png_ptr->pass == 4; i++)
             {
-               png_push_have_row(png_ptr, png_bytep_NULL);
+               png_push_have_row(png_ptr, (uint8_t*)NULL);
                png_read_push_finish_row(png_ptr);
             }
             if (png_ptr->pass == 6) /* pass 5 might be empty */
             {
-               png_push_have_row(png_ptr, png_bytep_NULL);
+               png_push_have_row(png_ptr, (uint8_t*)NULL);
                png_read_push_finish_row(png_ptr);
             }
             break;
@@ -795,7 +795,7 @@ png_push_process_row(png_structp png_ptr)
             }
             if (png_ptr->pass == 6) /* skip top generated row */
             {
-               png_push_have_row(png_ptr, png_bytep_NULL);
+               png_push_have_row(png_ptr, (uint8_t*)NULL);
                png_read_push_finish_row(png_ptr);
             }
             break;
@@ -806,7 +806,7 @@ png_push_process_row(png_structp png_ptr)
             png_read_push_finish_row(png_ptr);
             if (png_ptr->pass != 6)
                break;
-            png_push_have_row(png_ptr, png_bytep_NULL);
+            png_push_have_row(png_ptr, (uint8_t*)NULL);
             png_read_push_finish_row(png_ptr);
          }
       }
@@ -896,7 +896,7 @@ png_read_push_finish_row(png_structp png_ptr)
  * name or a critical chunk), the chunk is (currently) silently ignored.
  */
 void /* PRIVATE */
-png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t
+png_push_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t
    length)
 {
    uint32_t skip=0;
@@ -962,14 +962,14 @@ png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t
 }
 
 void /* PRIVATE */
-png_push_have_info(png_structp png_ptr, png_infop info_ptr)
+png_push_have_info(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr->info_fn != NULL)
       (*(png_ptr->info_fn))(png_ptr, info_ptr);
 }
 
 void /* PRIVATE */
-png_push_have_end(png_structp png_ptr, png_infop info_ptr)
+png_push_have_end(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr->end_fn != NULL)
       (*(png_ptr->end_fn))(png_ptr, info_ptr);

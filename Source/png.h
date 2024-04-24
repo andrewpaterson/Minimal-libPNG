@@ -417,40 +417,6 @@ extern "C" {
  * which applications aren't expected to use directly.
  */
 
-#ifndef PNG_NO_TYPECAST_NULL
-#define int_p_NULL                (int *)NULL
-#define png_bytep_NULL            (uint8_t*)NULL
-#define png_bytepp_NULL           (png_bytepp)NULL
-#define png_doublep_NULL          (png_doublep)NULL
-#define png_error_ptr_NULL        (png_error_ptr)NULL
-#define png_flush_ptr_NULL        (png_flush_ptr)NULL
-#define png_free_ptr_NULL         (png_free_ptr)NULL
-#define png_infopp_NULL           (png_infopp)NULL
-#define png_malloc_ptr_NULL       (png_malloc_ptr)NULL
-#define png_read_status_ptr_NULL  (png_read_status_ptr)NULL
-#define png_rw_ptr_NULL           (png_rw_ptr)NULL
-#define png_structp_NULL          (png_structp)NULL
-#define png_uint_16p_NULL         (uint16_t*)NULL
-#define png_voidp_NULL            (void*)NULL
-#define png_write_status_ptr_NULL (png_write_status_ptr)NULL
-#else
-#define int_p_NULL                NULL
-#define png_bytep_NULL            NULL
-#define png_bytepp_NULL           NULL
-#define png_doublep_NULL          NULL
-#define png_error_ptr_NULL        NULL
-#define png_flush_ptr_NULL        NULL
-#define png_free_ptr_NULL         NULL
-#define png_infopp_NULL           NULL
-#define png_malloc_ptr_NULL       NULL
-#define png_read_status_ptr_NULL  NULL
-#define png_rw_ptr_NULL           NULL
-#define png_structp_NULL          NULL
-#define png_uint_16p_NULL         NULL
-#define png_voidp_NULL            NULL
-#define png_write_status_ptr_NULL NULL
-#endif
-
 /* variables declared in png.c - only it needs to define PNG_NO_EXTERN */
 #if !defined(PNG_NO_EXTERN) || defined(PNG_ALWAYS_EXTERN)
 /* Version information for C files, stored in png.c.  This had better match

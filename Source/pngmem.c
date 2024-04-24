@@ -26,7 +26,7 @@ void* /* PRIVATE */
 png_create_struct(int type)
 {
 #ifdef PNG_USER_MEM_SUPPORTED
-   return (png_create_struct_2(type, png_malloc_ptr_NULL, png_voidp_NULL));
+   return (png_create_struct_2(type, (png_malloc_ptr)NULL, (void*)NULL));
 }
 
 /* Allocate memory for a png_struct or a png_info.  The malloc and
@@ -80,7 +80,7 @@ void /* PRIVATE */
 png_destroy_struct(void* struct_ptr)
 {
 #ifdef PNG_USER_MEM_SUPPORTED
-   png_destroy_struct_2(struct_ptr, png_free_ptr_NULL, png_voidp_NULL);
+   png_destroy_struct_2(struct_ptr, (png_free_ptr)NULL, (void*)NULL);
 }
 
 /* Free memory allocated by a png_create_struct() call */

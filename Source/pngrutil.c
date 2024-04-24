@@ -149,7 +149,7 @@ png_crc_error(png_structp png_ptr)
 
 /* read and check the IDHR chunk */
 void /* PRIVATE */
-png_handle_IHDR(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_IHDR(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint8_t buf[13];
    uint32_t width, height;
@@ -217,7 +217,7 @@ png_handle_IHDR(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 /* read and check the palette */
 void /* PRIVATE */
-png_handle_PLTE(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_PLTE(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    png_color palette[PNG_MAX_PALETTE_LENGTH];
    int num, i;
@@ -355,7 +355,7 @@ png_handle_PLTE(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 }
 
 void /* PRIVATE */
-png_handle_IEND(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_IEND(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    png_debug(1, "in png_handle_IEND\n");
 
@@ -379,7 +379,7 @@ png_handle_IEND(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 #if defined(PNG_READ_sBIT_SUPPORTED)
 void /* PRIVATE */
-png_handle_sBIT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_sBIT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    size_t truelen;
    uint8_t buf[4];
@@ -445,7 +445,7 @@ png_handle_sBIT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 #if defined(PNG_READ_sRGB_SUPPORTED)
 void /* PRIVATE */
-png_handle_sRGB(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_sRGB(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    int intent;
    uint8_t buf[1];
@@ -496,7 +496,7 @@ png_handle_sRGB(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 #if defined(PNG_READ_sPLT_SUPPORTED)
 void /* PRIVATE */
-png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_sPLT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 /* Note: this does not properly handle chunks that are > 64K under DOS */
 {
    uint8_t* chunkdata;
@@ -636,7 +636,7 @@ png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 #if defined(PNG_READ_tRNS_SUPPORTED)
 void /* PRIVATE */
-png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_tRNS(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint8_t readbuf[PNG_MAX_PALETTE_LENGTH];
 
@@ -728,7 +728,7 @@ png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 #if defined(PNG_READ_hIST_SUPPORTED)
 void /* PRIVATE */
-png_handle_hIST(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_hIST(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    unsigned int num, i;
    uint16_t readbuf[PNG_MAX_PALETTE_LENGTH];
@@ -782,7 +782,7 @@ png_handle_hIST(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
 #if defined(PNG_READ_pHYs_SUPPORTED)
 void /* PRIVATE */
-png_handle_pHYs(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_pHYs(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint8_t buf[9];
    uint32_t res_x, res_y;
@@ -827,7 +827,7 @@ png_handle_pHYs(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 #if defined(PNG_READ_pCAL_SUPPORTED)
 /* read the pCAL chunk (described in the PNG Extensions document) */
 void /* PRIVATE */
-png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_pCAL(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    char* purpose;
    int32_t X0, X1;
@@ -960,7 +960,7 @@ png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length)
    -- unless the PNG_FLAG_UNKNOWN_CHUNKS_SUPPORTED flag is on in which
    case it will be saved away to be written out later. */
 void /* PRIVATE */
-png_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t length)
+png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint32_t skip = 0;
 

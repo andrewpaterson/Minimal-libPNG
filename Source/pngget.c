@@ -14,7 +14,7 @@
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 
 uint32_t PNGAPI
-png_get_valid(png_structp png_ptr, png_infop info_ptr, uint32_t flag)
+png_get_valid(png_structp png_ptr, png_info* info_ptr, uint32_t flag)
 {
    if (png_ptr != NULL && info_ptr != NULL)
       return(info_ptr->valid & flag);
@@ -23,7 +23,7 @@ png_get_valid(png_structp png_ptr, png_infop info_ptr, uint32_t flag)
 }
 
 uint32_t PNGAPI
-png_get_rowbytes(png_structp png_ptr, png_infop info_ptr)
+png_get_rowbytes(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
       return(info_ptr->rowbytes);
@@ -33,7 +33,7 @@ png_get_rowbytes(png_structp png_ptr, png_infop info_ptr)
 
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
 png_bytepp PNGAPI
-png_get_rows(png_structp png_ptr, png_infop info_ptr)
+png_get_rows(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
       return(info_ptr->row_pointers);
@@ -45,7 +45,7 @@ png_get_rows(png_structp png_ptr, png_infop info_ptr)
 #ifdef PNG_EASY_ACCESS_SUPPORTED
 /* easy access to info, added in libpng-0.99 */
 uint32_t PNGAPI
-png_get_image_width(png_structp png_ptr, png_infop info_ptr)
+png_get_image_width(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -55,7 +55,7 @@ png_get_image_width(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint32_t PNGAPI
-png_get_image_height(png_structp png_ptr, png_infop info_ptr)
+png_get_image_height(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -65,7 +65,7 @@ png_get_image_height(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint8_t PNGAPI
-png_get_bit_depth(png_structp png_ptr, png_infop info_ptr)
+png_get_bit_depth(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -75,7 +75,7 @@ png_get_bit_depth(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint8_t PNGAPI
-png_get_color_type(png_structp png_ptr, png_infop info_ptr)
+png_get_color_type(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -85,7 +85,7 @@ png_get_color_type(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint8_t PNGAPI
-png_get_filter_type(png_structp png_ptr, png_infop info_ptr)
+png_get_filter_type(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -95,7 +95,7 @@ png_get_filter_type(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint8_t PNGAPI
-png_get_interlace_type(png_structp png_ptr, png_infop info_ptr)
+png_get_interlace_type(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -105,7 +105,7 @@ png_get_interlace_type(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint8_t PNGAPI
-png_get_compression_type(png_structp png_ptr, png_infop info_ptr)
+png_get_compression_type(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
    {
@@ -115,7 +115,7 @@ png_get_compression_type(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint32_t PNGAPI
-png_get_x_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
+png_get_x_pixels_per_meter(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
 #if defined(PNG_pHYs_SUPPORTED)
@@ -133,7 +133,7 @@ png_get_x_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint32_t PNGAPI
-png_get_y_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
+png_get_y_pixels_per_meter(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
 #if defined(PNG_pHYs_SUPPORTED)
@@ -151,7 +151,7 @@ png_get_y_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint32_t PNGAPI
-png_get_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
+png_get_pixels_per_meter(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
 #if defined(PNG_pHYs_SUPPORTED)
@@ -171,7 +171,7 @@ png_get_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
 
 #ifdef PNG_FLOATING_POINT_SUPPORTED
 float PNGAPI
-png_get_pixel_aspect_ratio(png_structp png_ptr, png_infop info_ptr)
+png_get_pixel_aspect_ratio(png_structp png_ptr, png_info* info_ptr)
    {
    if (png_ptr != NULL && info_ptr != NULL)
 #if defined(PNG_pHYs_SUPPORTED)
@@ -197,7 +197,7 @@ png_get_pixel_aspect_ratio(png_structp png_ptr, png_infop info_ptr)
 #endif  /* PNG_EASY_ACCESS_SUPPORTED */
 
 uint8_t PNGAPI
-png_get_channels(png_structp png_ptr, png_infop info_ptr)
+png_get_channels(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
       return(info_ptr->channels);
@@ -206,7 +206,7 @@ png_get_channels(png_structp png_ptr, png_infop info_ptr)
 }
 
 uint8_t* PNGAPI
-png_get_signature(png_structp png_ptr, png_infop info_ptr)
+png_get_signature(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
       return(info_ptr->signature);
@@ -216,7 +216,7 @@ png_get_signature(png_structp png_ptr, png_infop info_ptr)
 
 #if defined(PNG_sRGB_SUPPORTED)
 uint32_t PNGAPI
-png_get_sRGB(png_structp png_ptr, png_infop info_ptr, int *file_srgb_intent)
+png_get_sRGB(png_structp png_ptr, png_info* info_ptr, int *file_srgb_intent)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_sRGB)
       && file_srgb_intent != NULL)
@@ -232,7 +232,7 @@ png_get_sRGB(png_structp png_ptr, png_infop info_ptr, int *file_srgb_intent)
 
 #if defined(PNG_sPLT_SUPPORTED)
 uint32_t PNGAPI
-png_get_sPLT(png_structp png_ptr, png_infop info_ptr,
+png_get_sPLT(png_structp png_ptr, png_info* info_ptr,
              png_sPLT_tpp spalettes)
 {
    if (png_ptr != NULL && info_ptr != NULL && spalettes != NULL)
@@ -243,7 +243,7 @@ png_get_sPLT(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_hIST_SUPPORTED)
 uint32_t PNGAPI
-png_get_hIST(png_structp png_ptr, png_infop info_ptr, uint16_t* *hist)
+png_get_hIST(png_structp png_ptr, png_info* info_ptr, uint16_t* *hist)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_hIST)
       && hist != NULL)
@@ -257,7 +257,7 @@ png_get_hIST(png_structp png_ptr, png_infop info_ptr, uint16_t* *hist)
 #endif
 
 uint32_t PNGAPI
-png_get_IHDR(png_structp png_ptr, png_infop info_ptr,
+png_get_IHDR(png_structp png_ptr, png_info* info_ptr,
    uint32_t *width, uint32_t *height, int *bit_depth,
    int *color_type, int *interlace_type, int *compression_type,
    int *filter_type)
@@ -305,7 +305,7 @@ png_get_IHDR(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_pCAL_SUPPORTED)
 uint32_t PNGAPI
-png_get_pCAL(png_structp png_ptr, png_infop info_ptr, char** purpose, int32_t *X0, int32_t *X1, int *type, int *nparams, char** units, png_charpp *params)
+png_get_pCAL(png_structp png_ptr, png_info* info_ptr, char** purpose, int32_t *X0, int32_t *X1, int *type, int *nparams, char** units, png_charpp *params)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_pCAL)
       && purpose != NULL && X0 != NULL && X1 != NULL && type != NULL &&
@@ -328,7 +328,7 @@ png_get_pCAL(png_structp png_ptr, png_infop info_ptr, char** purpose, int32_t *X
 
 #if defined(PNG_pHYs_SUPPORTED)
 uint32_t PNGAPI
-png_get_pHYs(png_structp png_ptr, png_infop info_ptr,
+png_get_pHYs(png_structp png_ptr, png_info* info_ptr,
    uint32_t *res_x, uint32_t *res_y, int *unit_type)
 {
    uint32_t retval = 0;
@@ -358,7 +358,7 @@ png_get_pHYs(png_structp png_ptr, png_infop info_ptr,
 #endif
 
 uint32_t PNGAPI
-png_get_PLTE(png_structp png_ptr, png_infop info_ptr, png_colorp *palette,
+png_get_PLTE(png_structp png_ptr, png_info* info_ptr, png_colorp *palette,
    int *num_palette)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_PLTE)
@@ -375,7 +375,7 @@ png_get_PLTE(png_structp png_ptr, png_infop info_ptr, png_colorp *palette,
 
 #if defined(PNG_sBIT_SUPPORTED)
 uint32_t PNGAPI
-png_get_sBIT(png_structp png_ptr, png_infop info_ptr, png_color_8p *sig_bit)
+png_get_sBIT(png_structp png_ptr, png_info* info_ptr, png_color_8p *sig_bit)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_sBIT)
       && sig_bit != NULL)
@@ -390,7 +390,7 @@ png_get_sBIT(png_structp png_ptr, png_infop info_ptr, png_color_8p *sig_bit)
 
 #if defined(PNG_tRNS_SUPPORTED)
 uint32_t PNGAPI
-png_get_tRNS(png_structp png_ptr, png_infop info_ptr,
+png_get_tRNS(png_structp png_ptr, png_info* info_ptr,
    uint8_t* *trans, int *num_trans, png_color_16p *trans_values)
 {
    uint32_t retval = 0;
@@ -429,7 +429,7 @@ png_get_tRNS(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
 uint32_t PNGAPI
-png_get_unknown_chunks(png_structp png_ptr, png_infop info_ptr,
+png_get_unknown_chunks(png_structp png_ptr, png_info* info_ptr,
              png_unknown_chunkpp unknowns)
 {
    if (png_ptr != NULL && info_ptr != NULL && unknowns != NULL)

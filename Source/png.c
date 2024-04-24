@@ -235,18 +235,18 @@ png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length)
  * and png_info_init() so that applications that want to use a shared
  * libpng don't have to be recompiled if png_info changes size.
  */
-png_infop PNGAPI
+png_info* PNGAPI
 png_create_info_struct(png_structp png_ptr)
 {
-   png_infop info_ptr;
+   png_info* info_ptr;
 
    png_debug(1, "in png_create_info_struct\n");
    if(png_ptr == NULL) return (NULL);
 #ifdef PNG_USER_MEM_SUPPORTED
-   info_ptr = (png_infop)png_create_struct_2(PNG_STRUCT_INFO,
+   info_ptr = (png_info*)png_create_struct_2(PNG_STRUCT_INFO,
       png_ptr->malloc_fn, png_ptr->mem_ptr);
 #else
-   info_ptr = (png_infop)png_create_struct(PNG_STRUCT_INFO);
+   info_ptr = (png_info*)png_create_struct(PNG_STRUCT_INFO);
 #endif
    if (info_ptr != NULL)
       png_info_init_3(&info_ptr, sizeof(png_info));
@@ -260,9 +260,9 @@ png_create_info_struct(png_structp png_ptr)
  * useful for some applications.
  */
 void PNGAPI
-png_destroy_info_struct(png_structp png_ptr, png_infopp info_ptr_ptr)
+png_destroy_info_struct(png_structp png_ptr, png_info** info_ptr_ptr)
 {
-   png_infop info_ptr = NULL;
+   png_info* info_ptr = NULL;
    if(png_ptr == NULL) return;
 
    png_debug(1, "in png_destroy_info_struct\n");
@@ -290,7 +290,7 @@ png_destroy_info_struct(png_structp png_ptr, png_infopp info_ptr_ptr)
 #if defined(PNG_1_0_X) || defined(PNG_1_2_X)
 #undef png_info_init
 void PNGAPI
-png_info_init(png_infop info_ptr)
+png_info_init(png_info* info_ptr)
 {
    /* We only come here via pre-1.0.12-compiled applications */
    png_info_init_3(&info_ptr, 0);
@@ -298,9 +298,9 @@ png_info_init(png_infop info_ptr)
 #endif
 
 void PNGAPI
-png_info_init_3(png_infopp ptr_ptr, size_t png_info_struct_size)
+png_info_init_3(png_info** ptr_ptr, size_t png_info_struct_size)
 {
-   png_infop info_ptr = *ptr_ptr;
+   png_info* info_ptr = *ptr_ptr;
 
    if(info_ptr == NULL) return;
 
@@ -309,7 +309,7 @@ png_info_init_3(png_infopp ptr_ptr, size_t png_info_struct_size)
    if(sizeof(png_info) > png_info_struct_size)
      {
        png_destroy_struct(info_ptr);
-       info_ptr = (png_infop)png_create_struct(PNG_STRUCT_INFO);
+       info_ptr = (png_info*)png_create_struct(PNG_STRUCT_INFO);
        *ptr_ptr = info_ptr;
      }
 
@@ -319,7 +319,7 @@ png_info_init_3(png_infopp ptr_ptr, size_t png_info_struct_size)
 
 #ifdef PNG_FREE_ME_SUPPORTED
 void PNGAPI
-png_data_freer(png_structp png_ptr, png_infop info_ptr,
+png_data_freer(png_structp png_ptr, png_info* info_ptr,
    int freer, uint32_t mask)
 {
    png_debug(1, "in png_data_freer\n");
@@ -336,7 +336,7 @@ png_data_freer(png_structp png_ptr, png_infop info_ptr,
 #endif
 
 void PNGAPI
-png_free_data(png_structp png_ptr, png_infop info_ptr, uint32_t mask,
+png_free_data(png_structp png_ptr, png_info* info_ptr, uint32_t mask,
    int num)
 {
    png_debug(1, "in png_free_data\n");
@@ -524,7 +524,7 @@ if (mask & PNG_FREE_ROWS)
  * that png_free() checks for NULL pointers for us.
  */
 void /* PRIVATE */
-png_info_destroy(png_structp png_ptr, png_infop info_ptr)
+png_info_destroy(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_info_destroy\n");
 

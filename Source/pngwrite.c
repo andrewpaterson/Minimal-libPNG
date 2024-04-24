@@ -23,7 +23,7 @@
  * them in png_write_end(), and compressing them.
  */
 void PNGAPI
-png_write_info_before_PLTE(png_structp png_ptr, png_infop info_ptr)
+png_write_info_before_PLTE(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_write_info_before_PLTE\n");
    if (png_ptr == NULL || info_ptr == NULL)
@@ -92,7 +92,7 @@ png_write_info_before_PLTE(png_structp png_ptr, png_infop info_ptr)
 }
 
 void PNGAPI
-png_write_info(png_structp png_ptr, png_infop info_ptr)
+png_write_info(png_structp png_ptr, png_info* info_ptr)
 {
 #if defined(PNG_WRITE_TEXT_SUPPORTED) || defined(PNG_WRITE_sPLT_SUPPORTED)
    int i;
@@ -180,7 +180,7 @@ png_write_info(png_structp png_ptr, png_infop info_ptr)
  * comments, I suggest writing them here, and compressing them.
  */
 void PNGAPI
-png_write_end(png_structp png_ptr, png_infop info_ptr)
+png_write_end(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_write_end\n");
    if (png_ptr == NULL)
@@ -238,7 +238,7 @@ png_create_write_struct(const char* user_png_ver, void* error_ptr,
 {
 #ifdef PNG_USER_MEM_SUPPORTED
    return (png_create_write_struct_2(user_png_ver, error_ptr, error_fn,
-      warn_fn, png_voidp_NULL, png_malloc_ptr_NULL, png_free_ptr_NULL));
+      warn_fn, (void*)NULL, (png_malloc_ptr)NULL, (png_free_ptr)NULL));
 }
 
 /* Alternate initialize png_ptr structure, and allocate any memory needed */
@@ -324,12 +324,12 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
    png_ptr->zbuf = (uint8_t*)png_malloc(png_ptr,
       (uint32_t)png_ptr->zbuf_size);
 
-   png_set_write_fn(png_ptr, png_voidp_NULL, png_rw_ptr_NULL,
-      png_flush_ptr_NULL);
+   png_set_write_fn(png_ptr, (void*)NULL, (png_rw_ptr)NULL,
+      (png_flush_ptr)NULL);
 
 #if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
    png_set_filter_heuristics(png_ptr, PNG_FILTER_HEURISTIC_DEFAULT,
-      1, png_doublep_NULL, png_doublep_NULL);
+      1, (png_doublep)NULL, (png_doublep)NULL);
 #endif
 
 #ifdef PNG_SETJMP_SUPPORTED
@@ -456,8 +456,8 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
    png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
-   png_set_write_fn(png_ptr, png_voidp_NULL, png_rw_ptr_NULL,
-      png_flush_ptr_NULL);
+   png_set_write_fn(png_ptr, (void*)NULL, (png_rw_ptr)NULL,
+      (png_flush_ptr)NULL);
 
    /* initialize zbuf - compression buffer */
    png_ptr->zbuf_size = PNG_ZBUF_SIZE;
@@ -466,7 +466,7 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
 
 #if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
    png_set_filter_heuristics(png_ptr, PNG_FILTER_HEURISTIC_DEFAULT,
-      1, png_doublep_NULL, png_doublep_NULL);
+      1, (png_doublep)NULL, (png_doublep)NULL);
 #endif
 }
 
@@ -752,10 +752,10 @@ png_write_flush(png_structp png_ptr)
 
 /* free all memory used by the write */
 void PNGAPI
-png_destroy_write_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr)
+png_destroy_write_struct(png_structpp png_ptr_ptr, png_info** info_ptr_ptr)
 {
    png_structp png_ptr = NULL;
-   png_infop info_ptr = NULL;
+   png_info* info_ptr = NULL;
 #ifdef PNG_USER_MEM_SUPPORTED
    png_free_ptr free_fn = NULL;
    void* mem_ptr = NULL;
@@ -1177,7 +1177,7 @@ png_set_write_user_transform_fn(png_structp png_ptr, png_user_transform_ptr
 
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
 void PNGAPI
-png_write_png(png_structp png_ptr, png_infop info_ptr,
+png_write_png(png_structp png_ptr, png_info* info_ptr,
               int transforms, voidp params)
 {
    if (png_ptr == NULL || info_ptr == NULL)

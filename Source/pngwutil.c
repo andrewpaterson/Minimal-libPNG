@@ -409,7 +409,7 @@ png_write_IEND(png_structp png_ptr)
    PNG_IEND;
 #endif
    png_debug(1, "in png_write_IEND\n");
-   png_write_chunk(png_ptr, (uint8_t*)png_IEND, png_bytep_NULL,
+   png_write_chunk(png_ptr, (uint8_t*)png_IEND, (uint8_t*)NULL,
      (size_t)0);
    png_ptr->mode |= PNG_HAVE_IEND;
 }
