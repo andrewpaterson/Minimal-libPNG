@@ -2152,237 +2152,237 @@ extern void png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver, siz
 extern void png_write_init_2(png_structp png_ptr, const char* user_png_ver, size_t png_struct_size, size_t png_info_size);
 
 /* Allocate memory for an internal libpng struct */
-PNG_EXTERN void* png_create_struct (int type);
+void* png_create_struct (int type);
 
 /* Free memory from internal libpng struct */
-PNG_EXTERN void png_destroy_struct(void* struct_ptr);
+void png_destroy_struct(void* struct_ptr);
 
-PNG_EXTERN void* png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr);
-PNG_EXTERN void png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn, void* mem_ptr);
+void* png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr);
+void png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn, void* mem_ptr);
 
 /* Free any memory that info_ptr points to and reset struct. */
-PNG_EXTERN void png_info_destroy(png_structp png_ptr, png_infop info_ptr);
+void png_info_destroy(png_structp png_ptr, png_infop info_ptr);
 
 #ifndef PNG_1_0_X
 /* Function to allocate memory for zlib. */
-PNG_EXTERN voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size);
+voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size);
 
 /* Function to free memory for zlib */
-PNG_EXTERN void png_zfree(voidpf png_ptr, voidpf ptr);
+void png_zfree(voidpf png_ptr, voidpf ptr);
 
 #ifdef PNG_SIZE_T
 /* Function to convert a sizeof an item to sizeof item */
-PNG_EXTERN size_t png_convert_size(size_t size);
+size_t png_convert_size(size_t size);
 #endif
 
-PNG_EXTERN void png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length);
+void png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-PNG_EXTERN void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
+void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
 #endif
 
-PNG_EXTERN void png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length);
+void png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 #if !defined(PNG_NO_STDIO)
-PNG_EXTERN void png_default_flush(png_structp png_ptr);
+void png_default_flush(png_structp png_ptr);
 #endif
 #endif
 #else /* PNG_1_0_X */
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-PNG_EXTERN void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
+void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
 #endif
 #endif /* PNG_1_0_X */
 
 /* Reset the CRC variable */
-PNG_EXTERN void png_reset_crc(png_structp png_ptr);
+void png_reset_crc(png_structp png_ptr);
 
 /* Write the "data" buffer to whatever output you are using. */
-PNG_EXTERN void png_write_data(png_structp png_ptr, uint8_t* data, size_t length);
+void png_write_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 /* Read data from whatever input you are using into the "data" buffer */
-PNG_EXTERN void png_read_data(png_structp png_ptr, uint8_t* data, size_t length);
+void png_read_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 /* Read bytes into buf, and update png_ptr->crc */
-PNG_EXTERN void png_crc_read(png_structp png_ptr, uint8_t* buf, size_t length);
+void png_crc_read(png_structp png_ptr, uint8_t* buf, size_t length);
 
 /* Read "skip" bytes, read the file crc, and (optionally) verify png_ptr->crc */
-PNG_EXTERN int png_crc_finish(png_structp png_ptr, uint32_t skip);
+int png_crc_finish(png_structp png_ptr, uint32_t skip);
 
 /* Read the CRC from the file and compare it to the libpng calculated CRC */
-PNG_EXTERN int png_crc_error(png_structp png_ptr);
+int png_crc_error(png_structp png_ptr);
 
 /* Calculate the CRC over a section of data.  Note that we are only
  * passing a maximum of 64K on systems that have this as a memory limit,
  * since this is the maximum buffer size we can specify.
  */
-PNG_EXTERN void png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length);
+void png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length);
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
-PNG_EXTERN void png_flush(png_structp png_ptr);
+void png_flush(png_structp png_ptr);
 #endif
 
 /* simple function to write the signature */
-PNG_EXTERN void png_write_sig(png_structp png_ptr);
+void png_write_sig(png_structp png_ptr);
 
 /* write various chunks */
 
 /* Write the IHDR chunk, and update the png_struct with the necessary
  * information.
  */
-PNG_EXTERN void png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height, int bit_depth, int color_type, int compression_method, int filter_method, int interlace_method);
+void png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height, int bit_depth, int color_type, int compression_method, int filter_method, int interlace_method);
 
-PNG_EXTERN void png_write_PLTE(png_structp png_ptr, png_colorp palette, uint32_t num_pal);
+void png_write_PLTE(png_structp png_ptr, png_colorp palette, uint32_t num_pal);
 
-PNG_EXTERN void png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length);
+void png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length);
 
-PNG_EXTERN void png_write_IEND(png_structp png_ptr);
+void png_write_IEND(png_structp png_ptr);
 
 #if defined(PNG_WRITE_sBIT_SUPPORTED)
-PNG_EXTERN void png_write_sBIT(png_structp png_ptr, png_color_8p sbit, int color_type);
+void png_write_sBIT(png_structp png_ptr, png_color_8p sbit, int color_type);
 #endif
 
 #if defined(PNG_WRITE_sRGB_SUPPORTED)
-PNG_EXTERN void png_write_sRGB(png_structp png_ptr, int intent);
+void png_write_sRGB(png_structp png_ptr, int intent);
 #endif
 
 #if defined(PNG_WRITE_sPLT_SUPPORTED)
-PNG_EXTERN void png_write_sPLT(png_structp png_ptr, png_sPLT_tp palette);
+void png_write_sPLT(png_structp png_ptr, png_sPLT_tp palette);
 #endif
 
 #if defined(PNG_WRITE_tRNS_SUPPORTED)
-PNG_EXTERN void png_write_tRNS(png_structp png_ptr, uint8_t* trans, png_color_16p values, int number, int color_type);
+void png_write_tRNS(png_structp png_ptr, uint8_t* trans, png_color_16p values, int number, int color_type);
 #endif
 
 #if defined(PNG_WRITE_hIST_SUPPORTED)
-PNG_EXTERN void png_write_hIST(png_structp png_ptr, uint16_t* hist, int num_hist);
+void png_write_hIST(png_structp png_ptr, uint16_t* hist, int num_hist);
 #endif
 
 #if defined(PNG_WRITE_pCAL_SUPPORTED) || defined(PNG_WRITE_sPLT_SUPPORTED)
-PNG_EXTERN size_t png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key);
+size_t png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key);
 #endif
 
 #if defined(PNG_WRITE_pCAL_SUPPORTED)
-PNG_EXTERN void png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0, int32_t X1, int type, int nparams, char* units, png_charpp params);
+void png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0, int32_t X1, int type, int nparams, char* units, png_charpp params);
 #endif
 
 #if defined(PNG_WRITE_pHYs_SUPPORTED)
-PNG_EXTERN void png_write_pHYs(png_structp png_ptr, uint32_t x_pixels_per_unit, uint32_t y_pixels_per_unit, int unit_type);
+void png_write_pHYs(png_structp png_ptr, uint32_t x_pixels_per_unit, uint32_t y_pixels_per_unit, int unit_type);
 #endif
 
 /* Called when finished processing a row of data */
-PNG_EXTERN void png_write_finish_row(png_structp png_ptr);
+void png_write_finish_row(png_structp png_ptr);
 
 /* Internal use only.   Called before first row of data */
-PNG_EXTERN void png_write_start_row(png_structp png_ptr);
+void png_write_start_row(png_structp png_ptr);
 
 /* combine a row of data, dealing with alpha, etc. if requested */
-PNG_EXTERN void png_combine_row(png_structp png_ptr, uint8_t* row, int mask);
+void png_combine_row(png_structp png_ptr, uint8_t* row, int mask);
 
 #if defined(PNG_READ_INTERLACING_SUPPORTED)
-PNG_EXTERN void png_do_read_interlace(png_structp png_ptr);
+void png_do_read_interlace(png_structp png_ptr);
 #endif
 
 /* GRR TO DO (2.0 or whenever):  simplify other internal calling interfaces */
 
 #if defined(PNG_WRITE_INTERLACING_SUPPORTED)
 /* grab pixels out of a row for an interlaced pass */
-PNG_EXTERN void png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass);
+void png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass);
 #endif
 
 /* unfilter a row */
-PNG_EXTERN void png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* row, uint8_t* prev_row, int filter);
+void png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* row, uint8_t* prev_row, int filter);
 
 /* Choose the best filter to use and filter the row data */
-PNG_EXTERN void png_write_find_filter(png_structp png_ptr, png_row_infop row_info);
+void png_write_find_filter(png_structp png_ptr, png_row_infop row_info);
 
 /* Write out the filtered row. */
-PNG_EXTERN void png_write_filtered_row(png_structp png_ptr, uint8_t* filtered_row);
+void png_write_filtered_row(png_structp png_ptr, uint8_t* filtered_row);
 /* finish a row while reading, dealing with interlacing passes, etc. */
-PNG_EXTERN void png_read_finish_row(png_structp png_ptr);
+void png_read_finish_row(png_structp png_ptr);
 
 /* initialize the row buffers, etc. */
-PNG_EXTERN void png_read_start_row(png_structp png_ptr);
+void png_read_start_row(png_structp png_ptr);
 /* optional call to update the users info structure */
-PNG_EXTERN void png_read_transform_info(png_structp png_ptr, png_infop info_ptr);
+void png_read_transform_info(png_structp png_ptr, png_infop info_ptr);
 
 /* these are the functions that do the transformations */
 #if defined(PNG_READ_FILLER_SUPPORTED)
-PNG_EXTERN void png_do_read_filler(png_row_infop row_info, uint8_t* row, uint32_t filler, uint32_t flags);
+void png_do_read_filler(png_row_infop row_info, uint8_t* row, uint32_t filler, uint32_t flags);
 #endif
 
 #if defined(PNG_READ_SWAP_ALPHA_SUPPORTED)
-PNG_EXTERN void png_do_read_swap_alpha(png_row_infop row_info, uint8_t* row);
+void png_do_read_swap_alpha(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_WRITE_SWAP_ALPHA_SUPPORTED)
-PNG_EXTERN void png_do_write_swap_alpha(png_row_infop row_info, uint8_t* row);
+void png_do_write_swap_alpha(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_INVERT_ALPHA_SUPPORTED)
-PNG_EXTERN void png_do_read_invert_alpha(png_row_infop row_info, uint8_t* row);
+void png_do_read_invert_alpha(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_WRITE_INVERT_ALPHA_SUPPORTED)
-PNG_EXTERN void png_do_write_invert_alpha(png_row_infop row_info, uint8_t* row);
+void png_do_write_invert_alpha(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_WRITE_FILLER_SUPPORTED) || \
     defined(PNG_READ_STRIP_ALPHA_SUPPORTED)
-PNG_EXTERN void png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags);
+void png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags);
 #endif
 
 #if defined(PNG_READ_SWAP_SUPPORTED) || defined(PNG_WRITE_SWAP_SUPPORTED)
-PNG_EXTERN void png_do_swap(png_row_infop row_info, uint8_t* row);
+void png_do_swap(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_RGB_TO_GRAY_SUPPORTED)
-PNG_EXTERN int png_do_rgb_to_gray(png_structp png_ptr, png_row_infop   row_info, uint8_t* row);
+int png_do_rgb_to_gray(png_structp png_ptr, png_row_infop   row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_GRAY_TO_RGB_SUPPORTED)
-PNG_EXTERN void png_do_gray_to_rgb(png_row_infop row_info, uint8_t* row);
+void png_do_gray_to_rgb(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_PACK_SUPPORTED)
-PNG_EXTERN void png_do_unpack(png_row_infop row_info, uint8_t* row);
+void png_do_unpack(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_SHIFT_SUPPORTED)
-PNG_EXTERN void png_do_unshift(png_row_infop row_info, uint8_t* row, png_color_8p sig_bits);
+void png_do_unshift(png_row_infop row_info, uint8_t* row, png_color_8p sig_bits);
 #endif
 
 #if defined(PNG_READ_INVERT_SUPPORTED) || defined(PNG_WRITE_INVERT_SUPPORTED)
-PNG_EXTERN void png_do_invert(png_row_infop row_info, uint8_t* row);
+void png_do_invert(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_16_TO_8_SUPPORTED)
-PNG_EXTERN void png_do_chop(png_row_infop row_info, uint8_t* row);
+void png_do_chop(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_READ_DITHER_SUPPORTED)
-PNG_EXTERN void png_do_dither(png_row_infop row_info, uint8_t* row, uint8_t* palette_lookup, uint8_t* dither_lookup);
+void png_do_dither(png_row_infop row_info, uint8_t* row, uint8_t* palette_lookup, uint8_t* dither_lookup);
 
 #  if defined(PNG_CORRECT_PALETTE_SUPPORTED)
-PNG_EXTERN void png_correct_palette(png_structp png_ptr, png_colorp palette, int num_palette);
+void png_correct_palette(png_structp png_ptr, png_colorp palette, int num_palette);
 #  endif
 #endif
 
 #if defined(PNG_READ_BGR_SUPPORTED) || defined(PNG_WRITE_BGR_SUPPORTED)
-PNG_EXTERN void png_do_bgr(png_row_infop row_info, uint8_t* row);
+void png_do_bgr(png_row_infop row_info, uint8_t* row);
 #endif
 
 #if defined(PNG_WRITE_PACK_SUPPORTED)
-PNG_EXTERN void png_do_pack(png_row_infop row_info, uint8_t* row, uint32_t bit_depth);
+void png_do_pack(png_row_infop row_info, uint8_t* row, uint32_t bit_depth);
 #endif
 
 #if defined(PNG_WRITE_SHIFT_SUPPORTED)
-PNG_EXTERN void png_do_shift(png_row_infop row_info, uint8_t* row, png_color_8p bit_depth);
+void png_do_shift(png_row_infop row_info, uint8_t* row, png_color_8p bit_depth);
 #endif
 
 #if defined(PNG_READ_EXPAND_SUPPORTED)
-PNG_EXTERN void png_do_expand_palette(png_row_infop row_info, uint8_t* row, png_colorp palette, uint8_t* trans, int num_trans);
-PNG_EXTERN void png_do_expand(png_row_infop row_info, uint8_t* row, png_color_16p trans_value);
+void png_do_expand_palette(png_row_infop row_info, uint8_t* row, png_colorp palette, uint8_t* trans, int num_trans);
+void png_do_expand(png_row_infop row_info, uint8_t* row, png_color_16p trans_value);
 #endif
 
 /* The following decodes the appropriate chunks, and does error correction,
@@ -2390,24 +2390,24 @@ PNG_EXTERN void png_do_expand(png_row_infop row_info, uint8_t* row, png_color_16
  */
 
 /* decode the IHDR chunk */
-PNG_EXTERN void png_handle_IHDR(png_structp png_ptr, png_infop info_ptr, uint32_t length);
-PNG_EXTERN void png_handle_PLTE(png_structp png_ptr, png_infop info_ptr, uint32_t length);
-PNG_EXTERN void png_handle_IEND(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_IHDR(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_PLTE(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_IEND(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 
 #if defined(PNG_READ_hIST_SUPPORTED)
-PNG_EXTERN void png_handle_hIST(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_hIST(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 #endif
 
 #if defined(PNG_READ_pCAL_SUPPORTED)
-PNG_EXTERN void png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 #endif
 
 #if defined(PNG_READ_pHYs_SUPPORTED)
-PNG_EXTERN void png_handle_pHYs(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_pHYs(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 #endif
 
 #if defined(PNG_READ_sBIT_SUPPORTED)
-PNG_EXTERN void png_handle_sBIT(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_sBIT(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 #endif
 
 #if defined(PNG_READ_sPLT_SUPPORTED)
@@ -2415,41 +2415,41 @@ extern void png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, uint32_t le
 #endif /* PNG_READ_sPLT_SUPPORTED */
 
 #if defined(PNG_READ_sRGB_SUPPORTED)
-PNG_EXTERN void png_handle_sRGB(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_sRGB(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 #endif
 
 #if defined(PNG_READ_tRNS_SUPPORTED)
-PNG_EXTERN void png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 #endif
 
-PNG_EXTERN void png_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t length);
 
-PNG_EXTERN void png_check_chunk_name(png_structp png_ptr, uint8_t* chunk_name);
+void png_check_chunk_name(png_structp png_ptr, uint8_t* chunk_name);
 
 /* handle the transformations for reading and writing */
-PNG_EXTERN void png_do_read_transformations(png_structp png_ptr);
-PNG_EXTERN void png_do_write_transformations(png_structp png_ptr);
+void png_do_read_transformations(png_structp png_ptr);
+void png_do_write_transformations(png_structp png_ptr);
  
-PNG_EXTERN void png_init_read_transformations(png_structp png_ptr);
+void png_init_read_transformations(png_structp png_ptr);
 
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-PNG_EXTERN void png_push_read_chunk(png_structp png_ptr, png_infop info_ptr);
-PNG_EXTERN void png_push_read_sig(png_structp png_ptr, png_infop info_ptr);
-PNG_EXTERN void png_push_check_crc(png_structp png_ptr);
-PNG_EXTERN void png_push_crc_skip(png_structp png_ptr, uint32_t length);
-PNG_EXTERN void png_push_crc_finish(png_structp png_ptr);
-PNG_EXTERN void png_push_save_buffer(png_structp png_ptr);
-PNG_EXTERN void png_push_restore_buffer(png_structp png_ptr, uint8_t* buffer, size_t buffer_length);
-PNG_EXTERN void png_push_read_IDAT(png_structp png_ptr);
-PNG_EXTERN void png_process_IDAT_data(png_structp png_ptr, uint8_t* buffer, size_t buffer_length);
-PNG_EXTERN void png_push_process_row(png_structp png_ptr);
-PNG_EXTERN void png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t length);
-PNG_EXTERN void png_push_have_info(png_structp png_ptr, png_infop info_ptr);
-PNG_EXTERN void png_push_have_end(png_structp png_ptr, png_infop info_ptr);
-PNG_EXTERN void png_push_have_row(png_structp png_ptr, uint8_t* row);
-PNG_EXTERN void png_push_read_end(png_structp png_ptr, png_infop info_ptr);
-PNG_EXTERN void png_process_some_data(png_structp png_ptr, png_infop info_ptr);
-PNG_EXTERN void png_read_push_finish_row(png_structp png_ptr);
+void png_push_read_chunk(png_structp png_ptr, png_infop info_ptr);
+void png_push_read_sig(png_structp png_ptr, png_infop info_ptr);
+void png_push_check_crc(png_structp png_ptr);
+void png_push_crc_skip(png_structp png_ptr, uint32_t length);
+void png_push_crc_finish(png_structp png_ptr);
+void png_push_save_buffer(png_structp png_ptr);
+void png_push_restore_buffer(png_structp png_ptr, uint8_t* buffer, size_t buffer_length);
+void png_push_read_IDAT(png_structp png_ptr);
+void png_process_IDAT_data(png_structp png_ptr, uint8_t* buffer, size_t buffer_length);
+void png_push_process_row(png_structp png_ptr);
+void png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t length);
+void png_push_have_info(png_structp png_ptr, png_infop info_ptr);
+void png_push_have_end(png_structp png_ptr, png_infop info_ptr);
+void png_push_have_row(png_structp png_ptr, uint8_t* row);
+void png_push_read_end(png_structp png_ptr, png_infop info_ptr);
+void png_process_some_data(png_structp png_ptr, png_infop info_ptr);
+void png_read_push_finish_row(png_structp png_ptr);
 
 #endif /* PNG_PROGRESSIVE_READ_SUPPORTED */
 

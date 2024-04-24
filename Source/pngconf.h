@@ -111,50 +111,16 @@
  * the X config stuff didn't define _BSD_SOURCE we wouldn't need this.
  */
 
-#  ifdef __linux__
-#    ifdef _BSD_SOURCE
-#      define PNG_SAVE_BSD_SOURCE
-#      undef _BSD_SOURCE
-#    endif
-#    ifdef _SETJMP_H
-     /* If you encounter a compiler error here, see the explanation
-      * near the end of INSTALL.
-      */
-         __png.h__ already includes setjmp.h;
-         __dont__ include it again.;
-#    endif
-#  endif /* __linux__ */
 
-   /* include setjmp.h for error handling */
-#  include <setjmp.h>
-
-#  ifdef __linux__
-#    ifdef PNG_SAVE_BSD_SOURCE
-#      define _BSD_SOURCE
-#      undef PNG_SAVE_BSD_SOURCE
-#    endif
-#  endif /* __linux__ */
-#endif /* PNG_SETJMP_SUPPORTED */
-
-#ifdef BSD
-#  include <strings.h>
-#else
-#  include <string.h>
+/* include setjmp.h for error handling */
+#include <setjmp.h>
+#include <string.h>
 #endif
 
 /* Other defines for things like memory and the like can go here.  */
 #ifdef PNG_INTERNAL
 
 #include <stdlib.h>
-
-/* The functions exported by PNG_EXTERN are PNG_INTERNAL functions, which
- * aren't usually used outside the library (as far as I know), so it is
- * debatable if they should be exported at all.  In the future, when it is
- * possible to have run-time registry of chunk-handling functions, some of
- * these will be made available again.
-#define PNG_EXTERN extern
- */
-#define PNG_EXTERN
 
 /* Other defines specific to compilers can go here.  Try to keep
  * them inside an appropriate ifdef/endif pair for portability.
