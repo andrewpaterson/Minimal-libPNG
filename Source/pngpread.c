@@ -37,8 +37,7 @@ png_process_data(png_structp png_ptr, png_info* info_ptr,
 /* What we do with the incoming data depends on what we were previously
  * doing before we ran out of data...
  */
-void /* PRIVATE */
-png_process_some_data(png_structp png_ptr, png_info* info_ptr)
+void png_process_some_data(png_structp png_ptr, png_info* info_ptr)
 {
    if(png_ptr == NULL) return;
    switch (png_ptr->process_mode)
@@ -77,8 +76,7 @@ png_process_some_data(png_structp png_ptr, png_info* info_ptr)
  * checked by the calling application, or because of multiple calls to this
  * routine.
  */
-void /* PRIVATE */
-png_push_read_sig(png_structp png_ptr, png_info* info_ptr)
+void png_push_read_sig(png_structp png_ptr, png_info* info_ptr)
 {
    size_t num_checked = png_ptr->sig_bytes,
              num_to_check = 8 - num_checked;
@@ -109,36 +107,8 @@ png_push_read_sig(png_structp png_ptr, png_info* info_ptr)
    }
 }
 
-void /* PRIVATE */
-png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
+void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-      PNG_IHDR;
-      PNG_IDAT;
-      PNG_IEND;
-      PNG_PLTE;
-#if defined(PNG_READ_hIST_SUPPORTED)
-      PNG_hIST;
-#endif
-#if defined(PNG_READ_pCAL_SUPPORTED)
-      PNG_pCAL;
-#endif
-#if defined(PNG_READ_pHYs_SUPPORTED)
-      PNG_pHYs;
-#endif
-#if defined(PNG_READ_sBIT_SUPPORTED)
-      PNG_sBIT;
-#endif
-#if defined(PNG_READ_sRGB_SUPPORTED)
-      PNG_sRGB;
-#endif
-#if defined(PNG_READ_sPLT_SUPPORTED)
-      PNG_sPLT;
-#endif
-#if defined(PNG_READ_tRNS_SUPPORTED)
-      PNG_tRNS;
-#endif
-#endif /* PNG_USE_LOCAL_ARRAYS */
    /* First we make sure we have enough data for the 4 byte chunk name
     * and the 4 byte chunk length before proceeding with decoding the
     * chunk data.  To fully decode each of these chunks, we also make
@@ -339,15 +309,13 @@ png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    png_ptr->mode &= ~PNG_HAVE_CHUNK_HEADER;
 }
 
-void /* PRIVATE */
-png_push_crc_skip(png_structp png_ptr, uint32_t skip)
+void png_push_crc_skip(png_structp png_ptr, uint32_t skip)
 {
    png_ptr->process_mode = PNG_SKIP_MODE;
    png_ptr->skip_length = skip;
 }
 
-void /* PRIVATE */
-png_push_crc_finish(png_structp png_ptr)
+void png_push_crc_finish(png_structp png_ptr)
 {
    if (png_ptr->skip_length && png_ptr->save_buffer_size)
    {
@@ -433,8 +401,7 @@ png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length)
    }
 }
 
-void /* PRIVATE */
-png_push_save_buffer(png_structp png_ptr)
+void png_push_save_buffer(png_structp png_ptr)
 {
    if (png_ptr->save_buffer_size)
    {
@@ -482,8 +449,7 @@ png_push_save_buffer(png_structp png_ptr)
    png_ptr->buffer_size = 0;
 }
 
-void /* PRIVATE */
-png_push_restore_buffer(png_structp png_ptr, uint8_t* buffer,
+void png_push_restore_buffer(png_structp png_ptr, uint8_t* buffer,
    size_t buffer_length)
 {
    png_ptr->current_buffer = buffer;
@@ -492,12 +458,8 @@ png_push_restore_buffer(png_structp png_ptr, uint8_t* buffer,
    png_ptr->current_buffer_ptr = png_ptr->current_buffer;
 }
 
-void /* PRIVATE */
-png_push_read_IDAT(png_structp png_ptr)
+void png_push_read_IDAT(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_IDAT;
-#endif
    if (!(png_ptr->mode & PNG_HAVE_CHUNK_HEADER))
    {
       uint8_t chunk_length[4];
@@ -583,8 +545,7 @@ png_push_read_IDAT(png_structp png_ptr)
    }
 }
 
-void /* PRIVATE */
-png_process_IDAT_data(png_structp png_ptr, uint8_t* buffer,
+void png_process_IDAT_data(png_structp png_ptr, uint8_t* buffer,
    size_t buffer_length)
 {
    int ret;
@@ -640,8 +601,7 @@ png_process_IDAT_data(png_structp png_ptr, uint8_t* buffer,
    }
 }
 
-void /* PRIVATE */
-png_push_process_row(png_structp png_ptr)
+void png_push_process_row(png_structp png_ptr)
 {
    png_ptr->row_info.color_type = png_ptr->color_type;
    png_ptr->row_info.width = png_ptr->iwidth;
@@ -819,35 +779,8 @@ png_push_process_row(png_structp png_ptr)
    }
 }
 
-void /* PRIVATE */
-png_read_push_finish_row(png_structp png_ptr)
+void png_read_push_finish_row(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-
-   /* start of interlace block */
-   const int png_pass_start[] = {0, 4, 0, 2, 0, 1, 0};
-
-   /* offset to next interlace block */
-   const int png_pass_inc[] = {8, 8, 4, 4, 2, 2, 1};
-
-   /* start of interlace block in the y direction */
-   const int png_pass_ystart[] = {0, 0, 4, 0, 2, 0, 1};
-
-   /* offset to next interlace block in the y direction */
-   const int png_pass_yinc[] = {8, 8, 8, 4, 4, 2, 2};
-
-   /* Width of interlace block.  This is not currently used - if you need
-    * it, uncomment it here and in png.h
-   const int png_pass_width[] = {8, 4, 4, 2, 2, 1, 1};
-   */
-
-   /* Height of interlace block.  This is not currently used - if you need
-    * it, uncomment it here and in png.h
-   const int png_pass_height[] = {8, 8, 4, 4, 2, 2, 1};
-   */
-#endif
-
    png_ptr->row_number++;
    if (png_ptr->row_number < png_ptr->num_rows)
       return;
@@ -895,8 +828,7 @@ png_read_push_finish_row(png_structp png_ptr)
  * chunk.  If there isn't a problem with the chunk itself (ie a bad chunk
  * name or a critical chunk), the chunk is (currently) silently ignored.
  */
-void /* PRIVATE */
-png_push_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t
+void png_push_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t
    length)
 {
    uint32_t skip=0;
@@ -961,22 +893,19 @@ png_push_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t
    png_push_crc_skip(png_ptr, skip);
 }
 
-void /* PRIVATE */
-png_push_have_info(png_structp png_ptr, png_info* info_ptr)
+void png_push_have_info(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr->info_fn != NULL)
       (*(png_ptr->info_fn))(png_ptr, info_ptr);
 }
 
-void /* PRIVATE */
-png_push_have_end(png_structp png_ptr, png_info* info_ptr)
+void png_push_have_end(png_structp png_ptr, png_info* info_ptr)
 {
    if (png_ptr->end_fn != NULL)
       (*(png_ptr->end_fn))(png_ptr, info_ptr);
 }
 
-void /* PRIVATE */
-png_push_have_row(png_structp png_ptr, uint8_t* row)
+void png_push_have_row(png_structp png_ptr, uint8_t* row)
 {
    if (png_ptr->row_fn != NULL)
       (*(png_ptr->row_fn))(png_ptr, row, png_ptr->row_number,
@@ -988,10 +917,6 @@ png_progressive_combine_row (png_structp png_ptr,
    uint8_t* old_row, uint8_t* new_row)
 {
    if(png_ptr == NULL) return;
-#ifdef PNG_USE_LOCAL_ARRAYS
-   const int png_pass_dsp_mask[7] =
-      {0xff, 0x0f, 0xff, 0x33, 0xff, 0x55, 0xff};
-#endif
    if (new_row != NULL)    /* new_row must == png_ptr->row_buf here. */
       png_combine_row(png_ptr, old_row, png_pass_dsp_mask[png_ptr->pass]);
 }

@@ -160,8 +160,7 @@ png_set_invert_mono(png_structp png_ptr)
 }
 
 /* invert monochrome grayscale data */
-void /* PRIVATE */
-png_do_invert(png_row_infop row_info, uint8_t* row)
+void png_do_invert(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_invert\n");
   /* This test removed from libpng version 1.0.13 and 1.2.0:
@@ -215,8 +214,7 @@ png_do_invert(png_row_infop row_info, uint8_t* row)
 
 #if defined(PNG_READ_SWAP_SUPPORTED) || defined(PNG_WRITE_SWAP_SUPPORTED)
 /* swaps byte order on 16 bit depth images */
-void /* PRIVATE */
-png_do_swap(png_row_infop row_info, uint8_t* row)
+void png_do_swap(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_swap\n");
    if (
@@ -242,8 +240,7 @@ png_do_swap(png_row_infop row_info, uint8_t* row)
 #if defined(PNG_WRITE_FILLER_SUPPORTED) || \
     defined(PNG_READ_STRIP_ALPHA_SUPPORTED)
 /* remove filler or alpha byte(s) */
-void /* PRIVATE */
-png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags)
+void png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags)
 {
    png_debug(1, "in png_do_strip_filler\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -400,8 +397,7 @@ png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags)
 
 #if defined(PNG_READ_BGR_SUPPORTED) || defined(PNG_WRITE_BGR_SUPPORTED)
 /* swaps red and blue bytes within a pixel */
-void /* PRIVATE */
-png_do_bgr(png_row_infop row_info, uint8_t* row)
+void png_do_bgr(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_bgr\n");
    if (

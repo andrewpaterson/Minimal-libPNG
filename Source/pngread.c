@@ -315,33 +315,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 
    for(;;)
    {
-#ifdef PNG_USE_LOCAL_ARRAYS
-      PNG_IHDR;
-      PNG_IDAT;
-      PNG_IEND;
-      PNG_PLTE;
-#if defined(PNG_READ_hIST_SUPPORTED)
-      PNG_hIST;
-#endif
-#if defined(PNG_READ_pCAL_SUPPORTED)
-      PNG_pCAL;
-#endif
-#if defined(PNG_READ_pHYs_SUPPORTED)
-      PNG_pHYs;
-#endif
-#if defined(PNG_READ_sBIT_SUPPORTED)
-      PNG_sBIT;
-#endif
-#if defined(PNG_READ_sPLT_SUPPORTED)
-      PNG_sPLT;
-#endif
-#if defined(PNG_READ_sRGB_SUPPORTED)
-      PNG_sRGB;
-#endif
-#if defined(PNG_READ_tRNS_SUPPORTED)
-      PNG_tRNS;
-#endif
-#endif /* PNG_USE_LOCAL_ARRAYS */
       uint8_t chunk_length[4];
       uint32_t length;
 
@@ -433,8 +406,7 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 #endif /* PNG_NO_SEQUENTIAL_READ_SUPPORTED */
 
 /* optional call to update the users info_ptr structure */
-void
-png_read_update_info(png_structp png_ptr, png_infop info_ptr)
+void png_read_update_info(png_structp png_ptr, png_infop info_ptr)
 {
    png_debug(1, "in png_read_update_info\n");
    if(png_ptr == NULL) return;
@@ -452,8 +424,7 @@ png_read_update_info(png_structp png_ptr, png_infop info_ptr)
  * the user to obtain a gamma-corrected palette, for example.
  * If the user doesn't call this, we will do it ourselves.
  */
-void
-png_start_read_image(png_structp png_ptr)
+void png_start_read_image(png_structp png_ptr)
 {
    png_debug(1, "in png_start_read_image\n");
    if(png_ptr == NULL) return;
@@ -463,14 +434,8 @@ png_start_read_image(png_structp png_ptr)
 #endif /* PNG_NO_SEQUENTIAL_READ_SUPPORTED */
 
 #ifndef PNG_NO_SEQUENTIAL_READ_SUPPORTED
-void
-png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
+void png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_IDAT;
-   const int png_pass_dsp_mask[7] = {0xff, 0x0f, 0xff, 0x33, 0xff, 0x55, 0xff};
-   const int png_pass_mask[7] = {0x80, 0x08, 0x88, 0x22, 0xaa, 0x55, 0xff};
-#endif
    int ret;
    if(png_ptr == NULL) return;
    png_debug2(1, "in png_read_row (row %lu, pass %d)\n",
@@ -810,34 +775,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 
    do
    {
-#ifdef PNG_USE_LOCAL_ARRAYS
-      PNG_IHDR;
-      PNG_IDAT;
-      PNG_IEND;
-      PNG_PLTE;
-#if defined(PNG_READ_hIST_SUPPORTED)
-      PNG_hIST;
-#endif
-#if defined(PNG_READ_pCAL_SUPPORTED)
-      PNG_pCAL;
-#endif
-#if defined(PNG_READ_pHYs_SUPPORTED)
-      PNG_pHYs;
-#endif
-#if defined(PNG_READ_sBIT_SUPPORTED)
-      PNG_sBIT;
-#endif
-#if defined(PNG_READ_sPLT_SUPPORTED)
-      PNG_sPLT;
-#endif
-#if defined(PNG_READ_sRGB_SUPPORTED)
-      PNG_sRGB;
-#endif
-#if defined(PNG_READ_tRNS_SUPPORTED)
-      PNG_tRNS;
-#endif
-#endif /* PNG_USE_LOCAL_ARRAYS */
-
       png_read_data(png_ptr, chunk_length, 4);
       length = png_get_uint_31(png_ptr,chunk_length);
 
@@ -971,8 +908,7 @@ png_destroy_read_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr,
 }
 
 /* free all memory used by the read (old method) */
-void /* PRIVATE */
-png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr)
+void png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr)
 {
 #ifdef PNG_SETJMP_SUPPORTED
    jmp_buf tmp_jmp;

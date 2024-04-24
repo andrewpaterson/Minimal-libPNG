@@ -15,8 +15,7 @@
 /* Transform the data according to the user's wishes.  The order of
  * transformations is significant.
  */
-void /* PRIVATE */
-png_do_write_transformations(png_structp png_ptr)
+void png_do_write_transformations(png_structp png_ptr)
 {
    png_debug(1, "in png_do_write_transformations\n");
 
@@ -83,8 +82,7 @@ png_do_write_transformations(png_structp png_ptr)
  * row_info bit depth should be 8 (one pixel per byte).  The channels
  * should be 1 (this only happens on grayscale and paletted images).
  */
-void /* PRIVATE */
-png_do_pack(png_row_infop row_info, uint8_t* row, uint32_t bit_depth)
+void png_do_pack(png_row_infop row_info, uint8_t* row, uint32_t bit_depth)
 {
    png_debug(1, "in png_do_pack\n");
    if (row_info->bit_depth == 8 &&
@@ -212,8 +210,7 @@ png_do_pack(png_row_infop row_info, uint8_t* row, uint32_t bit_depth)
  * would pass 3 as bit_depth, and this routine would translate the
  * data to 0 to 15.
  */
-void /* PRIVATE */
-png_do_shift(png_row_infop row_info, uint8_t* row, png_color_8p bit_depth)
+void png_do_shift(png_row_infop row_info, uint8_t* row, png_color_8p bit_depth)
 {
    png_debug(1, "in png_do_shift\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -336,8 +333,7 @@ png_do_shift(png_row_infop row_info, uint8_t* row, png_color_8p bit_depth)
 #endif
 
 #if defined(PNG_WRITE_SWAP_ALPHA_SUPPORTED)
-void /* PRIVATE */
-png_do_write_swap_alpha(png_row_infop row_info, uint8_t* row)
+void png_do_write_swap_alpha(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_write_swap_alpha\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -428,8 +424,7 @@ png_do_write_swap_alpha(png_row_infop row_info, uint8_t* row)
 #endif
 
 #if defined(PNG_WRITE_INVERT_ALPHA_SUPPORTED)
-void /* PRIVATE */
-png_do_write_invert_alpha(png_row_infop row_info, uint8_t* row)
+void png_do_write_invert_alpha(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_write_invert_alpha\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)

@@ -128,8 +128,7 @@ png_write_chunk_end(png_structp png_ptr)
  * we should call png_set_sig_bytes() to tell libpng how many of the
  * bytes have already been written.
  */
-void /* PRIVATE */
-png_write_sig(png_structp png_ptr)
+void png_write_sig(png_structp png_ptr)
 {
    uint8_t png_signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
    /* write the rest of the 8 byte signature */
@@ -144,14 +143,8 @@ png_write_sig(png_structp png_ptr)
  * information.  Note that the rest of this code depends upon this
  * information being correct.
  */
-void /* PRIVATE */
-png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height,
-   int bit_depth, int color_type, int compression_type, int filter_type,
-   int interlace_type)
+void png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height, int bit_depth, int color_type, int compression_type, int filter_type, int interlace_type)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_IHDR;
-#endif
    uint8_t buf[13]; /* buffer to store the IHDR info */
 
    png_debug(1, "in png_write_IHDR\n");
@@ -291,12 +284,8 @@ png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height,
  * correct order for PNG, so people can redefine it to any convenient
  * structure.
  */
-void /* PRIVATE */
-png_write_PLTE(png_structp png_ptr, png_colorp palette, uint32_t num_pal)
+void png_write_PLTE(png_structp png_ptr, png_colorp palette, uint32_t num_pal)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_PLTE;
-#endif
    uint32_t i;
    png_colorp pal_ptr;
    uint8_t buf[3];
@@ -350,12 +339,8 @@ png_write_PLTE(png_structp png_ptr, png_colorp palette, uint32_t num_pal)
 }
 
 /* write an IDAT chunk */
-void /* PRIVATE */
-png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length)
+void png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_IDAT;
-#endif
    png_debug(1, "in png_write_IDAT\n");
 
    /* Optimize the CMF field in the zlib stream. */
@@ -402,62 +387,18 @@ png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length)
 }
 
 /* write an IEND chunk */
-void /* PRIVATE */
-png_write_IEND(png_structp png_ptr)
+void png_write_IEND(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_IEND;
-#endif
    png_debug(1, "in png_write_IEND\n");
    png_write_chunk(png_ptr, (uint8_t*)png_IEND, (uint8_t*)NULL,
      (size_t)0);
    png_ptr->mode |= PNG_HAVE_IEND;
 }
 
-#if defined(PNG_WRITE_gAMA_SUPPORTED)
-/* write a gAMA chunk */
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-void /* PRIVATE */
-png_write_gAMA(png_structp png_ptr, double file_gamma)
-{
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_gAMA;
-#endif
-   uint32_t igamma;
-   uint8_t buf[4];
-
-   png_debug(1, "in png_write_gAMA\n");
-   /* file_gamma is saved in 1/100,000ths */
-   igamma = (uint32_t)(file_gamma * 100000.0 + 0.5);
-   png_save_uint_32(buf, igamma);
-   png_write_chunk(png_ptr, (uint8_t*)png_gAMA, buf, (size_t)4);
-}
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-void /* PRIVATE */
-png_write_gAMA_fixed(png_structp png_ptr, png_fixed_point file_gamma)
-{
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_gAMA;
-#endif
-   uint8_t buf[4];
-
-   png_debug(1, "in png_write_gAMA\n");
-   /* file_gamma is saved in 1/100,000ths */
-   png_save_uint_32(buf, (uint32_t)file_gamma);
-   png_write_chunk(png_ptr, (uint8_t*)png_gAMA, buf, (size_t)4);
-}
-#endif
-#endif
-
 #if defined(PNG_WRITE_sRGB_SUPPORTED)
 /* write a sRGB chunk */
-void /* PRIVATE */
-png_write_sRGB(png_structp png_ptr, int srgb_intent)
+void png_write_sRGB(png_structp png_ptr, int srgb_intent)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_sRGB;
-#endif
    uint8_t buf[1];
 
    png_debug(1, "in png_write_sRGB\n");
@@ -472,12 +413,8 @@ png_write_sRGB(png_structp png_ptr, int srgb_intent)
 
 #if defined(PNG_WRITE_sPLT_SUPPORTED)
 /* write a sPLT chunk */
-void /* PRIVATE */
-png_write_sPLT(png_structp png_ptr, png_sPLT_tp spalette)
+void png_write_sPLT(png_structp png_ptr, png_sPLT_tp spalette)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_sPLT;
-#endif
    size_t name_len;
    char* new_name;
    uint8_t entrybuf[10];
@@ -555,12 +492,8 @@ png_write_sPLT(png_structp png_ptr, png_sPLT_tp spalette)
 
 #if defined(PNG_WRITE_sBIT_SUPPORTED)
 /* write the sBIT chunk */
-void /* PRIVATE */
-png_write_sBIT(png_structp png_ptr, png_color_8p sbit, int color_type)
+void png_write_sBIT(png_structp png_ptr, png_color_8p sbit, int color_type)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_sBIT;
-#endif
    uint8_t buf[4];
    size_t size;
 
@@ -611,13 +544,9 @@ png_write_sBIT(png_structp png_ptr, png_color_8p sbit, int color_type)
 
 #if defined(PNG_WRITE_tRNS_SUPPORTED)
 /* write the tRNS chunk */
-void /* PRIVATE */
-png_write_tRNS(png_structp png_ptr, uint8_t* trans, png_color_16p tran,
+void png_write_tRNS(png_structp png_ptr, uint8_t* trans, png_color_16p tran,
    int num_trans, int color_type)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_tRNS;
-#endif
    uint8_t buf[6];
 
    png_debug(1, "in png_write_tRNS\n");
@@ -667,12 +596,8 @@ png_write_tRNS(png_structp png_ptr, uint8_t* trans, png_color_16p tran,
 
 #if defined(PNG_WRITE_hIST_SUPPORTED)
 /* write the histogram */
-void /* PRIVATE */
-png_write_hIST(png_structp png_ptr, uint16_t* hist, int num_hist)
+void png_write_hIST(png_structp png_ptr, uint16_t* hist, int num_hist)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_hIST;
-#endif
    int i;
    uint8_t buf[3];
 
@@ -706,8 +631,7 @@ png_write_hIST(png_structp png_ptr, uint16_t* hist, int num_hist)
  * by the calling routine.  This avoids problems with trying to write to
  * static keywords without having to have duplicate copies of the strings.
  */
-size_t /* PRIVATE */
-png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key)
+size_t png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key)
 {
    size_t key_len;
    char* kp;
@@ -826,13 +750,9 @@ png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key)
 
 #if defined(PNG_WRITE_pCAL_SUPPORTED)
 /* write the pCAL chunk (described in the PNG extensions document) */
-void /* PRIVATE */
-png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0,
+void png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0,
    int32_t X1, int type, int nparams, char* units, png_charpp params)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_pCAL;
-#endif
    size_t purpose_len, units_len, total_len;
    uint32_t* params_len;
    uint8_t buf[10];
@@ -885,14 +805,10 @@ png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0,
 #endif
 #if defined(PNG_WRITE_pHYs_SUPPORTED)
 /* write the pHYs chunk */
-void /* PRIVATE */
-png_write_pHYs(png_structp png_ptr, uint32_t x_pixels_per_unit,
+void png_write_pHYs(png_structp png_ptr, uint32_t x_pixels_per_unit,
    uint32_t y_pixels_per_unit,
    int unit_type)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   PNG_pHYs;
-#endif
    uint8_t buf[9];
 
    png_debug(1, "in png_write_pHYs\n");
@@ -908,25 +824,8 @@ png_write_pHYs(png_structp png_ptr, uint32_t x_pixels_per_unit,
 #endif
 
 /* initializes the row writing capability of libpng */
-void /* PRIVATE */
-png_write_start_row(png_structp png_ptr)
+void png_write_start_row(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-
-   /* start of interlace block */
-   int png_pass_start[7] = {0, 4, 0, 2, 0, 1, 0};
-
-   /* offset to next interlace block */
-   int png_pass_inc[7] = {8, 8, 4, 4, 2, 2, 1};
-
-   /* start of interlace block in the y direction */
-   int png_pass_ystart[7] = {0, 0, 4, 0, 2, 0, 1};
-
-   /* offset to next interlace block in the y direction */
-   int png_pass_yinc[7] = {8, 8, 8, 4, 4, 2, 2};
-#endif
-
    size_t buf_size;
 
    png_debug(1, "in png_write_start_row\n");
@@ -1002,25 +901,8 @@ png_write_start_row(png_structp png_ptr)
 }
 
 /* Internal use only.  Called when finished processing a row of data. */
-void /* PRIVATE */
-png_write_finish_row(png_structp png_ptr)
+void png_write_finish_row(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-
-   /* start of interlace block */
-   int png_pass_start[7] = {0, 4, 0, 2, 0, 1, 0};
-
-   /* offset to next interlace block */
-   int png_pass_inc[7] = {8, 8, 4, 4, 2, 2, 1};
-
-   /* start of interlace block in the y direction */
-   int png_pass_ystart[7] = {0, 0, 4, 0, 2, 0, 1};
-
-   /* offset to next interlace block in the y direction */
-   int png_pass_yinc[7] = {8, 8, 8, 4, 4, 2, 2};
-#endif
-
    int ret;
 
    png_debug(1, "in png_write_finish_row\n");
@@ -1119,19 +1001,8 @@ png_write_finish_row(png_structp png_ptr)
  * sp will always be >= dp, so we should never overwrite anything.
  * See the default: case for the easiest code to understand.
  */
-void /* PRIVATE */
-png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass)
+void png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-
-   /* start of interlace block */
-   int png_pass_start[7] = {0, 4, 0, 2, 0, 1, 0};
-
-   /* offset to next interlace block */
-   int png_pass_inc[7] = {8, 8, 4, 4, 2, 2, 1};
-#endif
-
    png_debug(1, "in png_do_write_interlace\n");
    /* we don't have to do anything on the last pass (6) */
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -1290,8 +1161,7 @@ png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass)
 #define PNG_HISHIFT 10
 #define PNG_LOMASK ((uint32_t)0xffffL)
 #define PNG_HIMASK ((uint32_t)(~PNG_LOMASK >> PNG_HISHIFT))
-void /* PRIVATE */
-png_write_find_filter(png_structp png_ptr, png_row_infop row_info)
+void png_write_find_filter(png_structp png_ptr, png_row_infop row_info)
 {
     uint8_t* prev_row;
     uint8_t* best_row;
@@ -1930,8 +1800,7 @@ png_write_find_filter(png_structp png_ptr, png_row_infop row_info)
 
 
 /* Do the actual writing of a previously filtered row. */
-void /* PRIVATE */
-png_write_filtered_row(png_structp png_ptr, uint8_t* filtered_row)
+void png_write_filtered_row(png_structp png_ptr, uint8_t* filtered_row)
 {
    png_debug(1, "in png_write_filtered_row\n");
    png_debug1(2, "filter = %d\n", filtered_row[0]);

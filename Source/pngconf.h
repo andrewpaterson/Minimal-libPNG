@@ -596,19 +596,9 @@ typedef z_stream*   png_zstreamp;
  * They are no longer used in libpng itself, since version 1.0.5c,
  * but might be required for some pre-1.0.5c applications.
  */
-#if !defined(PNG_USE_LOCAL_ARRAYS) && !defined(PNG_USE_GLOBAL_ARRAYS)
-#  if defined(PNG_NO_GLOBAL_ARRAYS)
-#    define PNG_USE_LOCAL_ARRAYS
-#  else
-#    define PNG_USE_GLOBAL_ARRAYS
-#  endif
-#endif
+#define PNG_USE_GLOBAL_ARRAYS
 
-#ifdef PNG_USE_GLOBAL_ARRAYS
-#  ifndef PNG_EXPORT_VAR
-#    define PNG_EXPORT_VAR(type) extern  type
-#  endif
-#endif
+#define PNG_EXPORT_VAR(type) extern  type
 
 /* User may want to use these so they are not in PNG_INTERNAL. Any library
  * functions that are passed far data must be model independent.

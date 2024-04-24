@@ -656,8 +656,7 @@ png_set_read_user_transform_fn(png_structp png_ptr, png_user_transform_ptr
 /* Initialize everything needed for the read.  This includes modifying
  * the palette.
  */
-void /* PRIVATE */
-png_init_read_transformations(png_structp png_ptr)
+void png_init_read_transformations(png_structp png_ptr)
 {
    png_debug(1, "in png_init_read_transformations\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -699,8 +698,7 @@ png_init_read_transformations(png_structp png_ptr)
  * info should be updated so a PNG file could be written with it,
  * assuming the transformations result in valid PNG data.
  */
-void /* PRIVATE */
-png_read_transform_info(png_structp png_ptr, png_info* info_ptr)
+void png_read_transform_info(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_read_transform_info\n");
 #if defined(PNG_READ_EXPAND_SUPPORTED)
@@ -817,8 +815,7 @@ defined(PNG_READ_USER_TRANSFORM_SUPPORTED)
  * and is very touchy.  If you add a transformation, take care to
  * decide how it fits in with the other transformations here.
  */
-void /* PRIVATE */
-png_do_read_transformations(png_structp png_ptr)
+void png_do_read_transformations(png_structp png_ptr)
 {
    png_debug(1, "in png_do_read_transformations\n");
 #if !defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -1016,8 +1013,7 @@ From Andreas Dilger e-mail to png-implement, 26 March 1998:
  * the numbers 0 or 1.  If you would rather they contain 0 and 255, use
  * png_do_shift() after this.
  */
-void /* PRIVATE */
-png_do_unpack(png_row_infop row_info, uint8_t* row)
+void png_do_unpack(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_unpack\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -1106,8 +1102,7 @@ png_do_unpack(png_row_infop row_info, uint8_t* row)
  * a row of bit depth 8, but only 5 are significant, this will shift
  * the values back to 0 through 31.
  */
-void /* PRIVATE */
-png_do_unshift(png_row_infop row_info, uint8_t* row, png_color_8p sig_bits)
+void png_do_unshift(png_row_infop row_info, uint8_t* row, png_color_8p sig_bits)
 {
    png_debug(1, "in png_do_unshift\n");
    if (
@@ -1212,8 +1207,7 @@ png_do_unshift(png_row_infop row_info, uint8_t* row, png_color_8p sig_bits)
 
 #if defined(PNG_READ_16_TO_8_SUPPORTED)
 /* chop rows of bit depth 16 down to 8 */
-void /* PRIVATE */
-png_do_chop(png_row_infop row_info, uint8_t* row)
+void png_do_chop(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_chop\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -1266,8 +1260,7 @@ png_do_chop(png_row_infop row_info, uint8_t* row)
 #endif
 
 #if defined(PNG_READ_SWAP_ALPHA_SUPPORTED)
-void /* PRIVATE */
-png_do_read_swap_alpha(png_row_infop row_info, uint8_t* row)
+void png_do_read_swap_alpha(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_read_swap_alpha\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -1358,8 +1351,7 @@ png_do_read_swap_alpha(png_row_infop row_info, uint8_t* row)
 #endif
 
 #if defined(PNG_READ_INVERT_ALPHA_SUPPORTED)
-void /* PRIVATE */
-png_do_read_invert_alpha(png_row_infop row_info, uint8_t* row)
+void png_do_read_invert_alpha(png_row_infop row_info, uint8_t* row)
 {
    png_debug(1, "in png_do_read_invert_alpha\n");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
@@ -1457,8 +1449,7 @@ png_do_read_invert_alpha(png_row_infop row_info, uint8_t* row)
 
 #if defined(PNG_READ_FILLER_SUPPORTED)
 /* Add filler channel if we have RGB color */
-void /* PRIVATE */
-png_do_read_filler(png_row_infop row_info, uint8_t* row,
+void png_do_read_filler(png_row_infop row_info, uint8_t* row,
    uint32_t filler, uint32_t flags)
 {
    uint32_t i;
@@ -1633,8 +1624,7 @@ png_do_read_filler(png_row_infop row_info, uint8_t* row,
 
 #if defined(PNG_READ_GRAY_TO_RGB_SUPPORTED)
 /* expand grayscale files to RGB, with or without alpha */
-void /* PRIVATE */
-png_do_gray_to_rgb(png_row_infop row_info, uint8_t* row)
+void png_do_gray_to_rgb(png_row_infop row_info, uint8_t* row)
 {
    uint32_t i;
    uint32_t row_width = row_info->width;
@@ -1734,8 +1724,7 @@ png_do_gray_to_rgb(png_row_infop row_info, uint8_t* row)
  *
  *  Other integer coefficents can be used via png_set_rgb_to_gray().
  */
-int /* PRIVATE */
-png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, uint8_t* row)
+int png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, uint8_t* row)
 
 {
    uint32_t i;
@@ -1904,8 +1893,7 @@ png_build_grayscale_palette(int bit_depth, png_colorp palette)
 /* Expands a palette row to an RGB or RGBA row depending
  * upon whether you supply trans and num_trans.
  */
-void /* PRIVATE */
-png_do_expand_palette(png_row_infop row_info, uint8_t* row,
+void png_do_expand_palette(png_row_infop row_info, uint8_t* row,
    png_colorp palette, uint8_t* trans, int num_trans)
 {
    int shift, value;
@@ -2048,8 +2036,7 @@ png_do_expand_palette(png_row_infop row_info, uint8_t* row,
 /* If the bit depth < 8, it is expanded to 8.  Also, if the already
  * expanded transparency value is supplied, an alpha channel is built.
  */
-void /* PRIVATE */
-png_do_expand(png_row_infop row_info, uint8_t* row,
+void png_do_expand(png_row_infop row_info, uint8_t* row,
    png_color_16p trans_value)
 {
    int shift, value;
@@ -2247,8 +2234,7 @@ png_do_expand(png_row_infop row_info, uint8_t* row,
 #endif
 
 #if defined(PNG_READ_DITHER_SUPPORTED)
-void /* PRIVATE */
-png_do_dither(png_row_infop row_info, uint8_t* row,
+void png_do_dither(png_row_infop row_info, uint8_t* row,
     uint8_t* palette_lookup, uint8_t* dither_lookup)
 {
    uint8_t* sp; 

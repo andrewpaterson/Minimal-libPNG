@@ -22,8 +22,7 @@
 /* Allocate memory for a png_struct or a png_info.  The malloc and
    memset can be replaced by a single call to calloc() if this is thought
    to improve performance noticably. */
-void* /* PRIVATE */
-png_create_struct(int type)
+void* png_create_struct(int type)
 {
 #ifdef PNG_USER_MEM_SUPPORTED
    return (png_create_struct_2(type, (png_malloc_ptr)NULL, (void*)NULL));
@@ -32,8 +31,7 @@ png_create_struct(int type)
 /* Allocate memory for a png_struct or a png_info.  The malloc and
    memset can be replaced by a single call to calloc() if this is thought
    to improve performance noticably. */
-void* /* PRIVATE */
-png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr)
+void* png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr)
 {
 #endif /* PNG_USER_MEM_SUPPORTED */
    size_t size;
@@ -68,16 +66,14 @@ png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr)
 
 
 /* Free memory allocated by a png_create_struct() call */
-void /* PRIVATE */
-png_destroy_struct(void* struct_ptr)
+void png_destroy_struct(void* struct_ptr)
 {
 #ifdef PNG_USER_MEM_SUPPORTED
    png_destroy_struct_2(struct_ptr, (png_free_ptr)NULL, (void*)NULL);
 }
 
 /* Free memory allocated by a png_create_struct() call */
-void /* PRIVATE */
-png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn,
+void png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn,
     void* mem_ptr)
 {
 #endif /* PNG_USER_MEM_SUPPORTED */

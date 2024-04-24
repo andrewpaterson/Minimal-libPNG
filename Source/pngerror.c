@@ -17,10 +17,8 @@
 #include "png.h"
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
-static void /* PRIVATE */
-png_default_error(png_structp png_ptr, const char* error_message);
-static void /* PRIVATE */
-png_default_warning(png_structp png_ptr, const char* warning_message);
+static void png_default_error(png_structp png_ptr, const char* error_message);
+static void png_default_warning(png_structp png_ptr, const char* warning_message);
 
 /* This function is called whenever there is a fatal error.  This function
  * should not be changed.  If there is a need to handle errors differently,
@@ -116,8 +114,7 @@ static const char png_digit[16] = {
    'A', 'B', 'C', 'D', 'E', 'F'
 };
 
-static void /* PRIVATE */
-png_format_buffer(png_structp png_ptr, char* buffer, const char* error_message)
+static void png_format_buffer(png_structp png_ptr, char* buffer, const char* error_message)
 {
    int iout = 0, iin = 0;
 
@@ -179,8 +176,7 @@ png_chunk_warning(png_structp png_ptr, const char* warning_message)
  * function is used by default, or if the program supplies NULL for the
  * error function pointer in png_set_error_fn().
  */
-static void /* PRIVATE */
-png_default_error(png_structp png_ptr, const char* error_message)
+static void png_default_error(png_structp png_ptr, const char* error_message)
 {
 #ifndef PNG_NO_CONSOLE_IO
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -228,8 +224,7 @@ png_default_error(png_structp png_ptr, const char* error_message)
  * here if you don't want them to.  In the default configuration, png_ptr is
  * not used, but it is passed in case it may be useful.
  */
-static void /* PRIVATE */
-png_default_warning(png_structp png_ptr, const char* warning_message)
+static void png_default_warning(png_structp png_ptr, const char* warning_message)
 {
 #ifndef PNG_NO_CONSOLE_IO
 #  ifdef PNG_ERROR_NUMBERS_SUPPORTED

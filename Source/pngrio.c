@@ -25,8 +25,7 @@
    with very small lengths, so you should implement some kind of simple
    buffering if you are using unbuffered reads.  This should never be asked
    to read more then 64K on a 16 bit machine. */
-void /* PRIVATE */
-png_read_data(png_structp png_ptr, uint8_t* data, size_t length)
+void png_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    png_debug1(4,"reading %d bytes\n", (int)length);
    if (png_ptr->read_data_fn != NULL)

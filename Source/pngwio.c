@@ -25,8 +25,7 @@
    buffering if you are using unbuffered writes.  This should never be asked
    to write more than 64K on a 16 bit machine.  */
 
-void /* PRIVATE */
-png_write_data(png_structp png_ptr, uint8_t* data, size_t length)
+void png_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    if (png_ptr->write_data_fn != NULL )
       (*(png_ptr->write_data_fn))(png_ptr, data, length);
@@ -55,8 +54,7 @@ png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
    to disk).  After png_flush is called, there should be no data pending
    writing in any buffers. */
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
-void /* PRIVATE */
-png_flush(png_structp png_ptr)
+void png_flush(png_structp png_ptr)
 {
    if (png_ptr->output_flush_fn != NULL)
       (*(png_ptr->output_flush_fn))(png_ptr);

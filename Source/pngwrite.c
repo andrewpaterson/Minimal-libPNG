@@ -811,8 +811,7 @@ png_destroy_write_struct(png_structpp png_ptr_ptr, png_info** info_ptr_ptr)
 
 
 /* Free any memory used in png_ptr struct (old method) */
-void /* PRIVATE */
-png_write_destroy(png_structp png_ptr)
+void png_write_destroy(png_structp png_ptr)
 {
 #ifdef PNG_SETJMP_SUPPORTED
    jmp_buf tmp_jmp; /* save jump buffer */

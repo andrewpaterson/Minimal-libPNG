@@ -172,8 +172,7 @@ void png_zfree(voidpf png_ptr, voidpf ptr)
 /* Reset the CRC variable to 32 bits of 1's.  Care must be taken
  * in case CRC is > 32 bits to leave the top bits 0.
  */
-void /* PRIVATE */
-png_reset_crc(png_structp png_ptr)
+void png_reset_crc(png_structp png_ptr)
 {
    png_ptr->crc = crc32(0, Z_NULL, 0);
 }
@@ -183,8 +182,7 @@ png_reset_crc(png_structp png_ptr)
  * also check that this data will actually be used before going to the
  * trouble of calculating it.
  */
-void /* PRIVATE */
-png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length)
+void png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length)
 {
    int need_crc = 1;
 
@@ -497,8 +495,7 @@ if (mask & PNG_FREE_ROWS)
  * pointing to before re-using it or freeing the struct itself.  Recall
  * that png_free() checks for NULL pointers for us.
  */
-void /* PRIVATE */
-png_info_destroy(png_structp png_ptr, png_info* info_ptr)
+void png_info_destroy(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_info_destroy\n");
 

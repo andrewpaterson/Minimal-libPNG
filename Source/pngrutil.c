@@ -67,8 +67,7 @@ png_get_uint_16(uint8_t* buf)
 #endif /* PNG_READ_BIG_ENDIAN_SUPPORTED */
 
 /* Read data, and (optionally) run it through the CRC. */
-void /* PRIVATE */
-png_crc_read(png_structp png_ptr, uint8_t* buf, size_t length)
+void png_crc_read(png_structp png_ptr, uint8_t* buf, size_t length)
 {
    if(png_ptr == NULL) return;
    png_read_data(png_ptr, buf, length);
@@ -79,8 +78,7 @@ png_crc_read(png_structp png_ptr, uint8_t* buf, size_t length)
    are reading a ancillary or critical chunk, and how the program has set
    things up, we may calculate the CRC on the data and print a message.
    Returns '1' if there was a CRC error, '0' otherwise. */
-int /* PRIVATE */
-png_crc_finish(png_structp png_ptr, uint32_t skip)
+int png_crc_finish(png_structp png_ptr, uint32_t skip)
 {
    size_t i;
    size_t istop = png_ptr->zbuf_size;
@@ -115,8 +113,7 @@ png_crc_finish(png_structp png_ptr, uint32_t skip)
 
 /* Compare the CRC stored in the PNG file with that calculated by libpng from
    the data it has read thus far. */
-int /* PRIVATE */
-png_crc_error(png_structp png_ptr)
+int png_crc_error(png_structp png_ptr)
 {
    uint8_t crc_bytes[4];
    uint32_t crc;
@@ -148,8 +145,7 @@ png_crc_error(png_structp png_ptr)
 
 
 /* read and check the IDHR chunk */
-void /* PRIVATE */
-png_handle_IHDR(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_IHDR(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint8_t buf[13];
    uint32_t width, height;
@@ -216,8 +212,7 @@ png_handle_IHDR(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 }
 
 /* read and check the palette */
-void /* PRIVATE */
-png_handle_PLTE(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_PLTE(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    png_color palette[PNG_MAX_PALETTE_LENGTH];
    int num, i;
@@ -354,8 +349,7 @@ png_handle_PLTE(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 
 }
 
-void /* PRIVATE */
-png_handle_IEND(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_IEND(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    png_debug(1, "in png_handle_IEND\n");
 
@@ -378,8 +372,7 @@ png_handle_IEND(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 
 
 #if defined(PNG_READ_sBIT_SUPPORTED)
-void /* PRIVATE */
-png_handle_sBIT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_sBIT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    size_t truelen;
    uint8_t buf[4];
@@ -444,8 +437,7 @@ png_handle_sBIT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 #endif
 
 #if defined(PNG_READ_sRGB_SUPPORTED)
-void /* PRIVATE */
-png_handle_sRGB(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_sRGB(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    int intent;
    uint8_t buf[1];
@@ -495,8 +487,7 @@ png_handle_sRGB(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 
 
 #if defined(PNG_READ_sPLT_SUPPORTED)
-void /* PRIVATE */
-png_handle_sPLT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_sPLT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 /* Note: this does not properly handle chunks that are > 64K under DOS */
 {
    uint8_t* chunkdata;
@@ -635,8 +626,7 @@ png_handle_sPLT(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 #endif /* PNG_READ_sPLT_SUPPORTED */
 
 #if defined(PNG_READ_tRNS_SUPPORTED)
-void /* PRIVATE */
-png_handle_tRNS(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_tRNS(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint8_t readbuf[PNG_MAX_PALETTE_LENGTH];
 
@@ -727,8 +717,7 @@ png_handle_tRNS(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 #endif
 
 #if defined(PNG_READ_hIST_SUPPORTED)
-void /* PRIVATE */
-png_handle_hIST(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_hIST(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    unsigned int num, i;
    uint16_t readbuf[PNG_MAX_PALETTE_LENGTH];
@@ -781,8 +770,7 @@ png_handle_hIST(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 #endif
 
 #if defined(PNG_READ_pHYs_SUPPORTED)
-void /* PRIVATE */
-png_handle_pHYs(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_pHYs(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint8_t buf[9];
    uint32_t res_x, res_y;
@@ -826,8 +814,7 @@ png_handle_pHYs(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 
 #if defined(PNG_READ_pCAL_SUPPORTED)
 /* read the pCAL chunk (described in the PNG Extensions document) */
-void /* PRIVATE */
-png_handle_pCAL(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_pCAL(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    char* purpose;
    int32_t X0, X1;
@@ -959,8 +946,7 @@ png_handle_pCAL(png_structp png_ptr, png_info* info_ptr, uint32_t length)
    chunk name, CRC, or a critical chunk), the chunk is silently ignored
    -- unless the PNG_FLAG_UNKNOWN_CHUNKS_SUPPORTED flag is on in which
    case it will be saved away to be written out later. */
-void /* PRIVATE */
-png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length)
+void png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
    uint32_t skip = 0;
 
@@ -968,9 +954,6 @@ png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 
    if (png_ptr->mode & PNG_HAVE_IDAT)
    {
-#ifdef PNG_USE_LOCAL_ARRAYS
-      PNG_IDAT;
-#endif
       if (png_memcmp(png_ptr->chunk_name, png_IDAT, 4))  /* not an IDAT */
          png_ptr->mode |= PNG_AFTER_IDAT;
    }
@@ -1049,8 +1032,7 @@ png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 
 #define isnonalpha(c) ((c) < 65 || (c) > 122 || ((c) > 90 && (c) < 97))
 
-void /* PRIVATE */
-png_check_chunk_name(png_structp png_ptr, uint8_t* chunk_name)
+void png_check_chunk_name(png_structp png_ptr, uint8_t* chunk_name)
 {
    png_debug(1, "in png_check_chunk_name\n");
    if (isnonalpha(chunk_name[0]) || isnonalpha(chunk_name[1]) ||
@@ -1245,11 +1227,6 @@ void png_do_read_interlace(png_structp png_ptr)
    uint8_t* row = png_ptr->row_buf + 1;
    int pass = png_ptr->pass;
    uint32_t transformations = png_ptr->transformations;
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-   /* offset to next interlace block */
-   const int png_pass_inc[7] = {8, 8, 4, 4, 2, 2, 1};
-#endif
 
    png_debug(1,"in png_do_read_interlace (stock C version)\n");
    if (row != NULL && row_info != NULL)
@@ -1540,25 +1517,8 @@ void png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* r
    }
 }
 
-void /* PRIVATE */
-png_read_finish_row(png_structp png_ptr)
+void png_read_finish_row(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-
-   /* start of interlace block */
-   const int png_pass_start[7] = {0, 4, 0, 2, 0, 1, 0};
-
-   /* offset to next interlace block */
-   const int png_pass_inc[7] = {8, 8, 4, 4, 2, 2, 1};
-
-   /* start of interlace block in the y direction */
-   const int png_pass_ystart[7] = {0, 0, 4, 0, 2, 0, 1};
-
-   /* offset to next interlace block in the y direction */
-   const int png_pass_yinc[7] = {8, 8, 8, 4, 4, 2, 2};
-#endif
-
    png_debug(1, "in png_read_finish_row\n");
    png_ptr->row_number++;
    if (png_ptr->row_number < png_ptr->num_rows)
@@ -1600,9 +1560,6 @@ png_read_finish_row(png_structp png_ptr)
 
    if (!(png_ptr->flags & PNG_FLAG_ZLIB_FINISHED))
    {
-#ifdef PNG_USE_LOCAL_ARRAYS
-      PNG_IDAT;
-#endif
       char extra;
       int ret;
 
@@ -1667,25 +1624,8 @@ png_read_finish_row(png_structp png_ptr)
    png_ptr->mode |= PNG_AFTER_IDAT;
 }
 
-void /* PRIVATE */
-png_read_start_row(png_structp png_ptr)
+void png_read_start_row(png_structp png_ptr)
 {
-#ifdef PNG_USE_LOCAL_ARRAYS
-   /* arrays to facilitate easy interlacing - use pass (0 - 6) as index */
-
-   /* start of interlace block */
-   const int png_pass_start[7] = {0, 4, 0, 2, 0, 1, 0};
-
-   /* offset to next interlace block */
-   const int png_pass_inc[7] = {8, 8, 4, 4, 2, 2, 1};
-
-   /* start of interlace block in the y direction */
-   const int png_pass_ystart[7] = {0, 0, 4, 0, 2, 0, 1};
-
-   /* offset to next interlace block in the y direction */
-   const int png_pass_yinc[7] = {8, 8, 8, 4, 4, 2, 2};
-#endif
-
    int max_pixel_depth;
    uint32_t row_bytes;
 
