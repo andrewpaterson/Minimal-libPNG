@@ -1027,17 +1027,6 @@ struct png_struct_def
 #if defined(PNG_READ_DITHER_SUPPORTED) || defined(PNG_hIST_SUPPORTED)
    uint16_t* hist;                /* histogram */
 #endif
-
-#if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
-   uint8_t heuristic_method;        /* heuristic for row filter selection */
-   uint8_t num_prev_filters;        /* number of weights for previous rows */
-   uint8_t* prev_filters;           /* filter type(s) of previous row(s) */
-   uint16_t* filter_weights;      /* weight(s) for previous line(s) */
-   uint16_t* inv_filter_weights;  /* 1/weight(s) for previous line(s) */
-   uint16_t* filter_costs;        /* relative filter calculation cost */
-   uint16_t* inv_filter_costs;    /* 1/relative filter calculation cost */
-#endif
-
 /* New members added in libpng-1.0.6 */
 
 #ifdef PNG_FREE_ME_SUPPORTED
@@ -1385,40 +1374,6 @@ extern void png_set_filter(png_structp png_ptr, int method, int filters);
 #define PNG_FILTER_VALUE_AVG   3
 #define PNG_FILTER_VALUE_PAETH 4
 #define PNG_FILTER_VALUE_LAST  5
-
-#if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED) /* EXPERIMENTAL */
-/* The "heuristic_method" is given by one of the PNG_FILTER_HEURISTIC_
- * defines, either the default (minimum-sum-of-absolute-differences), or
- * the experimental method (weighted-minimum-sum-of-absolute-differences).
- *
- * Weights are factors >= 1.0, indicating how important it is to keep the
- * filter type consistent between rows.  Larger numbers mean the current
- * filter is that many times as likely to be the same as the "num_weights"
- * previous filters.  This is cumulative for each previous row with a weight.
- * There needs to be "num_weights" values in "filter_weights", or it can be
- * NULL if the weights aren't being specified.  Weights have no influence on
- * the selection of the first row filter.  Well chosen weights can (in theory)
- * improve the compression for a given image.
- *
- * Costs are factors >= 1.0 indicating the relative decoding costs of a
- * filter type.  Higher costs indicate more decoding expense, and are
- * therefore less likely to be selected over a filter with lower computational
- * costs.  There needs to be a value in "filter_costs" for each valid filter
- * type (given by PNG_FILTER_VALUE_LAST), or it can be NULL if you aren't
- * setting the costs.  Costs try to improve the speed of decompression without
- * unduly increasing the compressed image size.
- *
- * A negative weight or cost indicates the default value is to be used, and
- * values in the range [0.0, 1.0) indicate the value is to remain unchanged.
- * The default values for both weights and costs are currently 1.0, but may
- * change if good general weighting/cost heuristics can be found.  If both
- * the weights and costs are set to 1.0, this degenerates the WEIGHTED method
- * to the UNWEIGHTED method, but with added encoding time/computation.
- */
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-extern void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int num_weights, png_doublep filter_weights, png_doublep filter_costs);
-#endif
-#endif /*  PNG_WRITE_WEIGHTED_FILTER_SUPPORTED */
 
 /* Heuristic used for row filter selection.  These defines should NOT be
  * changed.

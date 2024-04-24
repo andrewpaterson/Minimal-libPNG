@@ -312,11 +312,6 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
    png_set_write_fn(png_ptr, (void*)NULL, (png_rw_ptr)NULL,
       (png_flush_ptr)NULL);
 
-#if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
-   png_set_filter_heuristics(png_ptr, PNG_FILTER_HEURISTIC_DEFAULT,
-      1, (png_doublep)NULL, (png_doublep)NULL);
-#endif
-
    return (png_ptr);
 }
 
@@ -428,11 +423,6 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
    png_ptr->zbuf_size = PNG_ZBUF_SIZE;
    png_ptr->zbuf = (uint8_t*)png_malloc(png_ptr,
       (uint32_t)png_ptr->zbuf_size);
-
-#if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
-   png_set_filter_heuristics(png_ptr, PNG_FILTER_HEURISTIC_DEFAULT,
-      1, (png_doublep)NULL, (png_doublep)NULL);
-#endif
 }
 
 /* Write a few rows of image data.  If the image is interlaced,
@@ -716,13 +706,6 @@ void png_write_destroy(png_structp png_ptr)
    png_free(png_ptr, png_ptr->up_row);
    png_free(png_ptr, png_ptr->avg_row);
    png_free(png_ptr, png_ptr->paeth_row);
-#if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
-   png_free(png_ptr, png_ptr->prev_filters);
-   png_free(png_ptr, png_ptr->filter_weights);
-   png_free(png_ptr, png_ptr->inv_filter_weights);
-   png_free(png_ptr, png_ptr->filter_costs);
-   png_free(png_ptr, png_ptr->inv_filter_costs);
-#endif
 
    error_fn = png_ptr->error_fn;
    warning_fn = png_ptr->warning_fn;
@@ -835,134 +818,7 @@ png_set_filter(png_structp png_ptr, int method, int filters)
       png_error(png_ptr, "Unknown custom filter method");
 }
 
-/* This allows us to influence the way in which libpng chooses the "best"
- * filter for the current scanline.  While the "minimum-sum-of-absolute-
- * differences metric is relatively fast and effective, there is some
- * question as to whether it can be improved upon by trying to keep the
- * filtered data going to zlib more consistent, hopefully resulting in
- * better compression.
- */
-#if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)      /* GRR 970116 */
-void
-png_set_filter_heuristics(png_structp png_ptr, int heuristic_method,
-   int num_weights, png_doublep filter_weights,
-   png_doublep filter_costs)
-{
-   int i;
-
-   png_debug(1, "in png_set_filter_heuristics\n");
-   if (png_ptr == NULL)
-      return;
-   if (heuristic_method >= PNG_FILTER_HEURISTIC_LAST)
-   {
-      png_warning(png_ptr, "Unknown filter heuristic method");
-      return;
-   }
-
-   if (heuristic_method == PNG_FILTER_HEURISTIC_DEFAULT)
-   {
-      heuristic_method = PNG_FILTER_HEURISTIC_UNWEIGHTED;
-   }
-
-   if (num_weights < 0 || filter_weights == NULL ||
-      heuristic_method == PNG_FILTER_HEURISTIC_UNWEIGHTED)
-   {
-      num_weights = 0;
-   }
-
-   png_ptr->num_prev_filters = (uint8_t)num_weights;
-   png_ptr->heuristic_method = (uint8_t)heuristic_method;
-
-   if (num_weights > 0)
-   {
-      if (png_ptr->prev_filters == NULL)
-      {
-         png_ptr->prev_filters = (uint8_t*)png_malloc(png_ptr,
-            (uint32_t)(sizeof(uint8_t) * num_weights));
-
-         /* To make sure that the weighting starts out fairly */
-         for (i = 0; i < num_weights; i++)
-         {
-            png_ptr->prev_filters[i] = 255;
-         }
-      }
-
-      if (png_ptr->filter_weights == NULL)
-      {
-         png_ptr->filter_weights = (uint16_t*)png_malloc(png_ptr,
-            (uint32_t)(sizeof(uint16_t) * num_weights));
-
-         png_ptr->inv_filter_weights = (uint16_t*)png_malloc(png_ptr,
-            (uint32_t)(sizeof(uint16_t) * num_weights));
-         for (i = 0; i < num_weights; i++)
-         {
-            png_ptr->inv_filter_weights[i] =
-            png_ptr->filter_weights[i] = PNG_WEIGHT_FACTOR;
-         }
-      }
-
-      for (i = 0; i < num_weights; i++)
-      {
-         if (filter_weights[i] < 0.0)
-         {
-            png_ptr->inv_filter_weights[i] =
-            png_ptr->filter_weights[i] = PNG_WEIGHT_FACTOR;
-         }
-         else
-         {
-            png_ptr->inv_filter_weights[i] =
-               (uint16_t)((double)PNG_WEIGHT_FACTOR*filter_weights[i]+0.5);
-            png_ptr->filter_weights[i] =
-               (uint16_t)((double)PNG_WEIGHT_FACTOR/filter_weights[i]+0.5);
-         }
-      }
-   }
-
-   /* If, in the future, there are other filter methods, this would
-    * need to be based on png_ptr->filter.
-    */
-   if (png_ptr->filter_costs == NULL)
-   {
-      png_ptr->filter_costs = (uint16_t*)png_malloc(png_ptr,
-         (uint32_t)(sizeof(uint16_t) * PNG_FILTER_VALUE_LAST));
-
-      png_ptr->inv_filter_costs = (uint16_t*)png_malloc(png_ptr,
-         (uint32_t)(sizeof(uint16_t) * PNG_FILTER_VALUE_LAST));
-
-      for (i = 0; i < PNG_FILTER_VALUE_LAST; i++)
-      {
-         png_ptr->inv_filter_costs[i] =
-         png_ptr->filter_costs[i] = PNG_COST_FACTOR;
-      }
-   }
-
-   /* Here is where we set the relative costs of the different filters.  We
-    * should take the desired compression level into account when setting
-    * the costs, so that Paeth, for instance, has a high relative cost at low
-    * compression levels, while it has a lower relative cost at higher
-    * compression settings.  The filter types are in order of increasing
-    * relative cost, so it would be possible to do this with an algorithm.
-    */
-   for (i = 0; i < PNG_FILTER_VALUE_LAST; i++)
-   {
-      if (filter_costs == NULL || filter_costs[i] < 0.0)
-      {
-         png_ptr->inv_filter_costs[i] =
-         png_ptr->filter_costs[i] = PNG_COST_FACTOR;
-      }
-      else if (filter_costs[i] >= 1.0)
-      {
-         png_ptr->inv_filter_costs[i] =
-            (uint16_t)((double)PNG_COST_FACTOR / filter_costs[i] + 0.5);
-         png_ptr->filter_costs[i] =
-            (uint16_t)((double)PNG_COST_FACTOR * filter_costs[i] + 0.5);
-      }
-   }
-}
-#endif /* PNG_WRITE_WEIGHTED_FILTER_SUPPORTED */
-
-void
-png_set_compression_level(png_structp png_ptr, int level)
+void png_set_compression_level(png_structp png_ptr, int level)
 {
    png_debug(1, "in png_set_compression_level\n");
    if (png_ptr == NULL)
@@ -971,8 +827,7 @@ png_set_compression_level(png_structp png_ptr, int level)
    png_ptr->zlib_level = level;
 }
 
-void
-png_set_compression_mem_level(png_structp png_ptr, int mem_level)
+void png_set_compression_mem_level(png_structp png_ptr, int mem_level)
 {
    png_debug(1, "in png_set_compression_mem_level\n");
    if (png_ptr == NULL)
@@ -981,8 +836,7 @@ png_set_compression_mem_level(png_structp png_ptr, int mem_level)
    png_ptr->zlib_mem_level = mem_level;
 }
 
-void
-png_set_compression_strategy(png_structp png_ptr, int strategy)
+void png_set_compression_strategy(png_structp png_ptr, int strategy)
 {
    png_debug(1, "in png_set_compression_strategy\n");
    if (png_ptr == NULL)
@@ -991,8 +845,7 @@ png_set_compression_strategy(png_structp png_ptr, int strategy)
    png_ptr->zlib_strategy = strategy;
 }
 
-void
-png_set_compression_window_bits(png_structp png_ptr, int window_bits)
+void png_set_compression_window_bits(png_structp png_ptr, int window_bits)
 {
    if (png_ptr == NULL)
       return;
