@@ -547,6 +547,4 @@ typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* defined(PNG_1_2_X) */
 
-#  define png_jmpbuf(png_ptr) (LIBPNG_WAS_COMPILED_WITH__PNG_SETJMP_NOT_SUPPORTED)
-
 #endif /* PNGCONF_H */

@@ -77,16 +77,6 @@ static int status_pass=1;
 static int status_dots_requested=0;
 static int status_dots=1;
 
-/* In case a system header (e.g., on AIX) defined jmpbuf */
-#ifdef jmpbuf
-#  undef jmpbuf
-#endif
-
-/* Define png_jmpbuf() in case we are using a pre-1.0.6 version of libpng */
-#ifndef png_jmpbuf
-#  define png_jmpbuf(png_ptr) png_ptr->jmpbuf
-#endif
-
 void read_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
 void read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
