@@ -265,16 +265,6 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
    png_ptr->user_height_max=PNG_USER_HEIGHT_MAX;
 #endif
 
-#ifdef PNG_SETJMP_SUPPORTED
-   if (setjmp(png_ptr->jmpbuf))
-   {
-      png_free(png_ptr, png_ptr->zbuf);
-      png_ptr->zbuf=NULL;
-      png_destroy_struct(png_ptr);
-      return (NULL);
-   }
-#endif
-
 #ifdef PNG_USER_MEM_SUPPORTED
    png_set_mem_fn(png_ptr, mem_ptr, malloc_fn, free_fn);
 #endif /* PNG_USER_MEM_SUPPORTED */
@@ -331,13 +321,6 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
       1, (png_doublep)NULL, (png_doublep)NULL);
 #endif
 
-#ifdef PNG_SETJMP_SUPPORTED
-/* Applications that neglect to set up their own setjmp() and then encounter
-   a png_error() will longjmp here.  Since the jmpbuf is then meaningless we
-   abort instead of returning. */
-   if (setjmp(png_ptr->jmpbuf))
-      abort();
-#endif
    return (png_ptr);
 }
 
@@ -403,9 +386,6 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
    size_t png_struct_size)
 {
    png_structp png_ptr=*ptr_ptr;
-#ifdef PNG_SETJMP_SUPPORTED
-   jmp_buf tmp_jmp; /* to save current jump buffer */
-#endif
 
    int i = 0;
 
@@ -429,11 +409,6 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
 
    png_debug(1, "in png_write_init_3\n");
 
-#ifdef PNG_SETJMP_SUPPORTED
-   /* save jump buffer and error functions */
-   memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
-#endif
-
    if (sizeof(png_struct) > png_struct_size)
      {
        png_destroy_struct(png_ptr);
@@ -448,11 +423,6 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
    png_ptr->user_width_max=PNG_USER_WIDTH_MAX;
    png_ptr->user_height_max=PNG_USER_HEIGHT_MAX;
-#endif
-
-#ifdef PNG_SETJMP_SUPPORTED
-   /* restore jump buffer */
-   memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
    png_set_write_fn(png_ptr, (void*)NULL, (png_rw_ptr)NULL,
@@ -812,9 +782,6 @@ png_destroy_write_struct(png_structpp png_ptr_ptr, png_info** info_ptr_ptr)
 /* Free any memory used in png_ptr struct (old method) */
 void png_write_destroy(png_structp png_ptr)
 {
-#ifdef PNG_SETJMP_SUPPORTED
-   jmp_buf tmp_jmp; /* save jump buffer */
-#endif
    png_error_ptr error_fn;
    png_error_ptr warning_fn;
    void* error_ptr;
@@ -842,11 +809,6 @@ void png_write_destroy(png_structp png_ptr)
    png_free(png_ptr, png_ptr->inv_filter_costs);
 #endif
 
-#ifdef PNG_SETJMP_SUPPORTED
-   /* reset structure */
-   memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
-#endif
-
    error_fn = png_ptr->error_fn;
    warning_fn = png_ptr->warning_fn;
    error_ptr = png_ptr->error_ptr;
@@ -861,10 +823,6 @@ void png_write_destroy(png_structp png_ptr)
    png_ptr->error_ptr = error_ptr;
 #ifdef PNG_USER_MEM_SUPPORTED
    png_ptr->free_fn = free_fn;
-#endif
-
-#ifdef PNG_SETJMP_SUPPORTED
-   memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 }
 

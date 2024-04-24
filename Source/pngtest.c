@@ -499,40 +499,6 @@ test_one_file(const char *inname, const char *outname)
    write_end_info_ptr = png_create_info_struct(write_ptr);
 #endif
 
-#ifdef PNG_SETJMP_SUPPORTED
-   png_debug(0, "Setting jmpbuf for read struct\n");
-   if (setjmp(png_jmpbuf(read_ptr)))
-   {
-      fprintf(STDERR, "%s -> %s: libpng read error\n", inname, outname);
-      if (row_buf)
-         png_free(read_ptr, row_buf);
-      png_destroy_read_struct(&read_ptr, &read_info_ptr, &end_info_ptr);
-#ifdef PNG_WRITE_SUPPORTED
-      png_destroy_info_struct(write_ptr, &write_end_info_ptr);
-      png_destroy_write_struct(&write_ptr, &write_info_ptr);
-#endif
-      FCLOSE(fpin);
-      FCLOSE(fpout);
-      return (1);
-   }
-
-#ifdef PNG_WRITE_SUPPORTED
-   png_debug(0, "Setting jmpbuf for write struct\n");
-   if (setjmp(png_jmpbuf(write_ptr)))
-   {
-      fprintf(STDERR, "%s -> %s: libpng write error\n", inname, outname);
-      png_destroy_read_struct(&read_ptr, &read_info_ptr, &end_info_ptr);
-      png_destroy_info_struct(write_ptr, &write_end_info_ptr);
-#ifdef PNG_WRITE_SUPPORTED
-      png_destroy_write_struct(&write_ptr, &write_info_ptr);
-#endif
-      FCLOSE(fpin);
-      FCLOSE(fpout);
-      return (1);
-   }
-#endif
-#endif
-
    png_debug(0, "Initializing input and output streams\n");
 #if !defined(PNG_NO_STDIO)
    png_init_io(read_ptr, fpin);

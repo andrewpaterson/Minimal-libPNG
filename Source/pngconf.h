@@ -80,32 +80,9 @@
 #      include <stdio.h>
 #  endif
 
-/* This macro protects us against machines that don't have function
- * prototypes (ie K&R style headers).  If your compiler does not handle
- * function prototypes, define this macro and use the included ansi2knr.
- * I've always been able to use _NO_PROTO as the indicator, but you may
- * need to drag the empty declaration out in front of here, or change the
- * ifdef to suit your own needs.
- */
-
-
-#if !defined(PNG_SETJMP_NOT_SUPPORTED) && !defined(PNG_NO_SETJMP_SUPPORTED)
-#  define PNG_SETJMP_SUPPORTED
-#endif
-
-#ifdef PNG_SETJMP_SUPPORTED
-/* This is an attempt to force a single setjmp behaviour on Linux.  If
- * the X config stuff didn't define _BSD_SOURCE we wouldn't need this.
- */
-
-
-/* include setjmp.h for error handling */
-#include <setjmp.h>
 #include <string.h>
-#endif
-
-/* Other defines for things like memory and the like can go here.  */
 #include <stdlib.h>
+#include <malloc.h>
 
 /* Other defines specific to compilers can go here.  Try to keep
  * them inside an appropriate ifdef/endif pair for portability.
@@ -115,11 +92,6 @@
 #    include <math.h>
 #endif
 
-/* I have no idea why is this necessary... */
-#if defined(_MSC_VER) && (defined(WIN32) || defined(_Windows) || \
-    defined(_WINDOWS) || defined(_WIN32) || defined(__WIN32__))
-#  include <malloc.h>
-#endif
 
 /* This controls how fine the dithering gets.  As this allocates
  * a largish chunk of memory (32K), those who are not as concerned
@@ -575,11 +547,6 @@ typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* defined(PNG_1_2_X) */
 
-#ifdef PNG_SETJMP_SUPPORTED
-#  define png_jmpbuf(png_ptr) ((png_ptr)->jmpbuf)
-#else
-#  define png_jmpbuf(png_ptr) \
-   (LIBPNG_WAS_COMPILED_WITH__PNG_SETJMP_NOT_SUPPORTED)
-#endif
+#  define png_jmpbuf(png_ptr) (LIBPNG_WAS_COMPILED_WITH__PNG_SETJMP_NOT_SUPPORTED)
 
 #endif /* PNGCONF_H */

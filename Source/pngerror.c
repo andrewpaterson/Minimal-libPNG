@@ -203,14 +203,7 @@ static void png_default_error(png_structp png_ptr, const char* error_message)
    fprintf(stderr, "libpng error: %s\n", error_message);
 #endif
 
-#ifdef PNG_SETJMP_SUPPORTED
-   if (png_ptr)
-   {
-       longjmp(png_ptr->jmpbuf, 1);
-   }
-#else
    abort();
-#endif
 #ifdef PNG_NO_CONSOLE_IO
    /* make compiler happy */ ;
    if (&error_message != NULL)

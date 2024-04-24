@@ -898,9 +898,6 @@ typedef void (*png_free_ptr) (png_structp, void*);
 
 struct png_struct_def
 {
-#ifdef PNG_SETJMP_SUPPORTED
-   jmp_buf jmpbuf;            /* used in png_error */
-#endif
    png_error_ptr error_fn;    /* function for printing errors and aborting */
    png_error_ptr warning_fn;  /* function for printing warnings */
    void* error_ptr;       /* user supplied struct for error functions */
