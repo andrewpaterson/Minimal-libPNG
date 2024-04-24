@@ -68,10 +68,6 @@ static int verbose = 0;
 
 int test_one_file(const char *inname, const char *outname);
 
-#ifdef __TURBOC__
-#include <mem.h>
-#endif
-
 /* defined so I can write to a file on gui/windowing platforms */
 /*  #define STDERR stderr  */
 #define STDERR stdout   /* for DOS */

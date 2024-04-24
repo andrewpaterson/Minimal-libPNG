@@ -59,15 +59,7 @@ png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr)
    }
 #endif /* PNG_USER_MEM_SUPPORTED */
 
-#if defined(__TURBOC__) && !defined(__FLAT__)
-   struct_ptr = (void*)farmalloc(size);
-#else
-# if defined(_MSC_VER) && defined(MAXSEG_64K)
-   struct_ptr = (void*)halloc(size,1);
-# else
    struct_ptr = (void*)malloc(size);
-# endif
-#endif
    if (struct_ptr != NULL)
       png_memset(struct_ptr, 0, size);
 
@@ -101,15 +93,7 @@ png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn,
          return;
       }
 #endif /* PNG_USER_MEM_SUPPORTED */
-#if defined(__TURBOC__) && !defined(__FLAT__)
-      farfree(struct_ptr);
-#else
-# if defined(_MSC_VER) && defined(MAXSEG_64K)
-      hfree(struct_ptr);
-# else
       free(struct_ptr);
-# endif
-#endif
    }
 }
 
@@ -159,24 +143,10 @@ png_malloc_default(png_structp png_ptr, uint32_t size)
 #endif
 
  /* Check for overflow */
-#if defined(__TURBOC__) && !defined(__FLAT__)
- if (size != (uint32_t)size)
-   ret = NULL;
- else
-   ret = farmalloc(size);
-#else
-# if defined(_MSC_VER) && defined(MAXSEG_64K)
- if (size != (uint32_t)size)
-   ret = NULL;
- else
-   ret = halloc(size, 1);
-# else
  if (size != (size_t)size)
    ret = NULL;
  else
    ret = malloc((size_t)size);
-# endif
-#endif
 
 #ifndef PNG_USER_MEM_SUPPORTED
    if (ret == NULL && (png_ptr->flags&PNG_FLAG_MALLOC_NULL_MEM_OK) == 0)
@@ -210,15 +180,7 @@ png_free_default(png_structp png_ptr, void* ptr)
 
 #endif /* PNG_USER_MEM_SUPPORTED */
 
-#if defined(__TURBOC__) && !defined(__FLAT__)
-   farfree(ptr);
-#else
-# if defined(_MSC_VER) && defined(MAXSEG_64K)
-   hfree(ptr);
-# else
    free(ptr);
-# endif
-#endif
 }
 
 

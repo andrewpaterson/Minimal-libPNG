@@ -608,31 +608,6 @@ typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* (PNG_1_0_X) || defined(PNG_1_2_X) */
 
-
-/* If CYGWIN, then disallow GLOBAL ARRAYS unless building a static lib.
- * When building a static lib, default to no GLOBAL ARRAYS, but allow
- * command-line override
- */
-#if defined(__CYGWIN__)
-#  if !defined(PNG_STATIC)
-#    if defined(PNG_USE_GLOBAL_ARRAYS)
-#      undef PNG_USE_GLOBAL_ARRAYS
-#    endif
-#    if !defined(PNG_USE_LOCAL_ARRAYS)
-#      define PNG_USE_LOCAL_ARRAYS
-#    endif
-#  else
-#    if defined(PNG_USE_LOCAL_ARRAYS) || defined(PNG_NO_GLOBAL_ARRAYS)
-#      if defined(PNG_USE_GLOBAL_ARRAYS)
-#        undef PNG_USE_GLOBAL_ARRAYS
-#      endif
-#    endif
-#  endif
-#  if !defined(PNG_USE_LOCAL_ARRAYS) && !defined(PNG_USE_GLOBAL_ARRAYS)
-#    define PNG_USE_LOCAL_ARRAYS
-#  endif
-#endif
-
 /* Do not use global arrays (helps with building DLL's)
  * They are no longer used in libpng itself, since version 1.0.5c,
  * but might be required for some pre-1.0.5c applications.
@@ -644,13 +619,6 @@ typedef z_stream*   png_zstreamp;
 #    define PNG_USE_GLOBAL_ARRAYS
 #  endif
 #endif
-
-#if defined(__CYGWIN__)
-#  undef
-#  define __cdecl
-#  undef 
-#  define 
-#endif  
 
 #ifdef PNG_USE_GLOBAL_ARRAYS
 #  ifndef PNG_EXPORT_VAR

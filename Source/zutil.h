@@ -114,20 +114,12 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 
          /* functions */
 
-#if defined(STDC99) || (defined(__TURBOC__) && __TURBOC__ >= 0x550)
-#  ifndef HAVE_VSNPRINTF
-#    define HAVE_VSNPRINTF
-#  endif
-#endif
-#if defined(__CYGWIN__)
+#if defined(STDC99)
 #  ifndef HAVE_VSNPRINTF
 #    define HAVE_VSNPRINTF
 #  endif
 #endif
 #ifndef HAVE_VSNPRINTF
-#  ifdef __TURBOC__
-#    define NO_vsnprintf
-#  endif
 #  ifdef __SASC
 #    define NO_vsnprintf
 #  endif
