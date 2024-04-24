@@ -130,12 +130,12 @@ png_set_strip_alpha(png_structp png_ptr)
 
 typedef struct png_dsort_struct
 {
-   struct png_dsort_struct FAR * next;
+   struct png_dsort_struct *next;
    png_byte left;
    png_byte right;
 } png_dsort;
-typedef png_dsort FAR *       png_dsortp;
-typedef png_dsort FAR * FAR * png_dsortpp;
+typedef png_dsort *      png_dsortp;
+typedef png_dsort **png_dsortpp;
 
 void PNGAPI
 png_set_dither(png_structp png_ptr, png_colorp palette,

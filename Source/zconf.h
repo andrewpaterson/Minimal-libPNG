@@ -7,57 +7,8 @@
 
 #ifndef ZCONF_H
 #define ZCONF_H
+#include "stdint.h"
 
-/*
- * If you *really* need a unique prefix for all types and library functions,
- * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.
- */
-#ifdef Z_PREFIX
-#  define deflateInit_          z_deflateInit_
-#  define deflate               z_deflate
-#  define deflateEnd            z_deflateEnd
-#  define inflateInit_          z_inflateInit_
-#  define inflate               z_inflate
-#  define inflateEnd            z_inflateEnd
-#  define deflateInit2_         z_deflateInit2_
-#  define deflateSetDictionary  z_deflateSetDictionary
-#  define deflateCopy           z_deflateCopy
-#  define deflateReset          z_deflateReset
-#  define deflateParams         z_deflateParams
-#  define deflateBound          z_deflateBound
-#  define deflatePrime          z_deflatePrime
-#  define inflateInit2_         z_inflateInit2_
-#  define inflateSetDictionary  z_inflateSetDictionary
-#  define inflateSync           z_inflateSync
-#  define inflateSyncPoint      z_inflateSyncPoint
-#  define inflateCopy           z_inflateCopy
-#  define inflateReset          z_inflateReset
-#  define inflateBack           z_inflateBack
-#  define inflateBackEnd        z_inflateBackEnd
-#  define compress              z_compress
-#  define compress2             z_compress2
-#  define compressBound         z_compressBound
-#  define uncompress            z_uncompress
-#  define adler32               z_adler32
-#  define crc32                 z_crc32
-#  define get_crc_table         z_get_crc_table
-#  define zError                z_zError
-
-#  define alloc_func            z_alloc_func
-#  define free_func             z_free_func
-#  define in_func               z_in_func
-#  define out_func              z_out_func
-#  define Byte                  z_Byte
-#  define uInt                  z_uInt
-#  define uLong                 z_uLong
-#  define Bytef                 z_Bytef
-#  define charf                 z_charf
-#  define intf                  z_intf
-#  define uIntf                 z_uIntf
-#  define uLongf                z_uLongf
-#  define voidpf                z_voidpf
-#  define voidp                 z_voidp
-#endif
 
 #if (defined(OS_2) || defined(__OS2__)) && !defined(OS2)
 #  define OS2
@@ -165,26 +116,26 @@
 #  endif
 #endif
 
-/* The following definitions for FAR are needed only for MSDOS mixed
+/* The following definitions for  are needed only for MSDOS mixed
  * model programming (small or medium model with some far allocations).
  * This was tested only with MSC; for other MSDOS compilers you may have
  * to define NO_MEMCPY in zutil.h.  If you don't need the mixed model,
- * just define FAR to be empty.
+ * just define  to be empty.
  */
 #ifdef SYS16BIT
 #  if defined(M_I86SM) || defined(M_I86MM)
      /* MSC small or medium model */
 #    define SMALL_MEDIUM
 #    ifdef _MSC_VER
-#      define FAR _far
+#      define  _far
 #    else
-#      define FAR far
+#      define  far
 #    endif
 #  endif
 #  if (defined(__SMALL__) || defined(__MEDIUM__))
      /* Turbo C small or medium model */
 #    define SMALL_MEDIUM
-#    define FAR far
+#    define  far
 #  endif
 #endif
 
@@ -206,8 +157,8 @@
     * Caution: the standard ZLIB1.DLL is NOT compiled using ZLIB_WINAPI.
     */
 #  ifdef ZLIB_WINAPI
-#    ifdef FAR
-#      undef FAR
+#    ifdef 
+#      undef 
 #    endif
 #    include <windows.h>
      /* No need for _export, use ZLIB.DEF instead. */
@@ -216,7 +167,7 @@
 #    ifdef WIN32
 #      define ZEXPORTVA WINAPIV
 #    else
-#      define ZEXPORTVA FAR CDECL
+#      define ZEXPORTVA  CDECL
 #    endif
 #  endif
 #endif
@@ -243,34 +194,30 @@
 #  define ZEXPORTVA
 #endif
 
-#ifndef FAR
-#  define FAR
-#endif
-
 #if !defined(__MACTYPES__)
 typedef unsigned char  Byte;  /* 8 bits */
 #endif
 typedef unsigned int   uInt;  /* 16 bits or more */
-typedef unsigned long  uLong; /* 32 bits or more */
+typedef uint32_t  uLong; /* 32 bits or more */
 
 #ifdef SMALL_MEDIUM
-   /* Borland C/C++ and some old MSC versions ignore FAR inside typedef */
-#  define Bytef Byte FAR
+   /* Borland C/C++ and some old MSC versions ignore  inside typedef */
+#  define Bytef Byte 
 #else
-   typedef Byte  FAR Bytef;
+   typedef Byte   Bytef;
 #endif
-typedef char  FAR charf;
-typedef int   FAR intf;
-typedef uInt  FAR uIntf;
-typedef uLong FAR uLongf;
+typedef char   charf;
+typedef int    intf;
+typedef uInt   uIntf;
+typedef uLong  uLongf;
 
 #ifdef STDC
    typedef void const *voidpc;
-   typedef void FAR   *voidpf;
+   typedef void    *voidpf;
    typedef void       *voidp;
 #else
    typedef Byte const *voidpc;
-   typedef Byte FAR   *voidpf;
+   typedef Byte    *voidpf;
    typedef Byte       *voidp;
 #endif
 
@@ -297,8 +244,8 @@ typedef uLong FAR uLongf;
 
 #if defined(__MVS__)
 #  define NO_vsnprintf
-#  ifdef FAR
-#    undef FAR
+#  ifdef 
+#    undef 
 #  endif
 #endif
 

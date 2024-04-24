@@ -257,7 +257,7 @@ png_write_end(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_WRITE_tIME_SUPPORTED)
 /* "time.h" functions are not supported on WindowsCE */
 void PNGAPI
-png_convert_from_struct_tm(png_timep ptime, struct tm FAR * ttime)
+png_convert_from_struct_tm(png_timep ptime, struct tm *ttime)
 {
    png_debug(1, "in png_convert_from_struct_tm\n");
    ptime->year = (png_uint_16)(1900 + ttime->tm_year);

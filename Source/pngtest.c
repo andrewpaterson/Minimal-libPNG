@@ -458,9 +458,9 @@ typedef struct memory_information
 {
    png_uint_32               size;
    png_voidp                 pointer;
-   struct memory_information FAR *next;
+   struct memory_information *next;
 } memory_information;
-typedef memory_information FAR *memory_infop;
+typedef memory_information *memory_infop;
 
 static memory_infop pinformation = NULL;
 static int current_allocation = 0;
@@ -511,7 +511,7 @@ png_debug_malloc(png_structp png_ptr, png_uint_32 size)
       /* Make sure the caller isn't assuming zeroed memory. */
       png_memset(pinfo->pointer, 0xdd, pinfo->size);
       if(verbose)
-         printf("png_malloc %lu bytes at %x\n",(unsigned long)size,
+         printf("png_malloc %lu bytes at %x\n",(uint32_t)size,
           pinfo->pointer);
       return (png_voidp)(pinfo->pointer);
    }
@@ -533,7 +533,7 @@ png_debug_free(png_structp png_ptr, png_voidp ptr)
 
    /* Unlink the element from the list. */
    {
-      memory_infop FAR *ppinfo = &pinformation;
+      memory_infop *ppinfo = &pinformation;
       for (;;)
       {
          memory_infop pinfo = *ppinfo;
@@ -939,7 +939,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
    png_debug(0, "\nAllocating row buffer...");
    row_buf = (png_bytep)png_malloc(read_ptr,
       png_get_rowbytes(read_ptr, read_info_ptr));
-   png_debug1(0, "0x%08lx\n\n", (unsigned long)row_buf);
+   png_debug1(0, "0x%08lx\n\n", (uint32_t)row_buf);
 #endif /* SINGLE_ROWBUF_ALLOC */
    png_debug(0, "Writing row data\n");
 
@@ -967,7 +967,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
          png_debug2(0, "\nAllocating row buffer (pass %d, y = %ld)...", pass,y);
          row_buf = (png_bytep)png_malloc(read_ptr,
             png_get_rowbytes(read_ptr, read_info_ptr));
-         png_debug2(0, "0x%08lx (%ld bytes)\n", (unsigned long)row_buf,
+         png_debug2(0, "0x%08lx (%ld bytes)\n", (uint32_t)row_buf,
             png_get_rowbytes(read_ptr, read_info_ptr));
 #endif /* !SINGLE_ROWBUF_ALLOC */
          png_read_rows(read_ptr, (png_bytepp)&row_buf, png_bytepp_NULL, 1);
@@ -1052,7 +1052,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
       iwidth = png_get_image_width(write_ptr, write_info_ptr);
       iheight = png_get_image_height(write_ptr, write_info_ptr);
       fprintf(STDERR, "Image width = %lu, height = %lu\n",
-         (unsigned long)iwidth, (unsigned long)iheight);
+         (uint32_t)iwidth, (uint32_t)iheight);
    }
 #endif
 

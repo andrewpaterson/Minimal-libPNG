@@ -105,9 +105,7 @@ local  void check_match OF((deflate_state *s, IPos start, IPos match,
 #define NIL 0
 /* Tail of hash chains */
 
-#ifndef TOO_FAR
 #  define TOO_FAR 4096
-#endif
 /* Matches of length 3 are discarded if their distance exceeds TOO_FAR */
 
 #define MIN_LOOKAHEAD (MAX_MATCH+MIN_MATCH+1)
@@ -270,7 +268,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     if (windowBits == 8) windowBits = 9;  /* until 256-byte window bug fixed */
     s = (deflate_state *) ZALLOC(strm, 1, sizeof(deflate_state));
     if (s == Z_NULL) return Z_MEM_ERROR;
-    strm->state = (struct internal_state FAR *)s;
+    strm->state = (struct internal_state *)s;
     s->strm = strm;
 
     s->wrap = wrap;
@@ -913,7 +911,7 @@ int ZEXPORT deflateCopy (dest, source)
 
     ds = (deflate_state *) ZALLOC(dest, 1, sizeof(deflate_state));
     if (ds == Z_NULL) return Z_MEM_ERROR;
-    dest->state = (struct internal_state FAR *) ds;
+    dest->state = (struct internal_state *) ds;
     zmemcpy(ds, ss, sizeof(deflate_state));
     ds->strm = dest;
 
@@ -1598,11 +1596,9 @@ local block_state deflate_slow(s, flush)
             }
             /* longest_match() or longest_match_fast() sets match_start */
 
-            if (s->match_length <= 5 && (s->strategy == Z_FILTERED
-#if TOO_FAR <= 32767
+            if (s->match_length <= 5 && (s->strategy == Z_FILTERED 
                 || (s->match_length == MIN_MATCH &&
                     s->strstart - s->match_start > TOO_FAR)
-#endif
                 )) {
 
                 /* If prev_match is also MIN_MATCH, match_start is garbage

@@ -471,14 +471,14 @@ PNG_EXPORT_VAR (const char) png_libpng_ver[18];
 #ifdef PNG_USE_GLOBAL_ARRAYS
 /* This was removed in version 1.0.5c */
 /* Structures to facilitate easy interlacing.  See png.c for more details */
-PNG_EXPORT_VAR (const int FARDATA) png_pass_start[7];
-PNG_EXPORT_VAR (const int FARDATA) png_pass_inc[7];
-PNG_EXPORT_VAR (const int FARDATA) png_pass_ystart[7];
-PNG_EXPORT_VAR (const int FARDATA) png_pass_yinc[7];
-PNG_EXPORT_VAR (const int FARDATA) png_pass_mask[7];
-PNG_EXPORT_VAR (const int FARDATA) png_pass_dsp_mask[7];
+PNG_EXPORT_VAR (const int) png_pass_start[7];
+PNG_EXPORT_VAR (const int) png_pass_inc[7];
+PNG_EXPORT_VAR (const int) png_pass_ystart[7];
+PNG_EXPORT_VAR (const int) png_pass_yinc[7];
+PNG_EXPORT_VAR (const int) png_pass_mask[7];
+PNG_EXPORT_VAR (const int) png_pass_dsp_mask[7];
 /* This isn't currently used.  If you need it, see png.c for more details.
-PNG_EXPORT_VAR (const int FARDATA) png_pass_height[7];
+PNG_EXPORT_VAR (const int) png_pass_height[7];
 */
 #endif
 
@@ -494,8 +494,8 @@ typedef struct png_color_struct
    png_byte green;
    png_byte blue;
 } png_color;
-typedef png_color FAR * png_colorp;
-typedef png_color FAR * FAR * png_colorpp;
+typedef png_color *png_colorp;
+typedef png_color **png_colorpp;
 
 typedef struct png_color_16_struct
 {
@@ -505,8 +505,8 @@ typedef struct png_color_16_struct
    png_uint_16 blue;
    png_uint_16 gray;  /* for use in grayscale files */
 } png_color_16;
-typedef png_color_16 FAR * png_color_16p;
-typedef png_color_16 FAR * FAR * png_color_16pp;
+typedef png_color_16 *png_color_16p;
+typedef png_color_16 **png_color_16pp;
 
 typedef struct png_color_8_struct
 {
@@ -516,8 +516,8 @@ typedef struct png_color_8_struct
    png_byte gray;  /* for use in grayscale files */
    png_byte alpha; /* for alpha channel files */
 } png_color_8;
-typedef png_color_8 FAR * png_color_8p;
-typedef png_color_8 FAR * FAR * png_color_8pp;
+typedef png_color_8 *png_color_8p;
+typedef png_color_8 **png_color_8pp;
 
 /*
  * The following two structures are used for the in-core representation
@@ -531,8 +531,8 @@ typedef struct png_sPLT_entry_struct
    png_uint_16 alpha;
    png_uint_16 frequency;
 } png_sPLT_entry;
-typedef png_sPLT_entry FAR * png_sPLT_entryp;
-typedef png_sPLT_entry FAR * FAR * png_sPLT_entrypp;
+typedef png_sPLT_entry *png_sPLT_entryp;
+typedef png_sPLT_entry **png_sPLT_entrypp;
 
 /*  When the depth of the sPLT palette is 8 bits, the color and alpha samples
  *  occupy the LSB of their respective members, and the MSB of each member
@@ -546,8 +546,8 @@ typedef struct png_sPLT_struct
    png_sPLT_entryp entries;  /* palette entries */
    png_int_32 nentries;      /* number of palette entries */
 } png_sPLT_t;
-typedef png_sPLT_t FAR * png_sPLT_tp;
-typedef png_sPLT_t FAR * FAR * png_sPLT_tpp;
+typedef png_sPLT_t *png_sPLT_tp;
+typedef png_sPLT_t **png_sPLT_tpp;
 
 
 /* Supported compression types for text in PNG files (tEXt, and zTXt).
@@ -575,8 +575,8 @@ typedef struct png_time_struct
    png_byte minute;  /* minute of hour, 0 - 59 */
    png_byte second;  /* second of minute, 0 - 60 (for leap seconds) */
 } png_time;
-typedef png_time FAR * png_timep;
-typedef png_time FAR * FAR * png_timepp;
+typedef png_time *png_timep;
+typedef png_time **png_timepp;
 
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
 /* png_unknown_chunk is a structure to hold queued chunks for which there is
@@ -594,8 +594,8 @@ typedef struct png_unknown_chunk_t
     png_byte location; /* mode of operation at read time */
 }
 png_unknown_chunk;
-typedef png_unknown_chunk FAR * png_unknown_chunkp;
-typedef png_unknown_chunk FAR * FAR * png_unknown_chunkpp;
+typedef png_unknown_chunk *png_unknown_chunkp;
+typedef png_unknown_chunk **png_unknown_chunkpp;
 #endif
 
 /* png_info is a structure that holds the information in a PNG file so
@@ -792,8 +792,8 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
 
 } png_info;
 
-typedef png_info FAR * png_infop;
-typedef png_info FAR * FAR * png_infopp;
+typedef png_info *png_infop;
+typedef png_info **png_infopp;
 
 /* Maximum positive integer used in PNG is (2^31)-1 */
 #define PNG_UINT_31_MAX ((png_uint_32)0x7fffffffL)
@@ -906,8 +906,8 @@ typedef struct png_row_info_struct
    png_byte pixel_depth; /* bits per pixel (depth * channels) */
 } png_row_info;
 
-typedef png_row_info FAR * png_row_infop;
-typedef png_row_info FAR * FAR * png_row_infopp;
+typedef png_row_info *png_row_infop;
+typedef png_row_info **png_row_infopp;
 
 /* These are the function types for the I/O functions and for the functions
  * that allow the user to override the default I/O functions with his or her
@@ -916,7 +916,7 @@ typedef png_row_info FAR * FAR * png_row_infopp;
  * user read/write data functions.
  */
 typedef struct png_struct_def png_struct;
-typedef png_struct FAR * png_structp;
+typedef png_struct *png_structp;
 
 typedef void (PNGAPI *png_error_ptr) PNGARG((png_structp, png_const_charp));
 typedef void (PNGAPI *png_rw_ptr) PNGARG((png_structp, png_bytep, png_size_t));
@@ -1237,7 +1237,7 @@ struct png_struct_def
  */
 typedef png_structp version_1_2_16;
 
-typedef png_struct FAR * FAR * png_structpp;
+typedef png_struct **png_structpp;
 
 /* Here are the function definitions most commonly used.  This is not
  * the place to find out how to use libpng.  See libpng.txt for the
@@ -2437,7 +2437,7 @@ extern PNG_EXPORT(void,png_save_uint_16)
 #if !defined(PNG_NO_EXTERN) || defined(PNG_ALWAYS_EXTERN)
 /* place to hold the signature string for a PNG file. */
 #ifdef PNG_USE_GLOBAL_ARRAYS
-   PNG_EXPORT_VAR (const png_byte FARDATA) png_sig[8];
+   PNG_EXPORT_VAR (const png_byte) png_sig[8];
 #else
 #if 0
 #define png_sig png_sig_bytes(NULL)
@@ -2472,27 +2472,27 @@ extern PNG_EXPORT(void,png_save_uint_16)
 #define PNG_zTXt const png_byte png_zTXt[5] = {122,  84,  88, 116, '\0'}
 
 #ifdef PNG_USE_GLOBAL_ARRAYS
-PNG_EXPORT_VAR (const png_byte FARDATA) png_IHDR[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_IDAT[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_IEND[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_PLTE[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_bKGD[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_cHRM[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_gAMA[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_hIST[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_iCCP[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_iTXt[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_oFFs[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_pCAL[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_sCAL[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_pHYs[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_sBIT[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_sPLT[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_sRGB[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_tEXt[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_tIME[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_tRNS[5];
-PNG_EXPORT_VAR (const png_byte FARDATA) png_zTXt[5];
+PNG_EXPORT_VAR (const png_byte) png_IHDR[5];
+PNG_EXPORT_VAR (const png_byte) png_IDAT[5];
+PNG_EXPORT_VAR (const png_byte) png_IEND[5];
+PNG_EXPORT_VAR (const png_byte) png_PLTE[5];
+PNG_EXPORT_VAR (const png_byte) png_bKGD[5];
+PNG_EXPORT_VAR (const png_byte) png_cHRM[5];
+PNG_EXPORT_VAR (const png_byte) png_gAMA[5];
+PNG_EXPORT_VAR (const png_byte) png_hIST[5];
+PNG_EXPORT_VAR (const png_byte) png_iCCP[5];
+PNG_EXPORT_VAR (const png_byte) png_iTXt[5];
+PNG_EXPORT_VAR (const png_byte) png_oFFs[5];
+PNG_EXPORT_VAR (const png_byte) png_pCAL[5];
+PNG_EXPORT_VAR (const png_byte) png_sCAL[5];
+PNG_EXPORT_VAR (const png_byte) png_pHYs[5];
+PNG_EXPORT_VAR (const png_byte) png_sBIT[5];
+PNG_EXPORT_VAR (const png_byte) png_sPLT[5];
+PNG_EXPORT_VAR (const png_byte) png_sRGB[5];
+PNG_EXPORT_VAR (const png_byte) png_tEXt[5];
+PNG_EXPORT_VAR (const png_byte) png_tIME[5];
+PNG_EXPORT_VAR (const png_byte) png_tRNS[5];
+PNG_EXPORT_VAR (const png_byte) png_zTXt[5];
 #endif /* PNG_USE_GLOBAL_ARRAYS */
 
 #if defined(PNG_1_0_X) || defined (PNG_1_2_X)
