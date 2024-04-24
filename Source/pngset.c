@@ -26,7 +26,7 @@ png_set_bKGD(png_structp png_ptr, png_infop info_ptr, png_color_16p background)
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   png_memcpy(&(info_ptr->background), background, png_sizeof(png_color_16));
+   png_memcpy(&(info_ptr->background), background, sizeof(png_color_16));
    info_ptr->valid |= PNG_INFO_bKGD;
 }
 #endif
@@ -118,7 +118,7 @@ png_set_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p hist)
    /* Changed from info->num_palette to PNG_MAX_PALETTE_LENGTH in version
       1.2.1 */
    png_ptr->hist = (png_uint_16p)png_malloc_warn(png_ptr,
-      (uint32_t)(PNG_MAX_PALETTE_LENGTH * png_sizeof (uint16_t)));
+      (uint32_t)(PNG_MAX_PALETTE_LENGTH * sizeof (uint16_t)));
    if (png_ptr->hist == NULL)
      {
        png_warning(png_ptr, "Insufficient memory for hIST chunk data.");
@@ -189,33 +189,8 @@ png_set_IHDR(png_structp png_ptr, png_infop info_ptr,
    if (compression_type != PNG_COMPRESSION_TYPE_BASE)
       png_error(png_ptr, "Unknown compression method in IHDR");
 
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   /* Accept filter_method 64 (intrapixel differencing) only if
-    * 1. Libpng was compiled with PNG_MNG_FEATURES_SUPPORTED and
-    * 2. Libpng did not read a PNG signature (this filter_method is only
-    *    used in PNG datastreams that are embedded in MNG datastreams) and
-    * 3. The application called png_permit_mng_features with a mask that
-    *    included PNG_FLAG_MNG_FILTER_64 and
-    * 4. The filter_method is 64 and
-    * 5. The color_type is RGB or RGBA
-    */
-   if((png_ptr->mode&PNG_HAVE_PNG_SIGNATURE)&&png_ptr->mng_features_permitted)
-      png_warning(png_ptr,"MNG features are not allowed in a PNG datastream");
-   if(filter_type != PNG_FILTER_TYPE_BASE)
-   {
-     if(!((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
-        (filter_type == PNG_INTRAPIXEL_DIFFERENCING) &&
-        ((png_ptr->mode&PNG_HAVE_PNG_SIGNATURE) == 0) &&
-        (color_type == PNG_COLOR_TYPE_RGB ||
-         color_type == PNG_COLOR_TYPE_RGB_ALPHA)))
-        png_error(png_ptr, "Unknown filter method in IHDR");
-     if(png_ptr->mode&PNG_HAVE_PNG_SIGNATURE)
-        png_warning(png_ptr, "Invalid filter method in IHDR");
-   }
-#else
    if(filter_type != PNG_FILTER_TYPE_BASE)
       png_error(png_ptr, "Unknown filter method in IHDR");
-#endif
 
    info_ptr->width = width;
    info_ptr->height = height;
@@ -241,7 +216,7 @@ png_set_IHDR(png_structp png_ptr, png_infop info_ptr,
                  - 1        /* filter byte */
                  - 7*8      /* rounding of width to multiple of 8 pixels */
                  - 8)       /* extra max_pixel_depth pad */
-      info_ptr->rowbytes = (png_size_t)0;
+      info_ptr->rowbytes = (size_t)0;
    else
       info_ptr->rowbytes = PNG_ROWBYTES(info_ptr->pixel_depth,width);
 }
@@ -267,7 +242,7 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr,
        png_warning(png_ptr, "Insufficient memory for pCAL purpose.");
        return;
      }
-   png_memcpy(info_ptr->pcal_purpose, purpose, (png_size_t)length);
+   png_memcpy(info_ptr->pcal_purpose, purpose, (size_t)length);
 
    png_debug(3, "storing X0, X1, type, and nparams in info\n");
    info_ptr->pcal_X0 = X0;
@@ -283,10 +258,10 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr,
        png_warning(png_ptr, "Insufficient memory for pCAL units.");
        return;
      }
-   png_memcpy(info_ptr->pcal_units, units, (png_size_t)length);
+   png_memcpy(info_ptr->pcal_units, units, (size_t)length);
 
    info_ptr->pcal_params = (png_charpp)png_malloc_warn(png_ptr,
-      (uint32_t)((nparams + 1) * png_sizeof(png_charp)));
+      (uint32_t)((nparams + 1) * sizeof(png_charp)));
    if (info_ptr->pcal_params == NULL)
      {
        png_warning(png_ptr, "Insufficient memory for pCAL params.");
@@ -305,7 +280,7 @@ png_set_pCAL(png_structp png_ptr, png_infop info_ptr,
           png_warning(png_ptr, "Insufficient memory for pCAL parameter.");
           return;
         }
-      png_memcpy(info_ptr->pcal_params[i], params[i], (png_size_t)length);
+      png_memcpy(info_ptr->pcal_params[i], params[i], (size_t)length);
    }
 
    info_ptr->valid |= PNG_INFO_pCAL;
@@ -364,10 +339,10 @@ png_set_PLTE(png_structp png_ptr, png_infop info_ptr,
       of num_palette entries,
       in case of an invalid PNG file that has too-large sample values. */
    png_ptr->palette = (png_colorp)png_malloc(png_ptr,
-      PNG_MAX_PALETTE_LENGTH * png_sizeof(png_color));
+      PNG_MAX_PALETTE_LENGTH * sizeof(png_color));
    png_memset(png_ptr->palette, 0, PNG_MAX_PALETTE_LENGTH *
-      png_sizeof(png_color));
-   png_memcpy(png_ptr->palette, palette, num_palette * png_sizeof (png_color));
+      sizeof(png_color));
+   png_memcpy(png_ptr->palette, palette, num_palette * sizeof (png_color));
    info_ptr->palette = png_ptr->palette;
    info_ptr->num_palette = png_ptr->num_palette = (uint16_t)num_palette;
 
@@ -389,7 +364,7 @@ png_set_sBIT(png_structp png_ptr, png_infop info_ptr,
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   png_memcpy(&(info_ptr->sig_bit), sig_bit, png_sizeof (png_color_8));
+   png_memcpy(&(info_ptr->sig_bit), sig_bit, sizeof (png_color_8));
    info_ptr->valid |= PNG_INFO_sBIT;
 }
 #endif
@@ -447,7 +422,7 @@ png_set_tIME(png_structp png_ptr, png_infop info_ptr, png_timep mod_time)
        (png_ptr->mode & PNG_WROTE_tIME))
       return;
 
-   png_memcpy(&(info_ptr->mod_time), mod_time, png_sizeof (png_time));
+   png_memcpy(&(info_ptr->mod_time), mod_time, sizeof (png_time));
    info_ptr->valid |= PNG_INFO_tIME;
 }
 #endif
@@ -475,7 +450,7 @@ png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
        png_ptr->trans = info_ptr->trans = (png_bytep)png_malloc(png_ptr,
            (uint32_t)PNG_MAX_PALETTE_LENGTH);
        if (num_trans <= PNG_MAX_PALETTE_LENGTH)
-         png_memcpy(info_ptr->trans, trans, (png_size_t)num_trans);
+         png_memcpy(info_ptr->trans, trans, (size_t)num_trans);
 #ifdef PNG_FREE_ME_SUPPORTED
        info_ptr->free_me |= PNG_FREE_TRNS;
 #else
@@ -486,7 +461,7 @@ png_set_tRNS(png_structp png_ptr, png_infop info_ptr,
    if (trans_values != NULL)
    {
       png_memcpy(&(info_ptr->trans_values), trans_values,
-         png_sizeof(png_color_16));
+         sizeof(png_color_16));
       if (num_trans == 0)
         num_trans = 1;
    }
@@ -507,7 +482,7 @@ png_set_sPLT(png_structp png_ptr,
        return;
 
     np = (png_sPLT_tp)png_malloc_warn(png_ptr,
-        (info_ptr->splt_palettes_num + nentries) * png_sizeof(png_sPLT_t));
+        (info_ptr->splt_palettes_num + nentries) * sizeof(png_sPLT_t));
     if (np == NULL)
     {
       png_warning(png_ptr, "No memory for sPLT palettes.");
@@ -515,7 +490,7 @@ png_set_sPLT(png_structp png_ptr,
     }
 
     png_memcpy(np, info_ptr->splt_palettes,
-           info_ptr->splt_palettes_num * png_sizeof(png_sPLT_t));
+           info_ptr->splt_palettes_num * sizeof(png_sPLT_t));
     png_free(png_ptr, info_ptr->splt_palettes);
     info_ptr->splt_palettes=NULL;
 
@@ -528,10 +503,10 @@ png_set_sPLT(png_structp png_ptr,
         /* TODO: use png_malloc_warn */
         png_strcpy(to->name, from->name);
         to->entries = (png_sPLT_entryp)png_malloc(png_ptr,
-            from->nentries * png_sizeof(png_sPLT_entry));
+            from->nentries * sizeof(png_sPLT_entry));
         /* TODO: use png_malloc_warn */
         png_memcpy(to->entries, from->entries,
-            from->nentries * png_sizeof(png_sPLT_entry));
+            from->nentries * sizeof(png_sPLT_entry));
         to->nentries = from->nentries;
         to->depth = from->depth;
     }
@@ -556,7 +531,7 @@ png_set_unknown_chunks(png_structp png_ptr,
     if (png_ptr == NULL || info_ptr == NULL || num_unknowns == 0)
         return;
 
-    np = (png_unknown_chunkp)png_malloc_warn(png_ptr, (uint32_t)((info_ptr->unknown_chunks_num + num_unknowns) * png_sizeof(png_unknown_chunk)));
+    np = (png_unknown_chunkp)png_malloc_warn(png_ptr, (uint32_t)((info_ptr->unknown_chunks_num + num_unknowns) * sizeof(png_unknown_chunk)));
     if (np == NULL)
     {
        png_warning(png_ptr, "Out of memory while processing unknown chunk.");
@@ -564,7 +539,7 @@ png_set_unknown_chunks(png_structp png_ptr,
     }
 
     png_memcpy(np, info_ptr->unknown_chunks,
-           info_ptr->unknown_chunks_num * png_sizeof(png_unknown_chunk));
+           info_ptr->unknown_chunks_num * sizeof(png_unknown_chunk));
     png_free(png_ptr, info_ptr->unknown_chunks);
     info_ptr->unknown_chunks=NULL;
 
@@ -605,9 +580,6 @@ png_set_unknown_chunk_location(png_structp png_ptr, png_infop info_ptr,
 }
 #endif
 
-#if defined(PNG_1_0_X) || defined(PNG_1_2_X)
-#if defined(PNG_READ_EMPTY_PLTE_SUPPORTED) || \
-    defined(PNG_WRITE_EMPTY_PLTE_SUPPORTED)
 void PNGAPI
 png_permit_empty_plte (png_structp png_ptr, int empty_plte_permitted)
 {
@@ -620,21 +592,6 @@ png_permit_empty_plte (png_structp png_ptr, int empty_plte_permitted)
      ((png_ptr->mng_features_permitted & (~(PNG_FLAG_MNG_EMPTY_PLTE))) |
      ((empty_plte_permitted & PNG_FLAG_MNG_EMPTY_PLTE)));
 }
-#endif
-#endif
-
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-uint32_t PNGAPI
-png_permit_mng_features (png_structp png_ptr, uint32_t mng_features)
-{
-   png_debug(1, "in png_permit_mng_features\n");
-   if (png_ptr == NULL)
-      return (uint32_t)0;
-   png_ptr->mng_features_permitted =
-     (uint8_t)(mng_features & PNG_ALL_MNG_FEATURES);
-   return (uint32_t)png_ptr->mng_features_permitted;
-}
-#endif
 
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
 void PNGAPI
@@ -666,12 +623,12 @@ png_set_keep_unknown_chunks(png_structp png_ptr, int keep, png_bytep
     if(png_ptr->chunk_list != NULL)
     {
        png_memcpy(new_list, png_ptr->chunk_list,
-          (png_size_t)(5*old_num_chunks));
+          (size_t)(5*old_num_chunks));
        png_free(png_ptr, png_ptr->chunk_list);
        png_ptr->chunk_list=NULL;
     }
     png_memcpy(new_list+5*old_num_chunks, chunk_list,
-       (png_size_t)(5*num_chunks));
+       (size_t)(5*num_chunks));
     for (p=new_list+5*old_num_chunks+4, i = 0; i<num_chunks; i++, p+=5)
        *p=(uint8_t)keep;
     png_ptr->num_chunk_list=old_num_chunks+num_chunks;
@@ -720,7 +677,7 @@ png_set_compression_buffer_size(png_structp png_ptr, uint32_t size)
        return;
     if(png_ptr->zbuf)
        png_free(png_ptr, png_ptr->zbuf);
-    png_ptr->zbuf_size = (png_size_t)size;
+    png_ptr->zbuf_size = (size_t)size;
     png_ptr->zbuf = (png_bytep)png_malloc(png_ptr, size);
     png_ptr->zstream.next_out = png_ptr->zbuf;
     png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;

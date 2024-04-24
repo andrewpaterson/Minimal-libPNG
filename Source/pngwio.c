@@ -26,7 +26,7 @@
    to write more than 64K on a 16 bit machine.  */
 
 void /* PRIVATE */
-png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+png_write_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    if (png_ptr->write_data_fn != NULL )
       (*(png_ptr->write_data_fn))(png_ptr, data, length);
@@ -41,7 +41,7 @@ png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
 void PNGAPI
-png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+png_default_write_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    uint32_t check;
 
@@ -60,7 +60,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define MIN(a,b) (a <= b ? a : b)
 
 void PNGAPI
-png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+png_default_write_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    uint32_t check;
    uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "png_bytep" */
@@ -77,7 +77,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    else
    {
       uint8_t buf[NEAR_BUF_SIZE];
-      png_size_t written, remaining, err;
+      size_t written, remaining, err;
       check = 0;
       remaining = length;
       do

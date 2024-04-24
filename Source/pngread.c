@@ -85,7 +85,7 @@ png_create_read_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       return (NULL);
    }
 #ifdef USE_FAR_KEYWORD
-   png_memcpy(png_ptr->jmpbuf,jmpbuf,png_sizeof(jmp_buf));
+   png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
 #endif
 #endif
 
@@ -162,7 +162,7 @@ png_create_read_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
 #ifdef USE_FAR_KEYWORD
    if (setjmp(jmpbuf))
       PNG_ABORT();
-   png_memcpy(png_ptr->jmpbuf,jmpbuf,png_sizeof(jmp_buf));
+   png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
 #else
    if (setjmp(png_ptr->jmpbuf))
       PNG_ABORT();
@@ -185,13 +185,13 @@ png_read_init(png_structp png_ptr)
 
 void PNGAPI
 png_read_init_2(png_structp png_ptr, png_const_charp user_png_ver,
-   png_size_t png_struct_size, png_size_t png_info_size)
+   size_t png_struct_size, size_t png_info_size)
 {
    /* We only come here via pre-1.0.12-compiled applications */
    if(png_ptr == NULL) return;
 #if !defined(PNG_NO_STDIO)
-   if(png_sizeof(png_struct) > png_struct_size ||
-      png_sizeof(png_info) > png_info_size)
+   if(sizeof(png_struct) > png_struct_size ||
+      sizeof(png_info) > png_info_size)
    {
       char msg[80];
       png_ptr->warning_fn=NULL;
@@ -206,7 +206,7 @@ png_read_init_2(png_structp png_ptr, png_const_charp user_png_ver,
       png_warning(png_ptr, msg);
    }
 #endif
-   if(png_sizeof(png_struct) > png_struct_size)
+   if(sizeof(png_struct) > png_struct_size)
      {
        png_ptr->error_fn=NULL;
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -215,7 +215,7 @@ png_read_init_2(png_structp png_ptr, png_const_charp user_png_ver,
        png_error(png_ptr,
        "The png struct allocated by the application for reading is too small.");
      }
-   if(png_sizeof(png_info) > png_info_size)
+   if(sizeof(png_info) > png_info_size)
      {
        png_ptr->error_fn=NULL;
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -230,7 +230,7 @@ png_read_init_2(png_structp png_ptr, png_const_charp user_png_ver,
 
 void PNGAPI
 png_read_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
-   png_size_t png_struct_size)
+   size_t png_struct_size)
 {
 #ifdef PNG_SETJMP_SUPPORTED
    jmp_buf tmp_jmp;  /* to save current jump buffer */
@@ -261,10 +261,10 @@ png_read_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* save jump buffer and error functions */
-   png_memcpy(tmp_jmp, png_ptr->jmpbuf, png_sizeof (jmp_buf));
+   png_memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
 #endif
 
-   if(png_sizeof(png_struct) > png_struct_size)
+   if(sizeof(png_struct) > png_struct_size)
      {
        png_destroy_struct(png_ptr);
        *ptr_ptr = (png_structp)png_create_struct(PNG_STRUCT_PNG);
@@ -272,11 +272,11 @@ png_read_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
      }
 
    /* reset all variables to 0 */
-   png_memset(png_ptr, 0, png_sizeof (png_struct));
+   png_memset(png_ptr, 0, sizeof (png_struct));
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* restore jump buffer */
-   png_memcpy(png_ptr->jmpbuf, tmp_jmp, png_sizeof (jmp_buf));
+   png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
    /* added at libpng-1.2.6 */
@@ -325,7 +325,7 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
    /* If we haven't checked all of the PNG signature bytes, do so now. */
    if (png_ptr->sig_bytes < 8)
    {
-      png_size_t num_checked = png_ptr->sig_bytes,
+      size_t num_checked = png_ptr->sig_bytes,
                  num_to_check = 8 - num_checked;
 
       png_read_data(png_ptr, &(info_ptr->signature[num_checked]), num_to_check);
@@ -662,7 +662,7 @@ png_read_row(png_structp png_ptr, png_bytep row, png_bytep dsp_row)
          if (png_ptr->zbuf_size > png_ptr->idat_size)
             png_ptr->zstream.avail_in = (uInt)png_ptr->idat_size;
          png_crc_read(png_ptr, png_ptr->zbuf,
-            (png_size_t)png_ptr->zstream.avail_in);
+            (size_t)png_ptr->zstream.avail_in);
          png_ptr->idat_size -= png_ptr->zstream.avail_in;
       }
       ret = inflate(&png_ptr->zstream, Z_PARTIAL_FLUSH);
@@ -696,16 +696,6 @@ png_read_row(png_structp png_ptr, png_bytep row, png_bytep dsp_row)
 
    png_memcpy_check(png_ptr, png_ptr->prev_row, png_ptr->row_buf,
       png_ptr->rowbytes + 1);
-
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   if((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
-      (png_ptr->filter_type == PNG_INTRAPIXEL_DIFFERENCING))
-   {
-      /* Intrapixel differencing */
-      png_do_read_intrapixel(&(png_ptr->row_info), png_ptr->row_buf + 1);
-   }
-#endif
-
 
    if (png_ptr->transformations || (png_ptr->flags&PNG_FLAG_STRIP_ALPHA))
       png_do_read_transformations(png_ptr);
@@ -1166,7 +1156,7 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
     * being used again.
     */
 #ifdef PNG_SETJMP_SUPPORTED
-   png_memcpy(tmp_jmp, png_ptr->jmpbuf, png_sizeof (jmp_buf));
+   png_memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
 #endif
 
    error_fn = png_ptr->error_fn;
@@ -1176,7 +1166,7 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
    free_fn = png_ptr->free_fn;
 #endif
 
-   png_memset(png_ptr, 0, png_sizeof (png_struct));
+   png_memset(png_ptr, 0, sizeof (png_struct));
 
    png_ptr->error_fn = error_fn;
    png_ptr->warning_fn = warning_fn;
@@ -1186,7 +1176,7 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
 #endif
 
 #ifdef PNG_SETJMP_SUPPORTED
-   png_memcpy(png_ptr->jmpbuf, tmp_jmp, png_sizeof (jmp_buf));
+   png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
 }
@@ -1217,7 +1207,7 @@ png_read_png(png_structp png_ptr, png_infop info_ptr,
     * PNG file before the first IDAT (image data chunk).
     */
    png_read_info(png_ptr, info_ptr);
-   if (info_ptr->height > PNG_UINT_32_MAX/png_sizeof(png_bytep))
+   if (info_ptr->height > PNG_UINT_32_MAX/sizeof(png_bytep))
       png_error(png_ptr,"Image is too high to process with png_read_png()");
 
    /* -------------- image transformations start here ------------------- */
@@ -1312,7 +1302,7 @@ png_read_png(png_structp png_ptr, png_infop info_ptr,
    if(info_ptr->row_pointers == NULL)
    {
       info_ptr->row_pointers = (png_bytepp)png_malloc(png_ptr,
-         info_ptr->height * png_sizeof(png_bytep));
+         info_ptr->height * sizeof(png_bytep));
 #ifdef PNG_FREE_ME_SUPPORTED
       info_ptr->free_me |= PNG_FREE_ROWS;
 #endif

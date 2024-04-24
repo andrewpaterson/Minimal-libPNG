@@ -109,7 +109,7 @@ png_set_sig_bytes(png_structp png_ptr, int num_bytes)
  * PNG signature (this is the same behaviour as strcmp, memcmp, etc).
  */
 int PNGAPI
-png_sig_cmp(png_bytep sig, png_size_t start, png_size_t num_to_check)
+png_sig_cmp(png_bytep sig, size_t start, size_t num_to_check)
 {
    uint8_t png_signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
    if (num_to_check > 8)
@@ -134,7 +134,7 @@ png_sig_cmp(png_bytep sig, png_size_t start, png_size_t num_to_check)
 int PNGAPI
 png_check_sig(png_bytep sig, int num)
 {
-  return ((int)!png_sig_cmp(sig, (png_size_t)0, (png_size_t)num));
+  return ((int)!png_sig_cmp(sig, (size_t)0, (size_t)num));
 }
 #endif
 #endif /* PNG_READ_SUPPORTED */
@@ -171,13 +171,13 @@ png_zalloc(voidpf png_ptr, uInt items, uInt size)
 
    if (num_bytes > (uint32_t)0x8000L)
    {
-      png_memset(ptr, 0, (png_size_t)0x8000L);
-      png_memset((png_bytep)ptr + (png_size_t)0x8000L, 0,
-         (png_size_t)(num_bytes - (uint32_t)0x8000L));
+      png_memset(ptr, 0, (size_t)0x8000L);
+      png_memset((png_bytep)ptr + (size_t)0x8000L, 0,
+         (size_t)(num_bytes - (uint32_t)0x8000L));
    }
    else
    {
-      png_memset(ptr, 0, (png_size_t)num_bytes);
+      png_memset(ptr, 0, (size_t)num_bytes);
    }
 #endif
    return ((voidpf)ptr);
@@ -209,7 +209,7 @@ png_reset_crc(png_structp png_ptr)
  * trouble of calculating it.
  */
 void /* PRIVATE */
-png_calculate_crc(png_structp png_ptr, png_bytep ptr, png_size_t length)
+png_calculate_crc(png_structp png_ptr, png_bytep ptr, size_t length)
 {
    int need_crc = 1;
 
@@ -231,7 +231,7 @@ png_calculate_crc(png_structp png_ptr, png_bytep ptr, png_size_t length)
 
 /* Allocate the memory for an info_struct for the application.  We don't
  * really need the png_ptr, but it could potentially be useful in the
- * future.  This should be used in favour of malloc(png_sizeof(png_info))
+ * future.  This should be used in favour of malloc(sizeof(png_info))
  * and png_info_init() so that applications that want to use a shared
  * libpng don't have to be recompiled if png_info changes size.
  */
@@ -249,7 +249,7 @@ png_create_info_struct(png_structp png_ptr)
    info_ptr = (png_infop)png_create_struct(PNG_STRUCT_INFO);
 #endif
    if (info_ptr != NULL)
-      png_info_init_3(&info_ptr, png_sizeof(png_info));
+      png_info_init_3(&info_ptr, sizeof(png_info));
 
    return (info_ptr);
 }
@@ -298,7 +298,7 @@ png_info_init(png_infop info_ptr)
 #endif
 
 void PNGAPI
-png_info_init_3(png_infopp ptr_ptr, png_size_t png_info_struct_size)
+png_info_init_3(png_infopp ptr_ptr, size_t png_info_struct_size)
 {
    png_infop info_ptr = *ptr_ptr;
 
@@ -306,7 +306,7 @@ png_info_init_3(png_infopp ptr_ptr, png_size_t png_info_struct_size)
 
    png_debug(1, "in png_info_init_3\n");
 
-   if(png_sizeof(png_info) > png_info_struct_size)
+   if(sizeof(png_info) > png_info_struct_size)
      {
        png_destroy_struct(info_ptr);
        info_ptr = (png_infop)png_create_struct(PNG_STRUCT_INFO);
@@ -314,7 +314,7 @@ png_info_init_3(png_infopp ptr_ptr, png_size_t png_info_struct_size)
      }
 
    /* set everything to 0 */
-   png_memset(info_ptr, 0, png_sizeof (png_info));
+   png_memset(info_ptr, 0, sizeof (png_info));
 }
 
 #ifdef PNG_FREE_ME_SUPPORTED
@@ -539,7 +539,7 @@ png_info_destroy(png_structp png_ptr, png_infop info_ptr)
    }
 #endif
 
-   png_info_init_3(&info_ptr, png_sizeof(png_info));
+   png_info_init_3(&info_ptr, sizeof(png_info));
 }
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */
 
@@ -586,7 +586,7 @@ png_convert_to_rfc1123(png_structp png_ptr, png_timep ptime)
    if (png_ptr->time_buffer == NULL)
    {
       png_ptr->time_buffer = (png_charp)png_malloc(png_ptr, (uint32_t)(29*
-         png_sizeof(char)));
+         sizeof(char)));
    }
 
 #ifdef USE_FAR_KEYWORD
@@ -597,7 +597,7 @@ png_convert_to_rfc1123(png_structp png_ptr, png_timep ptime)
           ptime->year, ptime->hour % 24, ptime->minute % 60,
           ptime->second % 61);
       png_memcpy(png_ptr->time_buffer, near_time_buf,
-          29*png_sizeof(char));
+          29*sizeof(char));
    }
 #else
    sprintf(png_ptr->time_buffer, "%d %s %d %02d:%02d:%02d +0000",
@@ -703,13 +703,13 @@ png_access_version_number(void)
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 #ifdef PNG_SIZE_T
 /* Added at libpng version 1.2.6 */
-   PNG_EXTERN png_size_t PNGAPI png_convert_size PNGARG((size_t size));
-png_size_t PNGAPI
+   PNG_EXTERN size_t PNGAPI png_convert_size PNGARG((size_t size));
+size_t PNGAPI
 png_convert_size(size_t size)
 {
-  if (size > (png_size_t)-1)
+  if (size > (size_t)-1)
      PNG_ABORT();  /* We haven't got access to png_ptr, so no png_error() */
-  return ((png_size_t)size);
+  return ((size_t)size);
 }
 #endif /* PNG_SIZE_T */
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */

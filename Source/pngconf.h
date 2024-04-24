@@ -52,13 +52,6 @@
 #  define PNG_WRITE_SUPPORTED
 #endif
 
-/* Enabled by default in 1.2.0.  You can disable this if you don't need to
-   support PNGs that are embedded in MNG datastreams */
-#if !defined(PNG_1_0_X) && !defined(PNG_NO_MNG_FEATURES)
-#  ifndef PNG_MNG_FEATURES_SUPPORTED
-#    define PNG_MNG_FEATURES_SUPPORTED
-#  endif
-#endif
 
 #ifndef PNG_NO_FLOATING_POINT_SUPPORTED
 #  ifndef PNG_FLOATING_POINT_SUPPORTED
@@ -405,14 +398,6 @@
 #  endif
 #endif
 
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
-/* Deprecated, will be removed from version 2.0.0.
-   Use PNG_MNG_FEATURES_SUPPORTED instead. */
-#ifndef PNG_NO_READ_EMPTY_PLTE
-#  define PNG_READ_EMPTY_PLTE_SUPPORTED
-#endif
-#endif
-
 #endif /* PNG_READ_SUPPORTED */
 
 #if defined(PNG_WRITE_SUPPORTED)
@@ -467,13 +452,6 @@
 
 #ifndef PNG_NO_WRITE_FLUSH
 #  define PNG_WRITE_FLUSH_SUPPORTED
-#endif
-
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
-/* Deprecated, see PNG_MNG_FEATURES_SUPPORTED, above */
-#ifndef PNG_NO_WRITE_EMPTY_PLTE
-#  define PNG_WRITE_EMPTY_PLTE_SUPPORTED
-#endif
 #endif
 
 #endif /* PNG_WRITE_SUPPORTED */
@@ -750,25 +728,6 @@
      /* "time.h" functions are not supported on WindowsCE */
 #    include <time.h>
 #endif
-
-/* This is usually size_t.  It is typedef'ed just in case you need it to
-   change (I'm not sure if you will or not, so I thought I'd be safe) */
-#ifdef PNG_SIZE_T
-   typedef PNG_SIZE_T png_size_t;
-#  define png_sizeof(x) png_convert_size(sizeof (x))
-#else
-   typedef size_t png_size_t;
-#  define png_sizeof(x) sizeof (x)
-#endif
-
-/* The following is needed for medium model support.  It cannot be in the
- * PNG_INTERNAL section.  Needs modification for other compilers besides
- * MSC.  Model independent support declares all arrays and pointers to be
- * large using the far keyword.  The zlib version used must also support
- * model independent data.  As of version zlib 1.0.4, the necessary changes
- * have been made in zlib.  The USE_FAR_KEYWORD define triggers other
- * changes that are needed. (Tim Wegner)
- */
 
 
 /* Suggest testing for specific compiler first before testing for

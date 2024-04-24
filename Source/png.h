@@ -588,7 +588,7 @@ typedef struct png_unknown_chunk_t
 {
     uint8_t name[5];
     uint8_t *data;
-    png_size_t size;
+    size_t size;
 
     /* libpng-using applications should NOT directly modify this byte. */
     uint8_t location; /* mode of operation at read time */
@@ -771,7 +771,7 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
    /* storage for unknown chunks that the library doesn't recognize. */
    png_unknown_chunkp unknown_chunks;
-   png_size_t unknown_chunks_num;
+   size_t unknown_chunks_num;
 #endif
 
 #if defined(PNG_sPLT_SUPPORTED)
@@ -798,7 +798,7 @@ typedef png_info **png_infopp;
 /* Maximum positive integer used in PNG is (2^31)-1 */
 #define PNG_UINT_31_MAX ((uint32_t)0x7fffffffL)
 #define PNG_UINT_32_MAX ((uint32_t)(-1))
-#define PNG_SIZE_MAX ((png_size_t)(-1))
+#define PNG_SIZE_MAX ((size_t)(-1))
 #if defined(PNG_1_0_X) || defined (PNG_1_2_X)
 /* PNG_MAX_UINT is deprecated; use PNG_UINT_31_MAX instead. */
 #define PNG_MAX_UINT PNG_UINT_31_MAX
@@ -919,7 +919,7 @@ typedef struct png_struct_def png_struct;
 typedef png_struct *png_structp;
 
 typedef void (PNGAPI *png_error_ptr) PNGARG((png_structp, png_const_charp));
-typedef void (PNGAPI *png_rw_ptr) PNGARG((png_structp, png_bytep, png_size_t));
+typedef void (PNGAPI *png_rw_ptr) PNGARG((png_structp, png_bytep, size_t));
 typedef void (PNGAPI *png_flush_ptr) PNGARG((png_structp));
 typedef void (PNGAPI *png_read_status_ptr) PNGARG((png_structp, uint32_t,
    int));
@@ -967,7 +967,7 @@ typedef void (PNGAPI *png_unknown_chunk_ptr) PNGARG((png_structp));
 #define PNG_FLAG_MNG_FILTER_64      0x04
 #define PNG_ALL_MNG_FEATURES        0x05
 
-typedef png_voidp (*png_malloc_ptr) PNGARG((png_structp, png_size_t));
+typedef png_voidp (*png_malloc_ptr) PNGARG((png_structp, size_t));
 typedef void (*png_free_ptr) PNGARG((png_structp, png_voidp));
 
 /* The structure that holds the information to read and write PNG files.
@@ -1013,7 +1013,7 @@ struct png_struct_def
 
    z_stream zstream;          /* pointer to decompression structure (below) */
    png_bytep zbuf;            /* buffer for zlib */
-   png_size_t zbuf_size;      /* size of zbuf */
+   size_t zbuf_size;      /* size of zbuf */
    int zlib_level;            /* holds zlib compression level */
    int zlib_method;           /* holds zlib compression method */
    int zlib_window_bits;      /* holds zlib compression window bits */
@@ -1123,10 +1123,10 @@ struct png_struct_def
    png_bytep current_buffer;         /* buffer for recently used data */
    uint32_t push_length;          /* size of current input chunk */
    uint32_t skip_length;          /* bytes to skip in input data */
-   png_size_t save_buffer_size;      /* amount of data now in save_buffer */
-   png_size_t save_buffer_max;       /* total size of save_buffer */
-   png_size_t buffer_size;           /* total amount of available input data */
-   png_size_t current_buffer_size;   /* amount of data now in current_buffer */
+   size_t save_buffer_size;      /* amount of data now in save_buffer */
+   size_t save_buffer_max;       /* total size of save_buffer */
+   size_t buffer_size;           /* total amount of available input data */
+   size_t current_buffer_size;   /* amount of data now in current_buffer */
    int process_mode;                 /* what push library is currently doing */
    int cur_palette;                  /* current push library palette index */
 
@@ -1179,27 +1179,11 @@ struct png_struct_def
    uint16_t rgb_to_gray_green_coeff;
    uint16_t rgb_to_gray_blue_coeff;
 #endif
-
-/* New member added in libpng-1.0.4 (renamed in 1.0.9) */
-#if defined(PNG_MNG_FEATURES_SUPPORTED) || \
-    defined(PNG_READ_EMPTY_PLTE_SUPPORTED) || \
-    defined(PNG_WRITE_EMPTY_PLTE_SUPPORTED)
-/* changed from uint8_t to uint32_t at version 1.2.0 */
-#ifdef PNG_1_0_X
-   uint8_t mng_features_permitted;
-#else
    uint32_t mng_features_permitted;
-#endif /* PNG_1_0_X */
-#endif
 
 /* New member added in libpng-1.0.7 */
 #if defined(PNG_READ_GAMMA_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
    png_fixed_point int_gamma;
-#endif
-
-/* New member added in libpng-1.0.9, ifdef'ed out in 1.0.12, enabled in 1.2.0 */
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   uint8_t filter_type;
 #endif
 
 /* New members added in libpng-1.0.2 but first enabled by default in 1.2.0 */
@@ -1259,8 +1243,8 @@ extern PNG_EXPORT(void,png_set_sig_bytes) PNGARG((png_structp png_ptr,
  * signature, and non-zero otherwise.  Having num_to_check == 0 or
  * start > 7 will always fail (ie return non-zero).
  */
-extern PNG_EXPORT(int,png_sig_cmp) PNGARG((png_bytep sig, png_size_t start,
-   png_size_t num_to_check));
+extern PNG_EXPORT(int,png_sig_cmp) PNGARG((png_bytep sig, size_t start,
+   size_t num_to_check));
 
 /* Simple signature checking function.  This is the same as calling
  * png_check_sig(sig, n) := !png_sig_cmp(sig, 0, n).
@@ -1304,7 +1288,7 @@ extern PNG_EXPORT(png_structp,png_create_write_struct_2)
 
 /* Write a PNG chunk - size, type, (optional) data, CRC. */
 extern PNG_EXPORT(void,png_write_chunk) PNGARG((png_structp png_ptr,
-   png_bytep chunk_name, png_bytep data, png_size_t length));
+   png_bytep chunk_name, png_bytep data, size_t length));
 
 /* Write the start of a PNG chunk - length and chunk name. */
 extern PNG_EXPORT(void,png_write_chunk_start) PNGARG((png_structp png_ptr,
@@ -1312,7 +1296,7 @@ extern PNG_EXPORT(void,png_write_chunk_start) PNGARG((png_structp png_ptr,
 
 /* Write the data of a PNG chunk started with png_write_chunk_start(). */
 extern PNG_EXPORT(void,png_write_chunk_data) PNGARG((png_structp png_ptr,
-   png_bytep data, png_size_t length));
+   png_bytep data, size_t length));
 
 /* Finish a chunk started with png_write_chunk_start() (includes CRC). */
 extern PNG_EXPORT(void,png_write_chunk_end) PNGARG((png_structp png_ptr));
@@ -1326,11 +1310,11 @@ extern PNG_EXPORT(png_infop,png_create_info_struct)
 extern PNG_EXPORT(void,png_info_init) PNGARG((png_infop info_ptr));
 #undef png_info_init
 #define png_info_init(info_ptr) png_info_init_3(&info_ptr,\
-    png_sizeof(png_info));
+    sizeof(png_info));
 #endif
 
 extern PNG_EXPORT(void,png_info_init_3) PNGARG((png_infopp info_ptr,
-    png_size_t png_info_struct_size));
+    size_t png_info_struct_size));
 
 /* Writes all the PNG information before the image. */
 extern PNG_EXPORT(void,png_write_info_before_PLTE) PNGARG((png_structp png_ptr,
@@ -1476,16 +1460,7 @@ extern PNG_EXPORT(void,png_set_gamma) PNGARG((png_structp png_ptr,
    double screen_gamma, double default_file_gamma));
 #endif
 #endif
-
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
-#if defined(PNG_READ_EMPTY_PLTE_SUPPORTED) || \
-    defined(PNG_WRITE_EMPTY_PLTE_SUPPORTED)
-/* Permit or disallow empty PLTE (0: not permitted, 1: permitted) */
-/* Deprecated and will be removed.  Use png_permit_mng_features() instead. */
-extern PNG_EXPORT(void,png_permit_empty_plte) PNGARG((png_structp png_ptr,
-   int empty_plte_permitted));
-#endif
-#endif
+extern PNG_EXPORT(void,png_permit_empty_plte) PNGARG((png_structp png_ptr, int empty_plte_permitted));
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 /* Set how many lines between output flushes - 0 for no flushing */
@@ -1787,7 +1762,7 @@ extern PNG_EXPORT(png_voidp,png_get_progressive_ptr)
 
 /* function to be called when data becomes available */
 extern PNG_EXPORT(void,png_process_data) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_bytep buffer, png_size_t buffer_size));
+   png_infop info_ptr, png_bytep buffer, size_t buffer_size));
 
 /* function that combines rows.  Not very much different than the
  * png_combine_row() call.  Is this even used?????
@@ -2200,11 +2175,6 @@ extern PNG_EXPORT(png_charp,png_get_header_ver) PNGARG((png_structp png_ptr));
 extern PNG_EXPORT(png_charp,png_get_header_version) PNGARG((png_structp png_ptr));
 extern PNG_EXPORT(png_charp,png_get_libpng_ver) PNGARG((png_structp png_ptr));
 
-#ifdef PNG_MNG_FEATURES_SUPPORTED
-extern PNG_EXPORT(uint32_t,png_permit_mng_features) PNGARG((png_structp
-   png_ptr, uint32_t mng_features_permitted));
-#endif
-
 /* For use in png_set_keep_unknown, added to version 1.2.6 */
 #define PNG_HANDLE_CHUNK_AS_DEFAULT   0
 #define PNG_HANDLE_CHUNK_NEVER        1
@@ -2502,14 +2472,14 @@ PNG_EXPORT_VAR (const uint8_t) png_zTXt[5];
 extern PNG_EXPORT(void,png_read_init) PNGARG((png_structp png_ptr));
 #undef png_read_init
 #define png_read_init(png_ptr) png_read_init_3(&png_ptr, \
-    PNG_LIBPNG_VER_STRING,  png_sizeof(png_struct));
+    PNG_LIBPNG_VER_STRING,  sizeof(png_struct));
 #endif
 
 extern PNG_EXPORT(void,png_read_init_3) PNGARG((png_structpp ptr_ptr,
-    png_const_charp user_png_ver, png_size_t png_struct_size));
+    png_const_charp user_png_ver, size_t png_struct_size));
 #if defined(PNG_1_0_X) || defined (PNG_1_2_X)
 extern PNG_EXPORT(void,png_read_init_2) PNGARG((png_structp png_ptr,
-    png_const_charp user_png_ver, png_size_t png_struct_size, png_size_t
+    png_const_charp user_png_ver, size_t png_struct_size, size_t
     png_info_size));
 #endif
 
@@ -2520,13 +2490,13 @@ extern PNG_EXPORT(void,png_read_init_2) PNGARG((png_structp png_ptr,
 extern PNG_EXPORT(void,png_write_init) PNGARG((png_structp png_ptr));
 #undef png_write_init
 #define png_write_init(png_ptr) png_write_init_3(&png_ptr, \
-    PNG_LIBPNG_VER_STRING, png_sizeof(png_struct));
+    PNG_LIBPNG_VER_STRING, sizeof(png_struct));
 #endif
 
 extern PNG_EXPORT(void,png_write_init_3) PNGARG((png_structpp ptr_ptr,
-    png_const_charp user_png_ver, png_size_t png_struct_size));
+    png_const_charp user_png_ver, size_t png_struct_size));
 extern PNG_EXPORT(void,png_write_init_2) PNGARG((png_structp png_ptr,
-    png_const_charp user_png_ver, png_size_t png_struct_size, png_size_t
+    png_const_charp user_png_ver, size_t png_struct_size, size_t
     png_info_size));
 
 /* Allocate memory for an internal libpng struct */
@@ -2552,23 +2522,23 @@ PNG_EXTERN voidpf png_zalloc PNGARG((voidpf png_ptr, uInt items, uInt size));
 PNG_EXTERN void png_zfree PNGARG((voidpf png_ptr, voidpf ptr));
 
 #ifdef PNG_SIZE_T
-/* Function to convert a sizeof an item to png_sizeof item */
-   PNG_EXTERN png_size_t PNGAPI png_convert_size PNGARG((size_t size));
+/* Function to convert a sizeof an item to sizeof item */
+   PNG_EXTERN size_t PNGAPI png_convert_size PNGARG((size_t size));
 #endif
 
 /* Next four functions are used internally as callbacks.  PNGAPI is required
  * but not PNG_EXPORT.  PNGAPI added at libpng version 1.2.3. */
 
 PNG_EXTERN void PNGAPI png_default_read_data PNGARG((png_structp png_ptr,
-   png_bytep data, png_size_t length));
+   png_bytep data, size_t length));
 
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
 PNG_EXTERN void PNGAPI png_push_fill_buffer PNGARG((png_structp png_ptr,
-   png_bytep buffer, png_size_t length));
+   png_bytep buffer, size_t length));
 #endif
 
 PNG_EXTERN void PNGAPI png_default_write_data PNGARG((png_structp png_ptr,
-   png_bytep data, png_size_t length));
+   png_bytep data, size_t length));
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 #if !defined(PNG_NO_STDIO)
@@ -2578,7 +2548,7 @@ PNG_EXTERN void PNGAPI png_default_flush PNGARG((png_structp png_ptr));
 #else /* PNG_1_0_X */
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
 PNG_EXTERN void png_push_fill_buffer PNGARG((png_structp png_ptr,
-   png_bytep buffer, png_size_t length));
+   png_bytep buffer, size_t length));
 #endif
 #endif /* PNG_1_0_X */
 
@@ -2587,15 +2557,15 @@ PNG_EXTERN void png_reset_crc PNGARG((png_structp png_ptr));
 
 /* Write the "data" buffer to whatever output you are using. */
 PNG_EXTERN void png_write_data PNGARG((png_structp png_ptr, png_bytep data,
-   png_size_t length));
+   size_t length));
 
 /* Read data from whatever input you are using into the "data" buffer */
 PNG_EXTERN void png_read_data PNGARG((png_structp png_ptr, png_bytep data,
-   png_size_t length));
+   size_t length));
 
 /* Read bytes into buf, and update png_ptr->crc */
 PNG_EXTERN void png_crc_read PNGARG((png_structp png_ptr, png_bytep buf,
-   png_size_t length));
+   size_t length));
 
 /* Read "skip" bytes, read the file crc, and (optionally) verify png_ptr->crc */
 PNG_EXTERN int png_crc_finish PNGARG((png_structp png_ptr, uint32_t skip));
@@ -2608,7 +2578,7 @@ PNG_EXTERN int png_crc_error PNGARG((png_structp png_ptr));
  * since this is the maximum buffer size we can specify.
  */
 PNG_EXTERN void png_calculate_crc PNGARG((png_structp png_ptr, png_bytep ptr,
-   png_size_t length));
+   size_t length));
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 PNG_EXTERN void png_flush PNGARG((png_structp png_ptr));
@@ -2631,7 +2601,7 @@ PNG_EXTERN void png_write_PLTE PNGARG((png_structp png_ptr, png_colorp palette,
    uint32_t num_pal));
 
 PNG_EXTERN void png_write_IDAT PNGARG((png_structp png_ptr, png_bytep data,
-   png_size_t length));
+   size_t length));
 
 PNG_EXTERN void png_write_IEND PNGARG((png_structp png_ptr));
 
@@ -2676,7 +2646,7 @@ PNG_EXTERN void png_write_hIST PNGARG((png_structp png_ptr, png_uint_16p hist,
 #endif
 
 #if defined(PNG_WRITE_pCAL_SUPPORTED) || defined(PNG_WRITE_sPLT_SUPPORTED)
-PNG_EXTERN png_size_t png_check_keyword PNGARG((png_structp png_ptr,
+PNG_EXTERN size_t png_check_keyword PNGARG((png_structp png_ptr,
     png_charp key, png_charpp new_key));
 #endif
 
@@ -2947,10 +2917,10 @@ PNG_EXTERN void png_push_crc_skip PNGARG((png_structp png_ptr,
 PNG_EXTERN void png_push_crc_finish PNGARG((png_structp png_ptr));
 PNG_EXTERN void png_push_save_buffer PNGARG((png_structp png_ptr));
 PNG_EXTERN void png_push_restore_buffer PNGARG((png_structp png_ptr,
-   png_bytep buffer, png_size_t buffer_length));
+   png_bytep buffer, size_t buffer_length));
 PNG_EXTERN void png_push_read_IDAT PNGARG((png_structp png_ptr));
 PNG_EXTERN void png_process_IDAT_data PNGARG((png_structp png_ptr,
-   png_bytep buffer, png_size_t buffer_length));
+   png_bytep buffer, size_t buffer_length));
 PNG_EXTERN void png_push_process_row PNGARG((png_structp png_ptr));
 PNG_EXTERN void png_push_handle_unknown PNGARG((png_structp png_ptr,
    png_infop info_ptr, uint32_t length));
@@ -2966,14 +2936,6 @@ PNG_EXTERN void png_process_some_data PNGARG((png_structp png_ptr,
 PNG_EXTERN void png_read_push_finish_row PNGARG((png_structp png_ptr));
 
 #endif /* PNG_PROGRESSIVE_READ_SUPPORTED */
-
-#ifdef PNG_MNG_FEATURES_SUPPORTED
-PNG_EXTERN void png_do_read_intrapixel PNGARG((png_row_infop row_info,
-   png_bytep row));
-PNG_EXTERN void png_do_write_intrapixel PNGARG((png_row_infop row_info,
-   png_bytep row));
-#endif
-
 
 #if defined(PNG_INCH_CONVERSIONS) && defined(PNG_FLOATING_POINT_SUPPORTED)
 PNG_EXTERN uint32_t png_get_pixels_per_inch PNGARG((png_structp png_ptr,

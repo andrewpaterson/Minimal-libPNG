@@ -26,7 +26,7 @@
    buffering if you are using unbuffered reads.  This should never be asked
    to read more then 64K on a 16 bit machine. */
 void /* PRIVATE */
-png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+png_read_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    png_debug1(4,"reading %d bytes\n", (int)length);
    if (png_ptr->read_data_fn != NULL)
@@ -42,15 +42,15 @@ png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
 void PNGAPI
-png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
 {
-   png_size_t check;
+   size_t check;
 
    if(png_ptr == NULL) return;
-   /* fread() returns 0 on error, so it is OK to store this in a png_size_t
+   /* fread() returns 0 on error, so it is OK to store this in a size_t
     * instead of an int, which is what fread() actually returns.
     */
-   check = (png_size_t)fread(data, (png_size_t)1, length,
+   check = (size_t)fread(data, (size_t)1, length,
       (png_FILE_p)png_ptr->io_ptr);
 
    if (check != length)
@@ -66,7 +66,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define MIN(a,b) (a <= b ? a : b)
 
 static void PNGAPI
-png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    int check;
    uint8_t *n_data;
@@ -83,13 +83,13 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    else
    {
       uint8_t buf[NEAR_BUF_SIZE];
-      png_size_t read, remaining, err;
+      size_t read, remaining, err;
       check = 0;
       remaining = length;
       do
       {
          read = MIN(NEAR_BUF_SIZE, remaining);
-         err = fread(buf, (png_size_t)1, read, io_ptr);
+         err = fread(buf, (size_t)1, read, io_ptr);
          png_memcpy(data, buf, read); /* copy far buffer to near buffer */
          if(err != read)
             break;

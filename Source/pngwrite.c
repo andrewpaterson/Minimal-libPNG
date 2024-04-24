@@ -31,13 +31,6 @@ png_write_info_before_PLTE(png_structp png_ptr, png_infop info_ptr)
    if (!(png_ptr->mode & PNG_WROTE_INFO_BEFORE_PLTE))
    {
    png_write_sig(png_ptr); /* write PNG signature */
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   if((png_ptr->mode&PNG_HAVE_PNG_SIGNATURE)&&(png_ptr->mng_features_permitted))
-   {
-      png_warning(png_ptr,"MNG features are not allowed in a PNG datastream");
-      png_ptr->mng_features_permitted=0;
-   }
-#endif
    /* write IHDR information. */
    png_write_IHDR(png_ptr, info_ptr->width, info_ptr->height,
       info_ptr->bit_depth, info_ptr->color_type, info_ptr->compression_type,
@@ -332,7 +325,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       return (NULL);
    }
 #ifdef USE_FAR_KEYWORD
-   png_memcpy(png_ptr->jmpbuf,jmpbuf,png_sizeof(jmp_buf));
+   png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
 #endif
 #endif
 
@@ -399,7 +392,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
 #ifdef USE_FAR_KEYWORD
    if (setjmp(jmpbuf))
       PNG_ABORT();
-   png_memcpy(png_ptr->jmpbuf,jmpbuf,png_sizeof(jmp_buf));
+   png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
 #else
    if (setjmp(png_ptr->jmpbuf))
       PNG_ABORT();
@@ -421,13 +414,13 @@ png_write_init(png_structp png_ptr)
 
 void PNGAPI
 png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
-   png_size_t png_struct_size, png_size_t png_info_size)
+   size_t png_struct_size, size_t png_info_size)
 {
    /* We only come here via pre-1.0.12-compiled applications */
    if(png_ptr == NULL) return;
 #if !defined(PNG_NO_STDIO)
-   if(png_sizeof(png_struct) > png_struct_size ||
-      png_sizeof(png_info) > png_info_size)
+   if(sizeof(png_struct) > png_struct_size ||
+      sizeof(png_info) > png_info_size)
    {
       char msg[80];
       png_ptr->warning_fn=NULL;
@@ -442,7 +435,7 @@ png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
       png_warning(png_ptr, msg);
    }
 #endif
-   if(png_sizeof(png_struct) > png_struct_size)
+   if(sizeof(png_struct) > png_struct_size)
      {
        png_ptr->error_fn=NULL;
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -451,7 +444,7 @@ png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
        png_error(png_ptr,
        "The png struct allocated by the application for writing is too small.");
      }
-   if(png_sizeof(png_info) > png_info_size)
+   if(sizeof(png_info) > png_info_size)
      {
        png_ptr->error_fn=NULL;
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -467,7 +460,7 @@ png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
 
 void PNGAPI
 png_write_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
-   png_size_t png_struct_size)
+   size_t png_struct_size)
 {
    png_structp png_ptr=*ptr_ptr;
 #ifdef PNG_SETJMP_SUPPORTED
@@ -498,10 +491,10 @@ png_write_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* save jump buffer and error functions */
-   png_memcpy(tmp_jmp, png_ptr->jmpbuf, png_sizeof (jmp_buf));
+   png_memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
 #endif
 
-   if (png_sizeof(png_struct) > png_struct_size)
+   if (sizeof(png_struct) > png_struct_size)
      {
        png_destroy_struct(png_ptr);
        png_ptr = (png_structp)png_create_struct(PNG_STRUCT_PNG);
@@ -509,7 +502,7 @@ png_write_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
      }
 
    /* reset all variables to 0 */
-   png_memset(png_ptr, 0, png_sizeof (png_struct));
+   png_memset(png_ptr, 0, sizeof (png_struct));
 
    /* added at libpng-1.2.6 */
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
@@ -519,7 +512,7 @@ png_write_init_3(png_structpp ptr_ptr, png_const_charp user_png_ver,
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* restore jump buffer */
-   png_memcpy(png_ptr->jmpbuf, tmp_jmp, png_sizeof (jmp_buf));
+   png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
    png_set_write_fn(png_ptr, png_voidp_NULL, png_rw_ptr_NULL,
@@ -743,24 +736,6 @@ png_write_row(png_structp png_ptr, png_bytep row)
    if (png_ptr->transformations)
       png_do_write_transformations(png_ptr);
 
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   /* Write filter_method 64 (intrapixel differencing) only if
-    * 1. Libpng was compiled with PNG_MNG_FEATURES_SUPPORTED and
-    * 2. Libpng did not write a PNG signature (this filter_method is only
-    *    used in PNG datastreams that are embedded in MNG datastreams) and
-    * 3. The application called png_permit_mng_features with a mask that
-    *    included PNG_FLAG_MNG_FILTER_64 and
-    * 4. The filter_method is 64 and
-    * 5. The color_type is RGB or RGBA
-    */
-   if((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
-      (png_ptr->filter_type == PNG_INTRAPIXEL_DIFFERENCING))
-   {
-      /* Intrapixel differencing */
-      png_do_write_intrapixel(&(png_ptr->row_info), png_ptr->row_buf + 1);
-   }
-#endif
-
    /* Find a filter if necessary, filter the row and write it out. */
    png_write_find_filter(png_ptr, &(png_ptr->row_info));
 
@@ -935,7 +910,7 @@ png_write_destroy(png_structp png_ptr)
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* reset structure */
-   png_memcpy(tmp_jmp, png_ptr->jmpbuf, png_sizeof (jmp_buf));
+   png_memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
 #endif
 
    error_fn = png_ptr->error_fn;
@@ -945,7 +920,7 @@ png_write_destroy(png_structp png_ptr)
    free_fn = png_ptr->free_fn;
 #endif
 
-   png_memset(png_ptr, 0, png_sizeof (png_struct));
+   png_memset(png_ptr, 0, sizeof (png_struct));
 
    png_ptr->error_fn = error_fn;
    png_ptr->warning_fn = warning_fn;
@@ -955,7 +930,7 @@ png_write_destroy(png_structp png_ptr)
 #endif
 
 #ifdef PNG_SETJMP_SUPPORTED
-   png_memcpy(png_ptr->jmpbuf, tmp_jmp, png_sizeof (jmp_buf));
+   png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 }
 
@@ -966,11 +941,6 @@ png_set_filter(png_structp png_ptr, int method, int filters)
    png_debug(1, "in png_set_filter\n");
    if (png_ptr == NULL)
       return;
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   if((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
-      (method == PNG_INTRAPIXEL_DIFFERENCING))
-         method = PNG_FILTER_TYPE_BASE;
-#endif
    if (method == PNG_FILTER_TYPE_BASE)
    {
       switch (filters & (PNG_ALL_FILTERS | 0x07))
@@ -1101,7 +1071,7 @@ png_set_filter_heuristics(png_structp png_ptr, int heuristic_method,
       if (png_ptr->prev_filters == NULL)
       {
          png_ptr->prev_filters = (png_bytep)png_malloc(png_ptr,
-            (uint32_t)(png_sizeof(uint8_t) * num_weights));
+            (uint32_t)(sizeof(uint8_t) * num_weights));
 
          /* To make sure that the weighting starts out fairly */
          for (i = 0; i < num_weights; i++)
@@ -1113,10 +1083,10 @@ png_set_filter_heuristics(png_structp png_ptr, int heuristic_method,
       if (png_ptr->filter_weights == NULL)
       {
          png_ptr->filter_weights = (png_uint_16p)png_malloc(png_ptr,
-            (uint32_t)(png_sizeof(uint16_t) * num_weights));
+            (uint32_t)(sizeof(uint16_t) * num_weights));
 
          png_ptr->inv_filter_weights = (png_uint_16p)png_malloc(png_ptr,
-            (uint32_t)(png_sizeof(uint16_t) * num_weights));
+            (uint32_t)(sizeof(uint16_t) * num_weights));
          for (i = 0; i < num_weights; i++)
          {
             png_ptr->inv_filter_weights[i] =
@@ -1147,10 +1117,10 @@ png_set_filter_heuristics(png_structp png_ptr, int heuristic_method,
    if (png_ptr->filter_costs == NULL)
    {
       png_ptr->filter_costs = (png_uint_16p)png_malloc(png_ptr,
-         (uint32_t)(png_sizeof(uint16_t) * PNG_FILTER_VALUE_LAST));
+         (uint32_t)(sizeof(uint16_t) * PNG_FILTER_VALUE_LAST));
 
       png_ptr->inv_filter_costs = (png_uint_16p)png_malloc(png_ptr,
-         (uint32_t)(png_sizeof(uint16_t) * PNG_FILTER_VALUE_LAST));
+         (uint32_t)(sizeof(uint16_t) * PNG_FILTER_VALUE_LAST));
 
       for (i = 0; i < PNG_FILTER_VALUE_LAST; i++)
       {

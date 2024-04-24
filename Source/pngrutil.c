@@ -68,7 +68,7 @@ png_get_uint_16(png_bytep buf)
 
 /* Read data, and (optionally) run it through the CRC. */
 void /* PRIVATE */
-png_crc_read(png_structp png_ptr, png_bytep buf, png_size_t length)
+png_crc_read(png_structp png_ptr, png_bytep buf, size_t length)
 {
    if(png_ptr == NULL) return;
    png_read_data(png_ptr, buf, length);
@@ -82,10 +82,10 @@ png_crc_read(png_structp png_ptr, png_bytep buf, png_size_t length)
 int /* PRIVATE */
 png_crc_finish(png_structp png_ptr, uint32_t skip)
 {
-   png_size_t i;
-   png_size_t istop = png_ptr->zbuf_size;
+   size_t i;
+   size_t istop = png_ptr->zbuf_size;
 
-   for (i = (png_size_t)skip; i > istop; i -= istop)
+   for (i = (size_t)skip; i > istop; i -= istop)
    {
       png_crc_read(png_ptr, png_ptr->zbuf, png_ptr->zbuf_size);
    }
@@ -184,9 +184,6 @@ png_handle_IHDR(png_structp png_ptr, png_infop info_ptr, uint32_t length)
    png_ptr->bit_depth = (uint8_t)bit_depth;
    png_ptr->interlaced = (uint8_t)interlace_type;
    png_ptr->color_type = (uint8_t)color_type;
-#if defined(PNG_MNG_FEATURES_SUPPORTED)
-   png_ptr->filter_type = (uint8_t)filter_type;
-#endif
    png_ptr->compression_type = (uint8_t)compression_type;
 
    /* find number of channels */
@@ -464,7 +461,7 @@ png_handle_gAMA(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 void /* PRIVATE */
 png_handle_sBIT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 {
-   png_size_t truelen;
+   size_t truelen;
    uint8_t buf[4];
 
    png_debug(1, "in png_handle_sBIT\n");
@@ -494,7 +491,7 @@ png_handle_sBIT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
    if (png_ptr->color_type == PNG_COLOR_TYPE_PALETTE)
       truelen = 3;
    else
-      truelen = (png_size_t)png_ptr->channels;
+      truelen = (size_t)png_ptr->channels;
 
    if (length != truelen || length > 4)
    {
@@ -618,7 +615,7 @@ png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 #endif
    int data_length, entry_size, i;
    uint32_t skip = 0;
-   png_size_t slength;
+   size_t slength;
 
    png_debug(1, "in png_handle_sPLT\n");
 
@@ -641,7 +638,7 @@ png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 #endif
 
    chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
-   slength = (png_size_t)length;
+   slength = (size_t)length;
    png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
 
    if (png_crc_finish(png_ptr, skip))
@@ -678,13 +675,13 @@ png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
    new_palette.nentries = (int32_t) ( data_length / entry_size);
    if ((uint32_t) new_palette.nentries > (uint32_t) (PNG_SIZE_MAX /
-       png_sizeof(png_sPLT_entry)))
+       sizeof(png_sPLT_entry)))
    {
        png_warning(png_ptr, "sPLT chunk too long");
        return;
    }
    new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
-       png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+       png_ptr, new_palette.nentries * sizeof(png_sPLT_entry));
    if (new_palette.entries == NULL)
    {
        png_warning(png_ptr, "sPLT chunk requires too much memory");
@@ -793,7 +790,7 @@ png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length)
          png_crc_finish(png_ptr, length);
          return;
       }
-      png_crc_read(png_ptr, buf, (png_size_t)length);
+      png_crc_read(png_ptr, buf, (size_t)length);
       png_ptr->num_trans = 1;
       png_ptr->trans_values.red = png_get_uint_16(buf);
       png_ptr->trans_values.green = png_get_uint_16(buf + 2);
@@ -819,7 +816,7 @@ png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length)
          png_crc_finish(png_ptr, length);
          return;
       }
-      png_crc_read(png_ptr, readbuf, (png_size_t)length);
+      png_crc_read(png_ptr, readbuf, (size_t)length);
       png_ptr->num_trans = (uint16_t)length;
    }
    else
@@ -841,7 +838,7 @@ png_handle_tRNS(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 void /* PRIVATE */
 png_handle_bKGD(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 {
-   png_size_t truelen;
+   size_t truelen;
    uint8_t buf[6];
 
    png_debug(1, "in png_handle_bKGD\n");
@@ -1034,7 +1031,7 @@ png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length)
    uint8_t type, nparams;
    png_charp buf, units, endptr;
    png_charpp params;
-   png_size_t slength;
+   size_t slength;
    int i;
 
    png_debug(1, "in png_handle_pCAL\n");
@@ -1062,7 +1059,7 @@ png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length)
        png_warning(png_ptr, "No memory for pCAL purpose.");
        return;
      }
-   slength = (png_size_t)length;
+   slength = (size_t)length;
    png_crc_read(png_ptr, (png_bytep)purpose, slength);
 
    if (png_crc_finish(png_ptr, 0))
@@ -1117,7 +1114,7 @@ png_handle_pCAL(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 
    png_debug(3, "Allocating pCAL parameters array\n");
    params = (png_charpp)png_malloc_warn(png_ptr, (uint32_t)(nparams
-      *png_sizeof(png_charp))) ;
+      *sizeof(png_charp))) ;
    if (params == NULL)
      {
        png_free(png_ptr, purpose);
@@ -1248,7 +1245,7 @@ png_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t length)
 #endif
        png_strcpy((png_charp)chunk.name, (png_charp)png_ptr->chunk_name);
        chunk.data = (png_bytep)png_malloc(png_ptr, length);
-       chunk.size = (png_size_t)length;
+       chunk.size = (size_t)length;
        png_crc_read(png_ptr, (png_bytep)chunk.data, length);
 #if defined(PNG_READ_USER_CHUNKS_SUPPORTED)
        if(png_ptr->read_user_chunk_fn != NULL)
@@ -1454,7 +1451,7 @@ png_combine_row(png_structp png_ptr, png_bytep row, int mask)
          {
             png_bytep sp = png_ptr->row_buf + 1;
             png_bytep dp = row;
-            png_size_t pixel_bytes = (png_ptr->row_info.pixel_depth >> 3);
+            size_t pixel_bytes = (png_ptr->row_info.pixel_depth >> 3);
             uint32_t i;
             uint32_t row_width = png_ptr->width;
             uint8_t m = 0x80;
@@ -1512,8 +1509,8 @@ png_do_read_interlace(png_structp png_ptr)
       {
          case 1:
          {
-            png_bytep sp = row + (png_size_t)((row_info->width - 1) >> 3);
-            png_bytep dp = row + (png_size_t)((final_width - 1) >> 3);
+            png_bytep sp = row + (size_t)((row_info->width - 1) >> 3);
+            png_bytep dp = row + (size_t)((final_width - 1) >> 3);
             int sshift, dshift;
             int s_start, s_end, s_inc;
             int jstop = png_pass_inc[pass];
@@ -1597,8 +1594,8 @@ png_do_read_interlace(png_structp png_ptr)
          }
          case 4:
          {
-            png_bytep sp = row + (png_size_t)((row_info->width - 1) >> 1);
-            png_bytep dp = row + (png_size_t)((final_width - 1) >> 1);
+            png_bytep sp = row + (size_t)((row_info->width - 1) >> 1);
+            png_bytep dp = row + (size_t)((final_width - 1) >> 1);
             int sshift, dshift;
             int s_start, s_end, s_inc;
             uint32_t i;
@@ -1639,9 +1636,9 @@ png_do_read_interlace(png_structp png_ptr)
          }
          default:
          {
-            png_size_t pixel_bytes = (row_info->pixel_depth >> 3);
-            png_bytep sp = row + (png_size_t)(row_info->width - 1) * pixel_bytes;
-            png_bytep dp = row + (png_size_t)(final_width - 1) * pixel_bytes;
+            size_t pixel_bytes = (row_info->pixel_depth >> 3);
+            png_bytep sp = row + (size_t)(row_info->width - 1) * pixel_bytes;
+            png_bytep dp = row + (size_t)(final_width - 1) * pixel_bytes;
 
             int jstop = png_pass_inc[pass];
             uint32_t i;

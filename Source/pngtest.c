@@ -33,9 +33,9 @@
 #  include <stdio.h>
 #  include <stdlib.h>
 #  define READFILE(file, data, length, check) \
-     check=(png_size_t)fread(data,(png_size_t)1,length,file)
+     check=(size_t)fread(data,(size_t)1,length,file)
 #  define WRITEFILE(file, data, length, check) \
-     check=(png_size_t)fwrite(data,(png_size_t)1, length, file)
+     check=(size_t)fwrite(data,(size_t)1, length, file)
 #  define FCLOSE(file) fclose(file)
 
 #if defined(PNG_NO_STDIO)
@@ -276,11 +276,11 @@ static int wrote_question = 0;
 
 #ifndef USE_FAR_KEYWORD
 static void
-pngtest_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+pngtest_read_data(png_structp png_ptr, png_bytep data, size_t length)
 {
-   png_size_t check;
+   size_t check;
 
-   /* fread() returns 0 on error, so it is OK to store this in a png_size_t
+   /* fread() returns 0 on error, so it is OK to store this in a size_t
     * instead of an int, which is what fread() actually returns.
     */
    READFILE((png_FILE_p)png_ptr->io_ptr, data, length, check);
@@ -300,7 +300,7 @@ pngtest_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define MIN(a,b) (a <= b ? a : b)
 
 static void
-pngtest_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+pngtest_read_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    int check;
    uint8_t *n_data;
@@ -316,7 +316,7 @@ pngtest_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    else
    {
       uint8_t buf[NEAR_BUF_SIZE];
-      png_size_t read, remaining, err;
+      size_t read, remaining, err;
       check = 0;
       remaining = length;
       do
@@ -353,7 +353,7 @@ pngtest_flush(png_structp png_ptr)
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
 static void
-pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+pngtest_write_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    uint32_t check;
 
@@ -373,7 +373,7 @@ pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define MIN(a,b) (a <= b ? a : b)
 
 static void
-pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+pngtest_write_data(png_structp png_ptr, png_bytep data, size_t length)
 {
    uint32_t check;
    uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "png_bytep" */
@@ -389,7 +389,7 @@ pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    else
    {
       uint8_t buf[NEAR_BUF_SIZE];
-      png_size_t written, remaining, err;
+      size_t written, remaining, err;
       check = 0;
       remaining = length;
       do
@@ -488,7 +488,7 @@ png_debug_malloc(png_structp png_ptr, uint32_t size)
       memory_infop pinfo;
       png_set_mem_fn(png_ptr, NULL, NULL, NULL);
       pinfo = (memory_infop)png_malloc(png_ptr,
-         (uint32_t)png_sizeof (*pinfo));
+         (uint32_t)sizeof (*pinfo));
       pinfo->size = size;
       current_allocation += size;
       total_allocation += size;
@@ -669,7 +669,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
       return (1);
    }
 #ifdef USE_FAR_KEYWORD
-   png_memcpy(png_jmpbuf(read_ptr),jmpbuf,png_sizeof(jmp_buf));
+   png_memcpy(png_jmpbuf(read_ptr),jmpbuf,sizeof(jmp_buf));
 #endif
 
 #ifdef PNG_WRITE_SUPPORTED
@@ -691,7 +691,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
       return (1);
    }
 #ifdef USE_FAR_KEYWORD
-   png_memcpy(png_jmpbuf(write_ptr),jmpbuf,png_sizeof(jmp_buf));
+   png_memcpy(png_jmpbuf(write_ptr),jmpbuf,sizeof(jmp_buf));
 #endif
 #endif
 #endif
@@ -912,13 +912,13 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
          &unknowns);
       if (num_unknowns)
       {
-         png_size_t i;
+         size_t i;
          png_set_unknown_chunks(write_ptr, write_info_ptr, unknowns,
            num_unknowns);
          /* copy the locations from the read_info_ptr.  The automatically
             generated locations in write_info_ptr are wrong because we
             haven't written anything yet */
-         for (i = 0; i < (png_size_t)num_unknowns; i++)
+         for (i = 0; i < (size_t)num_unknowns; i++)
 		 {
            png_set_unknown_chunk_location(write_ptr, write_info_ptr, (int)i, (int)unknowns[i].location);
 		 }
@@ -1028,13 +1028,13 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
          &unknowns);
       if (num_unknowns)
       {
-         png_size_t i;
+         size_t i;
          png_set_unknown_chunks(write_ptr, write_end_info_ptr, unknowns,
            num_unknowns);
          /* copy the locations from the read_info_ptr.  The automatically
             generated locations in write_end_info_ptr are wrong because we
             haven't written the end_info yet */
-         for (i = 0; i < (png_size_t)num_unknowns; i++)
+         for (i = 0; i < (size_t)num_unknowns; i++)
 		 {
            png_set_unknown_chunk_location(write_ptr, write_end_info_ptr, (int)i, (int)unknowns[i].location);
 		 }
@@ -1091,7 +1091,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 
    for(;;)
    {
-      png_size_t num_in, num_out;
+      size_t num_in, num_out;
 
       READFILE(fpin, inbuf, 1, num_in);
       READFILE(fpout, outbuf, 1, num_out);

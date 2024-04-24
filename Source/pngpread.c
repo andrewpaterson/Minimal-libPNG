@@ -23,7 +23,7 @@
 
 void 
 png_process_data(png_structp png_ptr, png_infop info_ptr,
-   png_bytep buffer, png_size_t buffer_size)
+   png_bytep buffer, size_t buffer_size)
 {
    if(png_ptr == NULL) return;
    png_push_restore_buffer(png_ptr, buffer, buffer_size);
@@ -80,7 +80,7 @@ png_process_some_data(png_structp png_ptr, png_infop info_ptr)
 void /* PRIVATE */
 png_push_read_sig(png_structp png_ptr, png_infop info_ptr)
 {
-   png_size_t num_checked = png_ptr->sig_bytes,
+   size_t num_checked = png_ptr->sig_bytes,
              num_to_check = 8 - num_checked;
 
    if (png_ptr->buffer_size < num_to_check)
@@ -393,10 +393,10 @@ png_push_crc_finish(png_structp png_ptr)
 {
    if (png_ptr->skip_length && png_ptr->save_buffer_size)
    {
-      png_size_t save_size;
+      size_t save_size;
 
       if (png_ptr->skip_length < (uint32_t)png_ptr->save_buffer_size)
-         save_size = (png_size_t)png_ptr->skip_length;
+         save_size = (size_t)png_ptr->skip_length;
       else
          save_size = png_ptr->save_buffer_size;
 
@@ -409,10 +409,10 @@ png_push_crc_finish(png_structp png_ptr)
    }
    if (png_ptr->skip_length && png_ptr->current_buffer_size)
    {
-      png_size_t save_size;
+      size_t save_size;
 
       if (png_ptr->skip_length < (uint32_t)png_ptr->current_buffer_size)
-         save_size = (png_size_t)png_ptr->skip_length;
+         save_size = (size_t)png_ptr->skip_length;
       else
          save_size = png_ptr->current_buffer_size;
 
@@ -437,7 +437,7 @@ png_push_crc_finish(png_structp png_ptr)
 }
 
 void 
-png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, png_size_t length)
+png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, size_t length)
 {
    png_bytep ptr;
 
@@ -445,7 +445,7 @@ png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, png_size_t length)
    ptr = buffer;
    if (png_ptr->save_buffer_size)
    {
-      png_size_t save_size;
+      size_t save_size;
 
       if (length < png_ptr->save_buffer_size)
          save_size = length;
@@ -461,7 +461,7 @@ png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, png_size_t length)
    }
    if (length && png_ptr->current_buffer_size)
    {
-      png_size_t save_size;
+      size_t save_size;
 
       if (length < png_ptr->current_buffer_size)
          save_size = length;
@@ -482,7 +482,7 @@ png_push_save_buffer(png_structp png_ptr)
    {
       if (png_ptr->save_buffer_ptr != png_ptr->save_buffer)
       {
-         png_size_t i,istop;
+         size_t i,istop;
          png_bytep sp;
          png_bytep dp;
 
@@ -497,7 +497,7 @@ png_push_save_buffer(png_structp png_ptr)
    if (png_ptr->save_buffer_size + png_ptr->current_buffer_size >
       png_ptr->save_buffer_max)
    {
-      png_size_t new_max;
+      size_t new_max;
       png_bytep old_buffer;
 
       if (png_ptr->save_buffer_size > PNG_SIZE_MAX -
@@ -526,7 +526,7 @@ png_push_save_buffer(png_structp png_ptr)
 
 void /* PRIVATE */
 png_push_restore_buffer(png_structp png_ptr, png_bytep buffer,
-   png_size_t buffer_length)
+   size_t buffer_length)
 {
    png_ptr->current_buffer = buffer;
    png_ptr->current_buffer_size = buffer_length;
@@ -568,11 +568,11 @@ png_push_read_IDAT(png_structp png_ptr)
    }
    if (png_ptr->idat_size && png_ptr->save_buffer_size)
    {
-      png_size_t save_size;
+      size_t save_size;
 
       if (png_ptr->idat_size < (uint32_t)png_ptr->save_buffer_size)
       {
-         save_size = (png_size_t)png_ptr->idat_size;
+         save_size = (size_t)png_ptr->idat_size;
          /* check for overflow */
          if((uint32_t)save_size != png_ptr->idat_size)
             png_error(png_ptr, "save_size overflowed in pngpread");
@@ -590,11 +590,11 @@ png_push_read_IDAT(png_structp png_ptr)
    }
    if (png_ptr->idat_size && png_ptr->current_buffer_size)
    {
-      png_size_t save_size;
+      size_t save_size;
 
       if (png_ptr->idat_size < (uint32_t)png_ptr->current_buffer_size)
       {
-         save_size = (png_size_t)png_ptr->idat_size;
+         save_size = (size_t)png_ptr->idat_size;
          /* check for overflow */
          if((uint32_t)save_size != png_ptr->idat_size)
             png_error(png_ptr, "save_size overflowed in pngpread");
@@ -627,7 +627,7 @@ png_push_read_IDAT(png_structp png_ptr)
 
 void /* PRIVATE */
 png_process_IDAT_data(png_structp png_ptr, png_bytep buffer,
-   png_size_t buffer_length)
+   size_t buffer_length)
 {
    int ret;
 

@@ -36,13 +36,13 @@ png_voidp /* PRIVATE */
 png_create_struct_2(int type, png_malloc_ptr malloc_fn, png_voidp mem_ptr)
 {
 #endif /* PNG_USER_MEM_SUPPORTED */
-   png_size_t size;
+   size_t size;
    png_voidp struct_ptr;
 
    if (type == PNG_STRUCT_INFO)
-      size = png_sizeof(png_info);
+      size = sizeof(png_info);
    else if (type == PNG_STRUCT_PNG)
-      size = png_sizeof(png_struct);
+      size = sizeof(png_struct);
    else
       return (NULL);
 
@@ -129,7 +129,7 @@ png_malloc(png_structp png_ptr, uint32_t size)
       return (NULL);
 
    if(png_ptr->malloc_fn != NULL)
-       ret = ((png_voidp)(*(png_ptr->malloc_fn))(png_ptr, (png_size_t)size));
+       ret = ((png_voidp)(*(png_ptr->malloc_fn))(png_ptr, (size_t)size));
    else
        ret = (png_malloc_default(png_ptr, size));
    if (ret == NULL && (png_ptr->flags&PNG_FLAG_MALLOC_NULL_MEM_OK) == 0)
@@ -249,9 +249,9 @@ png_voidp PNGAPI
 png_memcpy_check (png_structp png_ptr, png_voidp s1, png_voidp s2,
    uint32_t length)
 {
-   png_size_t size;
+   size_t size;
 
-   size = (png_size_t)length;
+   size = (size_t)length;
    if ((uint32_t)size != length)
       png_error(png_ptr,"Overflow in png_memcpy_check.");
 
@@ -262,9 +262,9 @@ png_voidp PNGAPI
 png_memset_check (png_structp png_ptr, png_voidp s1, int value,
    uint32_t length)
 {
-   png_size_t size;
+   size_t size;
 
-   size = (png_size_t)length;
+   size = (size_t)length;
    if ((uint32_t)size != length)
       png_error(png_ptr,"Overflow in png_memset_check.");
 
