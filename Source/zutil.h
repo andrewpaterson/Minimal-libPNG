@@ -188,9 +188,9 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #    define zmemzero(dest, len) memset(dest, 0, len)
 #  endif
 #else
-   extern void zmemcpy  (Bytef* dest, const Bytef* source, uInt len);
-   extern int  zmemcmp  (const Bytef* s1, const Bytef* s2, uInt len);
-   extern void zmemzero (Bytef* dest, uInt len);
+   extern void zmemcpy  (uint8_t* dest, const uint8_t* source, uint32_t len);
+   extern int  zmemcmp  (const uint8_t* s1, const uint8_t* s2, uint32_t len);
+   extern void zmemzero (uint8_t* dest, uint32_t len);
 #endif
 
 /* Diagnostic functions */

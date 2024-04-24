@@ -36,7 +36,7 @@ struct internal_state {int dummy;}; /* for buggy compilers */
 #endif
 
 #ifndef STDC
-extern voidp  malloc (uInt size);
+extern voidp  malloc (uint32_t size);
 extern void   free   (voidpf ptr);
 #endif
 
@@ -58,9 +58,9 @@ typedef struct gz_stream {
     int      z_err;   /* error code for last stream operation */
     int      z_eof;   /* set if end of input file */
     FILE     *file;   /* .gz file */
-    Byte     *inbuf;  /* input buffer */
-    Byte     *outbuf; /* output buffer */
-    uLong    crc;     /* crc32 of uncompressed data */
+    uint8_t     *inbuf;  /* input buffer */
+    uint8_t     *outbuf; /* output buffer */
+    uint32_t    crc;     /* crc32 of uncompressed data */
     char     *msg;    /* error message */
     char     *path;   /* path name for debugging only */
     int      transparent; /* 1 if input file is not a .gz file */
@@ -78,8 +78,8 @@ local int    do_flush     (gzFile file, int flush);
 local int    get_byte    (gz_stream *s);
 local void   check_header(gz_stream *s);
 local int    destroy     (gz_stream *s);
-local void   putLong     (FILE *file, uLong x);
-local uLong  getLong     (gz_stream *s);
+local void   putLong     (FILE *file, uint32_t x);
+local uint32_t  getLong     (gz_stream *s);
 
 /* ===========================================================================
      Opens a gzip (.gz) file for reading or writing. The mode parameter
@@ -156,13 +156,13 @@ local gzFile gz_open (path, mode, fd)
                            Z_DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, strategy);
         /* windowBits is passed < 0 to suppress zlib header */
 
-        s->stream.next_out = s->outbuf = (Byte*)ALLOC(Z_BUFSIZE);
+        s->stream.next_out = s->outbuf = (uint8_t*)ALLOC(Z_BUFSIZE);
 #endif
         if (err != Z_OK || s->outbuf == Z_NULL) {
             return destroy(s), (gzFile)Z_NULL;
         }
     } else {
-        s->stream.next_in  = s->inbuf = (Byte*)ALLOC(Z_BUFSIZE);
+        s->stream.next_in  = s->inbuf = (uint8_t*)ALLOC(Z_BUFSIZE);
 
         err = inflateInit2(&(s->stream), -MAX_WBITS);
         /* windowBits is passed < 0 to tell that there is no zlib header.
@@ -264,7 +264,7 @@ local int get_byte(s)
     if (s->z_eof) return EOF;
     if (s->stream.avail_in == 0) {
         errno = 0;
-        s->stream.avail_in = (uInt)fread(s->inbuf, 1, Z_BUFSIZE, s->file);
+        s->stream.avail_in = (uint32_t)fread(s->inbuf, 1, Z_BUFSIZE, s->file);
         if (s->stream.avail_in == 0) {
             s->z_eof = 1;
             if (ferror(s->file)) s->z_err = Z_ERRNO;
@@ -290,7 +290,7 @@ local void check_header(s)
 {
     int method; /* method byte */
     int flags;  /* flags byte */
-    uInt len;
+    uint32_t len;
     int c;
 
     /* Assure two bytes in the buffer so we can peek ahead -- handle case
@@ -300,7 +300,7 @@ local void check_header(s)
     if (len < 2) {
         if (len) s->inbuf[0] = s->stream.next_in[0];
         errno = 0;
-        len = (uInt)fread(s->inbuf + len, 1, Z_BUFSIZE >> len, s->file);
+        len = (uint32_t)fread(s->inbuf + len, 1, Z_BUFSIZE >> len, s->file);
         if (len == 0 && ferror(s->file)) s->z_err = Z_ERRNO;
         s->stream.avail_in += len;
         s->stream.next_in = s->inbuf;
@@ -331,8 +331,8 @@ local void check_header(s)
     for (len = 0; len < 6; len++) (void)get_byte(s);
 
     if ((flags & EXTRA_FIELD) != 0) { /* skip the extra field */
-        len  =  (uInt)get_byte(s);
-        len += ((uInt)get_byte(s))<<8;
+        len  =  (uint32_t)get_byte(s);
+        len += ((uint32_t)get_byte(s))<<8;
         /* len is garbage if EOF but the loop below will quit anyway */
         while (len-- != 0 && get_byte(s) != EOF) ;
     }
@@ -397,16 +397,16 @@ int ZEXPORT gzread (file, buf, len)
     unsigned len;
 {
     gz_stream *s = (gz_stream*)file;
-    Bytef *start = (Bytef*)buf; /* starting point for crc computation */
-    Byte  *next_out; /* == stream.next_out but not forced far (for MSDOS) */
+    uint8_t *start = (uint8_t*)buf; /* starting point for crc computation */
+    uint8_t  *next_out; /* == stream.next_out but not forced far (for MSDOS) */
 
     if (s == NULL || s->mode != 'r') return Z_STREAM_ERROR;
 
     if (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO) return -1;
     if (s->z_err == Z_STREAM_END) return 0;  /* EOF */
 
-    next_out = (Byte*)buf;
-    s->stream.next_out = (Bytef*)buf;
+    next_out = (uint8_t*)buf;
+    s->stream.next_out = (uint8_t*)buf;
     s->stream.avail_out = len;
 
     if (s->stream.avail_out && s->back != EOF) {
@@ -426,7 +426,7 @@ int ZEXPORT gzread (file, buf, len)
 
         if (s->transparent) {
             /* Copy first the lookahead bytes: */
-            uInt n = s->stream.avail_in;
+            uint32_t n = s->stream.avail_in;
             if (n > s->stream.avail_out) n = s->stream.avail_out;
             if (n > 0) {
                 zmemcpy(s->stream.next_out, s->stream.next_in, n);
@@ -438,7 +438,7 @@ int ZEXPORT gzread (file, buf, len)
             }
             if (s->stream.avail_out > 0) {
                 s->stream.avail_out -=
-                    (uInt)fread(next_out, 1, s->stream.avail_out, s->file);
+                    (uint32_t)fread(next_out, 1, s->stream.avail_out, s->file);
             }
             len -= s->stream.avail_out;
             s->in  += len;
@@ -449,7 +449,7 @@ int ZEXPORT gzread (file, buf, len)
         if (s->stream.avail_in == 0 && !s->z_eof) {
 
             errno = 0;
-            s->stream.avail_in = (uInt)fread(s->inbuf, 1, Z_BUFSIZE, s->file);
+            s->stream.avail_in = (uint32_t)fread(s->inbuf, 1, Z_BUFSIZE, s->file);
             if (s->stream.avail_in == 0) {
                 s->z_eof = 1;
                 if (ferror(s->file)) {
@@ -467,7 +467,7 @@ int ZEXPORT gzread (file, buf, len)
 
         if (s->z_err == Z_STREAM_END) {
             /* Check CRC and original size */
-            s->crc = crc32(s->crc, start, (uInt)(s->stream.next_out - start));
+            s->crc = crc32(s->crc, start, (uint32_t)(s->stream.next_out - start));
             start = s->stream.next_out;
 
             if (getLong(s) != s->crc) {
@@ -487,7 +487,7 @@ int ZEXPORT gzread (file, buf, len)
         }
         if (s->z_err != Z_OK || s->z_eof) break;
     }
-    s->crc = crc32(s->crc, start, (uInt)(s->stream.next_out - start));
+    s->crc = crc32(s->crc, start, (uint32_t)(s->stream.next_out - start));
 
     if (len == s->stream.avail_out &&
         (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO))
@@ -565,7 +565,7 @@ int ZEXPORT gzwrite (file, buf, len)
 
     if (s == NULL || s->mode != 'w') return Z_STREAM_ERROR;
 
-    s->stream.next_in = (Bytef*)buf;
+    s->stream.next_in = (uint8_t*)buf;
     s->stream.avail_in = len;
 
     while (s->stream.avail_in != 0) {
@@ -586,7 +586,7 @@ int ZEXPORT gzwrite (file, buf, len)
         s->out -= s->stream.avail_out;
         if (s->z_err != Z_OK) break;
     }
-    s->crc = crc32(s->crc, (const Bytef *)buf, len);
+    s->crc = crc32(s->crc, (const uint8_t *)buf, len);
 
     return (int)(len - s->stream.avail_in);
 }
@@ -688,7 +688,7 @@ local int do_flush (file, flush)
     gzFile file;
     int flush;
 {
-    uInt len;
+    uint32_t len;
     int done = 0;
     gz_stream *s = (gz_stream*)file;
 
@@ -700,7 +700,7 @@ local int do_flush (file, flush)
         len = Z_BUFSIZE - s->stream.avail_out;
 
         if (len != 0) {
-            if ((uInt)fwrite(s->outbuf, 1, len, s->file) != len) {
+            if ((uint32_t)fwrite(s->outbuf, 1, len, s->file) != len) {
                 s->z_err = Z_ERRNO;
                 return Z_ERRNO;
             }
@@ -769,13 +769,13 @@ int32_t ZEXPORT gzseek (file, offset, whence)
 
         /* At this point, offset is the number of zero bytes to write. */
         if (s->inbuf == Z_NULL) {
-            s->inbuf = (Byte*)ALLOC(Z_BUFSIZE); /* for seeking */
+            s->inbuf = (uint8_t*)ALLOC(Z_BUFSIZE); /* for seeking */
             if (s->inbuf == Z_NULL) return -1L;
             zmemzero(s->inbuf, Z_BUFSIZE);
         }
         while (offset > 0)  {
-            uInt size = Z_BUFSIZE;
-            if (offset < Z_BUFSIZE) size = (uInt)offset;
+            uint32_t size = Z_BUFSIZE;
+            if (offset < Z_BUFSIZE) size = (uint32_t)offset;
 
             size = gzwrite(file, s->inbuf, size);
             if (size == 0) return -1L;
@@ -813,7 +813,7 @@ int32_t ZEXPORT gzseek (file, offset, whence)
     /* offset is now the number of bytes to skip. */
 
     if (offset != 0 && s->outbuf == Z_NULL) {
-        s->outbuf = (Byte*)ALLOC(Z_BUFSIZE);
+        s->outbuf = (uint8_t*)ALLOC(Z_BUFSIZE);
         if (s->outbuf == Z_NULL) return -1L;
     }
     if (offset && s->back != EOF) {
@@ -826,7 +826,7 @@ int32_t ZEXPORT gzseek (file, offset, whence)
         int size = Z_BUFSIZE;
         if (offset < Z_BUFSIZE) size = (int)offset;
 
-        size = gzread(file, s->outbuf, (uInt)size);
+        size = gzread(file, s->outbuf, (uint32_t)size);
         if (size <= 0) return -1L;
         offset -= size;
     }
@@ -901,7 +901,7 @@ int ZEXPORT gzdirect (file)
 */
 local void putLong (file, x)
     FILE *file;
-    uLong x;
+    uint32_t x;
 {
     int n;
     for (n = 0; n < 4; n++) {
@@ -914,17 +914,17 @@ local void putLong (file, x)
    Reads a long in LSB order from the given gz_stream. Sets z_err in case
    of error.
 */
-local uLong getLong (s)
+local uint32_t getLong (s)
     gz_stream *s;
 {
-    uLong x = (uLong)get_byte(s);
+    uint32_t x = (uint32_t)get_byte(s);
     int c;
 
-    x += ((uLong)get_byte(s))<<8;
-    x += ((uLong)get_byte(s))<<16;
+    x += ((uint32_t)get_byte(s))<<8;
+    x += ((uint32_t)get_byte(s))<<16;
     c = get_byte(s);
     if (c == EOF) s->z_err = Z_DATA_ERROR;
-    x += ((uLong)c)<<24;
+    x += ((uint32_t)c)<<24;
     return x;
 }
 
@@ -947,7 +947,7 @@ int ZEXPORT gzclose (file)
             return destroy((gz_stream*)file);
 
         putLong (s->file, s->crc);
-        putLong (s->file, (uLong)(s->in & 0xffffffff));
+        putLong (s->file, (uint32_t)(s->in & 0xffffffff));
 #endif
     }
     return destroy((gz_stream*)file);

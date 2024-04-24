@@ -29,18 +29,18 @@ const char * ZEXPORT zlibVersion()
     return ZLIB_VERSION;
 }
 
-uLong ZEXPORT zlibCompileFlags()
+uint32_t ZEXPORT zlibCompileFlags()
 {
-    uLong flags;
+    uint32_t flags;
 
     flags = 0;
-    switch (sizeof(uInt)) {
+    switch (sizeof(uint32_t)) {
     case 2:     break;
     case 4:     flags += 1;     break;
     case 8:     flags += 2;     break;
     default:    flags += 3;
     }
-    switch (sizeof(uLong)) {
+    switch (sizeof(uint32_t)) {
     case 2:     break;
     case 4:     flags += 1 << 2;        break;
     case 8:     flags += 2 << 2;        break;
@@ -139,9 +139,9 @@ const char * ZEXPORT zError(err)
 #ifndef HAVE_MEMCPY
 
 void zmemcpy(dest, source, len)
-    Bytef* dest;
-    const Bytef* source;
-    uInt  len;
+    uint8_t* dest;
+    const uint8_t* source;
+    uint32_t  len;
 {
     if (len == 0) return;
     do {
@@ -150,11 +150,11 @@ void zmemcpy(dest, source, len)
 }
 
 int zmemcmp(s1, s2, len)
-    const Bytef* s1;
-    const Bytef* s2;
-    uInt  len;
+    const uint8_t* s1;
+    const uint8_t* s2;
+    uint32_t  len;
 {
-    uInt j;
+    uint32_t j;
 
     for (j = 0; j < len; j++) {
         if (s1[j] != s2[j]) return 2*(s1[j] > s2[j])-1;
@@ -163,8 +163,8 @@ int zmemcmp(s1, s2, len)
 }
 
 void zmemzero(dest, len)
-    Bytef* dest;
-    uInt  len;
+    uint8_t* dest;
+    uint32_t  len;
 {
     if (len == 0) return;
     do {
@@ -284,8 +284,8 @@ void  zcfree (voidpf opaque, voidpf ptr)
 #ifndef MY_ZCALLOC /* Any system without a special alloc function */
 
 #ifndef STDC
-extern voidp  malloc (uInt size);
-extern voidp  calloc (uInt items, uInt size);
+extern voidp  malloc (uint32_t size);
+extern voidp  calloc (uint32_t items, uint32_t size);
 extern void   free   (voidpf ptr);
 #endif
 
@@ -295,7 +295,7 @@ voidpf zcalloc (opaque, items, size)
     unsigned size;
 {
     if (opaque) items += size - size; /* make compiler happy */
-    return sizeof(uInt) > 2 ? (voidpf)malloc(items * size) :
+    return sizeof(uint32_t) > 2 ? (voidpf)malloc(items * size) :
                               (voidpf)calloc(items, size);
 }
 

@@ -74,19 +74,19 @@ extern "C" {
   crash even in case of corrupted input.
 */
 
-typedef voidpf (*alloc_func) (voidpf opaque, uInt items, uInt size);
+typedef voidpf (*alloc_func) (voidpf opaque, uint32_t items, uint32_t size);
 typedef void   (*free_func)  (voidpf opaque, voidpf address);
 
 struct internal_state;
 
 typedef struct z_stream_s {
-    Bytef    *next_in;  /* next input byte */
-    uInt     avail_in;  /* number of bytes available at next_in */
-    uLong    total_in;  /* total nb of input bytes read so far */
+    uint8_t    *next_in;  /* next input byte */
+    uint32_t     avail_in;  /* number of bytes available at next_in */
+    uint32_t    total_in;  /* total nb of input bytes read so far */
 
-    Bytef    *next_out; /* next output byte should be put there */
-    uInt     avail_out; /* remaining free space at next_out */
-    uLong    total_out; /* total nb of bytes output so far */
+    uint8_t    *next_out; /* next output byte should be put there */
+    uint32_t     avail_out; /* remaining free space at next_out */
+    uint32_t    total_out; /* total nb of bytes output so far */
 
     char     *msg;      /* last error message, NULL if no error */
     struct internal_state *state; /* not visible by applications */
@@ -96,8 +96,8 @@ typedef struct z_stream_s {
     voidpf     opaque;  /* private data object passed to zalloc and zfree */
 
     int     data_type;  /* best guess about the data type: binary or text */
-    uLong   adler;      /* adler32 value of the uncompressed data */
-    uLong   reserved;   /* reserved for future use */
+    uint32_t   adler;      /* adler32 value of the uncompressed data */
+    uint32_t   reserved;   /* reserved for future use */
 } z_stream;
 
 typedef z_stream *z_streamp;
@@ -108,16 +108,16 @@ typedef z_stream *z_streamp;
 */
 typedef struct gz_header_s {
     int     text;       /* true if compressed data believed to be text */
-    uLong   time;       /* modification time */
+    uint32_t   time;       /* modification time */
     int     xflags;     /* extra flags (not used when writing a gzip file) */
     int     os;         /* operating system */
-    Bytef   *extra;     /* pointer to extra field or Z_NULL if none */
-    uInt    extra_len;  /* extra field length (valid if extra != Z_NULL) */
-    uInt    extra_max;  /* space at extra (only when reading header) */
-    Bytef   *name;      /* pointer to zero-terminated file name or Z_NULL */
-    uInt    name_max;   /* space at name (only when reading header) */
-    Bytef   *comment;   /* pointer to zero-terminated comment or Z_NULL */
-    uInt    comm_max;   /* space at comment (only when reading header) */
+    uint8_t   *extra;     /* pointer to extra field or Z_NULL if none */
+    uint32_t    extra_len;  /* extra field length (valid if extra != Z_NULL) */
+    uint32_t    extra_max;  /* space at extra (only when reading header) */
+    uint8_t   *name;      /* pointer to zero-terminated file name or Z_NULL */
+    uint32_t    name_max;   /* space at name (only when reading header) */
+    uint8_t   *comment;   /* pointer to zero-terminated comment or Z_NULL */
+    uint32_t    comm_max;   /* space at comment (only when reading header) */
     int     hcrc;       /* true if there was or will be a header crc */
     int     done;       /* true when done reading gzip header (not used
                            when writing a gzip file) */
@@ -536,8 +536,8 @@ ZEXTERN int ZEXPORT deflateInit2 (z_streamp strm,
 */
 
 ZEXTERN int ZEXPORT deflateSetDictionary (z_streamp strm,
-                                             const Bytef *dictionary,
-                                             uInt  dictLength);
+                                             const uint8_t *dictionary,
+                                             uint32_t  dictLength);
 /*
      Initializes the compression dictionary from the given byte sequence
    without producing any compressed output. This function must be called
@@ -641,7 +641,7 @@ ZEXTERN int ZEXPORT deflateTune (z_streamp strm,
    returns Z_OK on success, or Z_STREAM_ERROR for an invalid deflate stream.
  */
 
-ZEXTERN uLong ZEXPORT deflateBound (z_streamp strm, uLong sourceLen);
+ZEXTERN uint32_t ZEXPORT deflateBound (z_streamp strm, uint32_t sourceLen);
 /*
      deflateBound() returns an upper bound on the compressed size after
    deflation of sourceLen bytes.  It must be called after deflateInit()
@@ -729,7 +729,7 @@ ZEXTERN int ZEXPORT inflateInit2 (z_streamp strm,
    and avail_out are unchanged.)
 */
 
-ZEXTERN int ZEXPORT inflateSetDictionary (z_streamp strm, const Bytef *dictionary, uInt  dictLength);
+ZEXTERN int ZEXPORT inflateSetDictionary (z_streamp strm, const uint8_t *dictionary, uint32_t  dictLength);
 /*
      Initializes the decompression dictionary from the given uncompressed byte
    sequence. This function must be called immediately after a call of inflate,
@@ -942,12 +942,12 @@ ZEXTERN int ZEXPORT inflateBackEnd (z_streamp strm);
    state was inconsistent.
 */
 
-ZEXTERN uLong ZEXPORT zlibCompileFlags (void);
+ZEXTERN uint32_t ZEXPORT zlibCompileFlags (void);
 /* Return flags indicating compile-time options.
 
     Type sizes, two bits each, 00 = 16 bits, 01 = 32, 10 = 64, 11 = other:
-     1.0: size of uInt
-     3.2: size of uLong
+     1.0: size of uint32_t
+     3.2: size of uint32_t
      5.4: size of voidpf (pointer)
      7.6: size of int32_t
 
@@ -994,7 +994,7 @@ ZEXTERN uLong ZEXPORT zlibCompileFlags (void);
    utility functions can easily be modified if you need special options.
 */
 
-ZEXTERN int ZEXPORT compress (Bytef *dest,   uLongf *destLen, const Bytef *source, uLong sourceLen);
+ZEXTERN int ZEXPORT compress (uint8_t *dest,   uint32_t *destLen, const uint8_t *source, uint32_t sourceLen);
 /*
      Compresses the source buffer into the destination buffer.  sourceLen is
    the byte length of the source buffer. Upon entry, destLen is the total
@@ -1008,7 +1008,7 @@ ZEXTERN int ZEXPORT compress (Bytef *dest,   uLongf *destLen, const Bytef *sourc
    buffer.
 */
 
-ZEXTERN int ZEXPORT compress2 (Bytef *dest,   uLongf *destLen, const Bytef *source, uLong sourceLen, int level);
+ZEXTERN int ZEXPORT compress2 (uint8_t *dest,   uint32_t *destLen, const uint8_t *source, uint32_t sourceLen, int level);
 /*
      Compresses the source buffer into the destination buffer. The level
    parameter has the same meaning as in deflateInit.  sourceLen is the byte
@@ -1022,14 +1022,14 @@ ZEXTERN int ZEXPORT compress2 (Bytef *dest,   uLongf *destLen, const Bytef *sour
    Z_STREAM_ERROR if the level parameter is invalid.
 */
 
-ZEXTERN uLong ZEXPORT compressBound (uLong sourceLen);
+ZEXTERN uint32_t ZEXPORT compressBound (uint32_t sourceLen);
 /*
      compressBound() returns an upper bound on the compressed size after
    compress() or compress2() on sourceLen bytes.  It would be used before
    a compress() or compress2() call to allocate the destination buffer.
 */
 
-ZEXTERN int ZEXPORT uncompress (Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen);
+ZEXTERN int ZEXPORT uncompress (uint8_t *dest, uint32_t *destLen, const uint8_t *source, uint32_t sourceLen);
 /*
      Decompresses the source buffer into the destination buffer.  sourceLen is
    the byte length of the source buffer. Upon entry, destLen is the total
@@ -1239,7 +1239,7 @@ ZEXTERN void ZEXPORT gzclearerr (gzFile file);
    compression library.
 */
 
-ZEXTERN uLong ZEXPORT adler32 (uLong adler, const Bytef *buf, uInt len);
+ZEXTERN uint32_t ZEXPORT adler32 (uint32_t adler, const uint8_t *buf, uint32_t len);
 /*
      Update a running Adler-32 checksum with the bytes buf[0..len-1] and
    return the updated checksum. If buf is NULL, this function returns
@@ -1247,7 +1247,7 @@ ZEXTERN uLong ZEXPORT adler32 (uLong adler, const Bytef *buf, uInt len);
    An Adler-32 checksum is almost as reliable as a CRC32 but can be computed
    much faster. Usage example:
 
-     uLong adler = adler32(0L, Z_NULL, 0);
+     uint32_t adler = adler32(0L, Z_NULL, 0);
 
      while (read_buffer(buffer, length) != EOF) {
        adler = adler32(adler, buffer, length);
@@ -1255,7 +1255,7 @@ ZEXTERN uLong ZEXPORT adler32 (uLong adler, const Bytef *buf, uInt len);
      if (adler != original_adler) error();
 */
 
-ZEXTERN uLong ZEXPORT adler32_combine (uLong adler1, uLong adler2, int32_t len2);
+ZEXTERN uint32_t ZEXPORT adler32_combine (uint32_t adler1, uint32_t adler2, int32_t len2);
 /*
      Combine two Adler-32 checksums into one.  For two sequences of bytes, seq1
    and seq2 with lengths len1 and len2, Adler-32 checksums were calculated for
@@ -1263,7 +1263,7 @@ ZEXTERN uLong ZEXPORT adler32_combine (uLong adler1, uLong adler2, int32_t len2)
    seq1 and seq2 concatenated, requiring only adler1, adler2, and len2.
 */
 
-ZEXTERN uLong ZEXPORT crc32   (uLong crc, const Bytef *buf, uInt len);
+ZEXTERN uint32_t ZEXPORT crc32   (uint32_t crc, const uint8_t *buf, uint32_t len);
 /*
      Update a running CRC-32 with the bytes buf[0..len-1] and return the
    updated CRC-32. If buf is NULL, this function returns the required initial
@@ -1271,7 +1271,7 @@ ZEXTERN uLong ZEXPORT crc32   (uLong crc, const Bytef *buf, uInt len);
    performed within this function so it shouldn't be done by the application.
    Usage example:
 
-     uLong crc = crc32(0L, Z_NULL, 0);
+     uint32_t crc = crc32(0L, Z_NULL, 0);
 
      while (read_buffer(buffer, length) != EOF) {
        crc = crc32(crc, buffer, length);
@@ -1279,7 +1279,7 @@ ZEXTERN uLong ZEXPORT crc32   (uLong crc, const Bytef *buf, uInt len);
      if (crc != original_crc) error();
 */
 
-ZEXTERN uLong ZEXPORT crc32_combine (uLong crc1, uLong crc2, int32_t len2);
+ZEXTERN uint32_t ZEXPORT crc32_combine (uint32_t crc1, uint32_t crc2, int32_t len2);
 
 /*
      Combine two CRC-32 check values into one.  For two sequences of bytes,
@@ -1316,7 +1316,7 @@ ZEXTERN int ZEXPORT inflateBackInit_ (z_streamp strm, int windowBits, uint8_t *w
 
 ZEXTERN const char   * ZEXPORT zError           (int);
 ZEXTERN int            ZEXPORT inflateSyncPoint (z_streamp z);
-ZEXTERN const uLongf * ZEXPORT get_crc_table    (void);
+ZEXTERN const uint32_t * ZEXPORT get_crc_table    (void);
 
 #ifdef __cplusplus
 }

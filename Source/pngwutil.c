@@ -279,7 +279,7 @@ png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height,
       png_ptr->zlib_method, png_ptr->zlib_window_bits,
       png_ptr->zlib_mem_level, png_ptr->zlib_strategy);
    png_ptr->zstream.next_out = png_ptr->zbuf;
-   png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
+   png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
    /* libpng is not interested in zstream.data_type */
    /* set it to a predefined value, to avoid its evaluation inside zlib */
    png_ptr->zstream.data_type = Z_BINARY;
@@ -1075,7 +1075,7 @@ png_write_start_row(png_structp png_ptr)
       png_ptr->num_rows = png_ptr->height;
       png_ptr->usr_width = png_ptr->width;
    }
-   png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
+   png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
    png_ptr->zstream.next_out = png_ptr->zbuf;
 }
 
@@ -1166,7 +1166,7 @@ png_write_finish_row(png_structp png_ptr)
          {
             png_write_IDAT(png_ptr, png_ptr->zbuf, png_ptr->zbuf_size);
             png_ptr->zstream.next_out = png_ptr->zbuf;
-            png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
+            png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
          }
       }
       else if (ret != Z_STREAM_END)
@@ -1988,7 +1988,7 @@ png_write_filtered_row(png_structp png_ptr, png_bytep filtered_row)
    /* set up the zlib input buffer */
 
    png_ptr->zstream.next_in = filtered_row;
-   png_ptr->zstream.avail_in = (uInt)png_ptr->row_info.rowbytes + 1;
+   png_ptr->zstream.avail_in = (uint32_t)png_ptr->row_info.rowbytes + 1;
    /* repeat until we have compressed all the data */
    do
    {
@@ -2011,7 +2011,7 @@ png_write_filtered_row(png_structp png_ptr, png_bytep filtered_row)
          /* write the IDAT and reset the zlib output buffer */
          png_write_IDAT(png_ptr, png_ptr->zbuf, png_ptr->zbuf_size);
          png_ptr->zstream.next_out = png_ptr->zbuf;
-         png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
+         png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
       }
    /* repeat until all data has been compressed */
    } while (png_ptr->zstream.avail_in);

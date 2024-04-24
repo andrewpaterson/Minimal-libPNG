@@ -1787,8 +1787,8 @@ extern PNG_EXPORT(void,png_free) PNGARG((png_structp png_ptr, png_voidp ptr));
 
 #if defined(PNG_1_0_X)
 /* Function to allocate memory for zlib. */
-extern PNG_EXPORT(voidpf,png_zalloc) PNGARG((voidpf png_ptr, uInt items,
-   uInt size));
+extern PNG_EXPORT(voidpf,png_zalloc) PNGARG((voidpf png_ptr, uint32_t items,
+   uint32_t size));
 
 /* Function to free memory for zlib */
 extern PNG_EXPORT(void,png_zfree) PNGARG((voidpf png_ptr, voidpf ptr));
@@ -2516,7 +2516,7 @@ PNG_EXTERN void png_info_destroy PNGARG((png_structp png_ptr,
 
 #ifndef PNG_1_0_X
 /* Function to allocate memory for zlib. */
-PNG_EXTERN voidpf png_zalloc PNGARG((voidpf png_ptr, uInt items, uInt size));
+PNG_EXTERN voidpf png_zalloc PNGARG((voidpf png_ptr, uint32_t items, uint32_t size));
 
 /* Function to free memory for zlib */
 PNG_EXTERN void png_zfree PNGARG((voidpf png_ptr, voidpf ptr));

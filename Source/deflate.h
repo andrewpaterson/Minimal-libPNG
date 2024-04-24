@@ -94,23 +94,23 @@ typedef unsigned IPos;
 typedef struct internal_state {
     z_streamp strm;      /* pointer back to this zlib stream */
     int   status;        /* as the name implies */
-    Bytef *pending_buf;  /* output still pending */
+    uint8_t *pending_buf;  /* output still pending */
     ulg   pending_buf_size; /* size of pending_buf */
-    Bytef *pending_out;  /* next pending byte to output to the stream */
-    uInt   pending;      /* nb of bytes in the pending buffer */
+    uint8_t *pending_out;  /* next pending byte to output to the stream */
+    uint32_t   pending;      /* nb of bytes in the pending buffer */
     int   wrap;          /* bit 0 true for zlib, bit 1 true for gzip */
     gz_headerp  gzhead;  /* gzip header information to write */
-    uInt   gzindex;      /* where in extra, name, or comment */
-    Byte  method;        /* STORED (for zip only) or DEFLATED */
+    uint32_t   gzindex;      /* where in extra, name, or comment */
+    uint8_t  method;        /* STORED (for zip only) or DEFLATED */
     int   last_flush;    /* value of flush param for previous deflate call */
 
                 /* used by deflate.c: */
 
-    uInt  w_size;        /* LZ77 window size (32K by default) */
-    uInt  w_bits;        /* log2(w_size)  (8..16) */
-    uInt  w_mask;        /* w_size - 1 */
+    uint32_t  w_size;        /* LZ77 window size (32K by default) */
+    uint32_t  w_bits;        /* log2(w_size)  (8..16) */
+    uint32_t  w_mask;        /* w_size - 1 */
 
-    Bytef *window;
+    uint8_t *window;
     /* Sliding window. Input bytes are read into the second half of the window,
      * and move to the first half later to keep a dictionary of at least wSize
      * bytes. With this organization, matches are limited to a distance of
@@ -133,12 +133,12 @@ typedef struct internal_state {
 
     Posf *head; /* Heads of the hash chains or NIL. */
 
-    uInt  ins_h;          /* hash index of string to be inserted */
-    uInt  hash_size;      /* number of elements in hash table */
-    uInt  hash_bits;      /* log2(hash_size) */
-    uInt  hash_mask;      /* hash_size-1 */
+    uint32_t  ins_h;          /* hash index of string to be inserted */
+    uint32_t  hash_size;      /* number of elements in hash table */
+    uint32_t  hash_bits;      /* log2(hash_size) */
+    uint32_t  hash_mask;      /* hash_size-1 */
 
-    uInt  hash_shift;
+    uint32_t  hash_shift;
     /* Number of bits by which ins_h must be shifted at each input
      * step. It must be such that after MIN_MATCH steps, the oldest
      * byte no longer takes part in the hash key, that is:
@@ -150,25 +150,25 @@ typedef struct internal_state {
      * negative when the window is moved backwards.
      */
 
-    uInt match_length;           /* length of best match */
+    uint32_t match_length;           /* length of best match */
     IPos prev_match;             /* previous match */
     int match_available;         /* set if previous match exists */
-    uInt strstart;               /* start of string to insert */
-    uInt match_start;            /* start of matching string */
-    uInt lookahead;              /* number of valid bytes ahead in window */
+    uint32_t strstart;               /* start of string to insert */
+    uint32_t match_start;            /* start of matching string */
+    uint32_t lookahead;              /* number of valid bytes ahead in window */
 
-    uInt prev_length;
+    uint32_t prev_length;
     /* Length of the best match at previous step. Matches not greater than this
      * are discarded. This is used in the lazy match evaluation.
      */
 
-    uInt max_chain_length;
+    uint32_t max_chain_length;
     /* To speed up deflation, hash chains are never searched beyond this
      * length.  A higher limit improves compression ratio but degrades the
      * speed.
      */
 
-    uInt max_lazy_match;
+    uint32_t max_lazy_match;
     /* Attempt to find a better match only when the current match is strictly
      * smaller than this value. This mechanism is used only for compression
      * levels >= 4.
@@ -182,7 +182,7 @@ typedef struct internal_state {
     int level;    /* compression level (1..9) */
     int strategy; /* favor or force Huffman coding*/
 
-    uInt good_match;
+    uint32_t good_match;
     /* Use a faster search when the previous match is longer than this */
 
     int nice_match; /* Stop searching when current match exceeds this */
@@ -213,7 +213,7 @@ typedef struct internal_state {
 
     uchf *l_buf;          /* buffer for literals or lengths */
 
-    uInt  lit_bufsize;
+    uint32_t  lit_bufsize;
     /* Size of match buffer for literals/lengths.  There are 4 reasons for
      * limiting lit_bufsize to 64K:
      *   - frequencies can be kept in 16 bit counters
@@ -233,7 +233,7 @@ typedef struct internal_state {
      *   - I can't count above 4
      */
 
-    uInt last_lit;      /* running index in l_buf */
+    uint32_t last_lit;      /* running index in l_buf */
 
     ushf *d_buf;
     /* Buffer for distances. To simplify the code, d_buf and l_buf have
@@ -243,7 +243,7 @@ typedef struct internal_state {
 
     ulg opt_len;        /* bit length of current block with optimal trees */
     ulg static_len;     /* bit length of current block with static trees */
-    uInt matches;       /* number of string matches in current block */
+    uint32_t matches;       /* number of string matches in current block */
     int last_eob_len;   /* bit length of EOB code for last block */
 
 #ifdef DEBUG
@@ -281,9 +281,9 @@ typedef struct internal_state {
         /* in trees.c */
 void _tr_init        (deflate_state *s);
 int  _tr_tally       (deflate_state *s, unsigned dist, unsigned lc);
-void _tr_flush_block (deflate_state *s, charf *buf, ulg stored_len, int eof);
+void _tr_flush_block (deflate_state *s, char *buf, ulg stored_len, int eof);
 void _tr_align       (deflate_state *s);
-void _tr_stored_block(deflate_state *s, charf *buf, ulg stored_len, int eof);
+void _tr_stored_block(deflate_state *s, char *buf, ulg stored_len, int eof);
 
 #define d_code(dist) \
    ((dist) < 256 ? _dist_code[dist] : _dist_code[256+((dist)>>7)])

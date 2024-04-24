@@ -1167,8 +1167,8 @@ z_streamp strm;
 
 int ZEXPORT inflateSetDictionary(strm, dictionary, dictLength)
 z_streamp strm;
-const Bytef *dictionary;
-uInt dictLength;
+const uint8_t *dictionary;
+uint32_t dictLength;
 {
     struct inflate_state *state;
     uint32_t id;

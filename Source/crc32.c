@@ -216,9 +216,9 @@ local void gf2_matrix_square(square, mat)
 }
 
 /* ========================================================================= */
-uLong ZEXPORT crc32_combine(crc1, crc2, len2)
-    uLong crc1;
-    uLong crc2;
+uint32_t ZEXPORT crc32_combine(crc1, crc2, len2)
+    uint32_t crc1;
+    uint32_t crc2;
     int32_t len2;
 {
     int n;

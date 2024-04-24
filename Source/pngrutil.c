@@ -1857,8 +1857,8 @@ png_read_finish_row(png_structp png_ptr)
       char extra;
       int ret;
 
-      png_ptr->zstream.next_out = (Byte *)&extra;
-      png_ptr->zstream.avail_out = (uInt)1;
+      png_ptr->zstream.next_out = (uint8_t *)&extra;
+      png_ptr->zstream.avail_out = (uint32_t)1;
       for(;;)
       {
          if (!(png_ptr->zstream.avail_in))
@@ -1877,10 +1877,10 @@ png_read_finish_row(png_structp png_ptr)
                   png_error(png_ptr, "Not enough image data");
 
             }
-            png_ptr->zstream.avail_in = (uInt)png_ptr->zbuf_size;
+            png_ptr->zstream.avail_in = (uint32_t)png_ptr->zbuf_size;
             png_ptr->zstream.next_in = png_ptr->zbuf;
             if (png_ptr->zbuf_size > png_ptr->idat_size)
-               png_ptr->zstream.avail_in = (uInt)png_ptr->idat_size;
+               png_ptr->zstream.avail_in = (uint32_t)png_ptr->idat_size;
             png_crc_read(png_ptr, png_ptr->zbuf, png_ptr->zstream.avail_in);
             png_ptr->idat_size -= png_ptr->zstream.avail_in;
          }

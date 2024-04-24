@@ -24,22 +24,22 @@
    buffer, or Z_DATA_ERROR if the input data was corrupted.
 */
 int ZEXPORT uncompress (dest, destLen, source, sourceLen)
-    Bytef *dest;
-    uLongf *destLen;
-    const Bytef *source;
-    uLong sourceLen;
+    uint8_t *dest;
+    uint32_t *destLen;
+    const uint8_t *source;
+    uint32_t sourceLen;
 {
     z_stream stream;
     int err;
 
-    stream.next_in = (Bytef*)source;
-    stream.avail_in = (uInt)sourceLen;
+    stream.next_in = (uint8_t*)source;
+    stream.avail_in = (uint32_t)sourceLen;
     /* Check for source > 64K on 16-bit machine: */
-    if ((uLong)stream.avail_in != sourceLen) return Z_BUF_ERROR;
+    if ((uint32_t)stream.avail_in != sourceLen) return Z_BUF_ERROR;
 
     stream.next_out = dest;
-    stream.avail_out = (uInt)*destLen;
-    if ((uLong)stream.avail_out != *destLen) return Z_BUF_ERROR;
+    stream.avail_out = (uint32_t)*destLen;
+    if ((uint32_t)stream.avail_out != *destLen) return Z_BUF_ERROR;
 
     stream.zalloc = (alloc_func)0;
     stream.zfree = (free_func)0;

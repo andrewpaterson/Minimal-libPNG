@@ -186,31 +186,14 @@
 #  define ZEXPORTVA
 #endif
 
-#if !defined(__MACTYPES__)
-typedef uint8_t  Byte;  /* 8 bits */
-#endif
-typedef unsigned int   uInt;  /* 16 bits or more */
-typedef uint32_t  uLong; /* 32 bits or more */
-
-#ifdef SMALL_MEDIUM
-   /* Borland C/C++ and some old MSC versions ignore  inside typedef */
-#  define Bytef Byte 
-#else
-   typedef Byte   Bytef;
-#endif
-typedef char   charf;
-typedef int    intf;
-typedef uInt   uIntf;
-typedef uLong  uLongf;
-
 #ifdef STDC
    typedef void const *voidpc;
    typedef void    *voidpf;
    typedef void       *voidp;
 #else
-   typedef Byte const *voidpc;
-   typedef Byte    *voidpf;
-   typedef Byte       *voidp;
+   typedef uint8_t const *voidpc;
+   typedef uint8_t    *voidpf;
+   typedef uint8_t       *voidp;
 #endif
 
 #if 0           /* HAVE_UNISTD_H -- this line is updated by ./configure */

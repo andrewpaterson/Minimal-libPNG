@@ -120,7 +120,7 @@ local int base_dist[D_CODES];
 
 struct static_tree_desc_s {
     const ct_data *static_tree;  /* static tree or NULL */
-    const intf *extra_bits;      /* extra bits for each code or NULL */
+    const int32_t *extra_bits;      /* extra bits for each code or NULL */
     int     extra_base;          /* base index for extra_bits */
     int     elems;               /* max number of elements in the tree */
     int     max_length;          /* max bit length for the codes */
@@ -154,7 +154,7 @@ local void set_data_type  (deflate_state *s);
 local unsigned bi_reverse (unsigned value, int length);
 local void bi_windup      (deflate_state *s);
 local void bi_flush       (deflate_state *s);
-local void copy_block     (deflate_state *s, charf *buf, unsigned len, int header);
+local void copy_block     (deflate_state *s, char *buf, unsigned len, int header);
 
 #ifdef GEN_TREES_H
 local void gen_trees_header (void);
@@ -491,7 +491,7 @@ local void gen_bitlen(s, desc)
     ct_data *tree        = desc->dyn_tree;
     int max_code         = desc->max_code;
     const ct_data *stree = desc->stat_desc->static_tree;
-    const intf *extra    = desc->stat_desc->extra_bits;
+    const int32_t *extra    = desc->stat_desc->extra_bits;
     int base             = desc->stat_desc->extra_base;
     int max_length       = desc->stat_desc->max_length;
     int h;              /* heap index */
@@ -863,7 +863,7 @@ local void send_all_trees(s, lcodes, dcodes, blcodes)
  */
 void _tr_stored_block(s, buf, stored_len, eof)
     deflate_state *s;
-    charf *buf;       /* input block */
+    char *buf;       /* input block */
     ulg stored_len;   /* length of input block */
     int eof;          /* true if this is the last block for a file */
 {
@@ -917,7 +917,7 @@ void _tr_align(s)
  */
 void _tr_flush_block(s, buf, stored_len, eof)
     deflate_state *s;
-    charf *buf;       /* input block, or NULL if too old */
+    char *buf;       /* input block, or NULL if too old */
     ulg stored_len;   /* length of input block */
     int eof;          /* true if this is the last block for a file */
 {
@@ -998,7 +998,7 @@ void _tr_flush_block(s, buf, stored_len, eof)
     }
     Assert (s->compressed_len == s->bits_sent, "bad compressed size");
     /* The above check is made mod 2^32, for files larger than 512 MB
-     * and uLong implemented on 32 bits.
+     * and uint32_t implemented on 32 bits.
      */
     init_block(s);
 
@@ -1105,7 +1105,7 @@ local void compress_block(s, ltree, dtree)
         } /* literal or match pair ? */
 
         /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
-        Assert((uInt)(s->pending) < s->lit_bufsize + 2*lx,
+        Assert((uint32_t)(s->pending) < s->lit_bufsize + 2*lx,
                "pendingBuf overflow");
 
     } while (lx < s->last_lit);
@@ -1163,7 +1163,7 @@ local void bi_flush(s)
         s->bi_buf = 0;
         s->bi_valid = 0;
     } else if (s->bi_valid >= 8) {
-        put_byte(s, (Byte)s->bi_buf);
+        put_byte(s, (uint8_t)s->bi_buf);
         s->bi_buf >>= 8;
         s->bi_valid -= 8;
     }
@@ -1178,7 +1178,7 @@ local void bi_windup(s)
     if (s->bi_valid > 8) {
         put_short(s, s->bi_buf);
     } else if (s->bi_valid > 0) {
-        put_byte(s, (Byte)s->bi_buf);
+        put_byte(s, (uint8_t)s->bi_buf);
     }
     s->bi_buf = 0;
     s->bi_valid = 0;
@@ -1193,7 +1193,7 @@ local void bi_windup(s)
  */
 local void copy_block(s, buf, len, header)
     deflate_state *s;
-    charf    *buf;    /* the input data */
+    char    *buf;    /* the input data */
     unsigned len;     /* its length */
     int      header;  /* true if block header must be written */
 {

@@ -680,7 +680,7 @@ png_set_compression_buffer_size(png_structp png_ptr, uint32_t size)
     png_ptr->zbuf_size = (size_t)size;
     png_ptr->zbuf = (png_bytep)png_malloc(png_ptr, size);
     png_ptr->zstream.next_out = png_ptr->zbuf;
-    png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
+    png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
 }
 #endif
 

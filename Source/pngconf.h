@@ -782,8 +782,8 @@ typedef char            ***png_charppp;
  * or another compression library is used, then change these.
  * Eliminates need to change all the source files.
  */
-typedef charf*      png_zcharp;
-typedef charf**     png_zcharpp;
+typedef char*      png_zcharp;
+typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* (PNG_1_0_X) || defined(PNG_1_2_X) */
 

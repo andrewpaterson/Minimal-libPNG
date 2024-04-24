@@ -254,7 +254,7 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
       png_ptr->mode |= PNG_HAVE_IDAT;
       png_ptr->process_mode = PNG_READ_IDAT_MODE;
       png_push_have_info(png_ptr, info_ptr);
-      png_ptr->zstream.avail_out = (uInt)png_ptr->irowbytes;
+      png_ptr->zstream.avail_out = (uint32_t)png_ptr->irowbytes;
       png_ptr->zstream.next_out = png_ptr->row_buf;
       return;
    }
@@ -635,7 +635,7 @@ png_process_IDAT_data(png_structp png_ptr, png_bytep buffer,
       png_error(png_ptr, "Extra compression data");
 
    png_ptr->zstream.next_in = buffer;
-   png_ptr->zstream.avail_in = (uInt)buffer_length;
+   png_ptr->zstream.avail_in = (uint32_t)buffer_length;
    for(;;)
    {
       ret = inflate(&png_ptr->zstream, Z_PARTIAL_FLUSH);
@@ -674,7 +674,7 @@ png_process_IDAT_data(png_structp png_ptr, png_bytep buffer,
            break;
          }
          png_push_process_row(png_ptr);
-         png_ptr->zstream.avail_out = (uInt)png_ptr->irowbytes;
+         png_ptr->zstream.avail_out = (uint32_t)png_ptr->irowbytes;
          png_ptr->zstream.next_out = png_ptr->row_buf;
       }
       else
