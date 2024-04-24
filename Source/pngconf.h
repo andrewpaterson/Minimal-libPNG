@@ -686,34 +686,6 @@ typedef z_stream*   png_zstreamp;
 #  define 
 #endif  
 
-/* If you define, e.g., with compiler option "-DPNGAPI=__stdcall",
- * you may get warnings regarding the linkage of png_zalloc and png_zfree.
- * Don't ignore those warnings; you must also reset the default calling
- * convention in your compiler to match your, and you must build
- * zlib and your applications the same way you build libpng.
- */
-
-#if defined(__MINGW32__) && !defined(PNG_MODULEDEF)
-#  ifndef PNG_NO_MODULEDEF
-#    define PNG_NO_MODULEDEF
-#  endif
-#endif
-
-#ifdef PNG_BUILDSYMS
-#  ifndef PNG_EXPORT
-#    define PNG_EXPORT(type,symbol) PNG_FUNCTION_EXPORT symbol END
-#  endif
-#  ifdef PNG_USE_GLOBAL_ARRAYS
-#    ifndef PNG_EXPORT_VAR
-#      define PNG_EXPORT_VAR(type) PNG_DATA_EXPORT
-#    endif
-#  endif
-#endif
-
-#ifndef PNG_EXPORT
-#  define PNG_EXPORT(type,symbol)  type symbol
-#endif
-
 #ifdef PNG_USE_GLOBAL_ARRAYS
 #  ifndef PNG_EXPORT_VAR
 #    define PNG_EXPORT_VAR(type) extern  type
