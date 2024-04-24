@@ -136,43 +136,6 @@ const char * zError(err)
     return ERR_MSG(err);
 }
 
-#ifndef HAVE_MEMCPY
-
-void zmemcpy(dest, source, len)
-    uint8_t* dest;
-    const uint8_t* source;
-    uint32_t  len;
-{
-    if (len == 0) return;
-    do {
-        *dest++ = *source++; /* ??? to be unrolled */
-    } while (--len != 0);
-}
-
-int zmemcmp(s1, s2, len)
-    const uint8_t* s1;
-    const uint8_t* s2;
-    uint32_t  len;
-{
-    uint32_t j;
-
-    for (j = 0; j < len; j++) {
-        if (s1[j] != s2[j]) return 2*(s1[j] > s2[j])-1;
-    }
-    return 0;
-}
-
-void zmemzero(dest, len)
-    uint8_t* dest;
-    uint32_t  len;
-{
-    if (len == 0) return;
-    do {
-        *dest++ = 0;  /* ??? to be unrolled */
-    } while (--len != 0);
-}
-#endif
-
 
 #ifdef SYS16BIT
 
