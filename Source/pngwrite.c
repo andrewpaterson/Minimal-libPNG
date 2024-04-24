@@ -902,7 +902,7 @@ png_set_write_user_transform_fn(png_structp png_ptr, png_user_transform_ptr
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
 void
 png_write_png(png_structp png_ptr, png_info* info_ptr,
-              int transforms, voidp params)
+              int transforms, void * params)
 {
    if (png_ptr == NULL || info_ptr == NULL)
       return;

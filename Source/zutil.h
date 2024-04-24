@@ -13,7 +13,6 @@
 #ifndef ZUTIL_H
 #define ZUTIL_H
 
-#define ZLIB_INTERNAL
 #include "zlib.h"
 
 #ifdef STDC
@@ -178,12 +177,12 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 
-voidpf zcalloc (voidpf opaque, unsigned items, unsigned size);
-void   zcfree  (voidpf opaque, voidpf ptr);
+void * zcalloc (void * opaque, unsigned items, unsigned size);
+void   zcfree  (void * opaque, void * ptr);
 
 #define ZALLOC(strm, items, size) \
            (*((strm)->zalloc))((strm)->opaque, (items), (size))
-#define ZFREE(strm, addr)  (*((strm)->zfree))((strm)->opaque, (voidpf)(addr))
+#define ZFREE(strm, addr)  (*((strm)->zfree))((strm)->opaque, (void *)(addr))
 #define TRY_FREE(s, p) {if (p) ZFREE(s, p);}
 
 #endif /* ZUTIL_H */

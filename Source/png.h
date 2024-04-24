@@ -2078,10 +2078,10 @@ void png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn, void* mem_ptr)
 void png_info_destroy(png_structp png_ptr, png_infop info_ptr);
 
 /* Function to allocate memory for zlib. */
-voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size);
+void * png_zalloc(void * png_ptr, uint32_t items, uint32_t size);
 
 /* Function to free memory for zlib */
-void png_zfree(voidpf png_ptr, voidpf ptr);
+void png_zfree(void * png_ptr, void * ptr);
 
 #ifdef PNG_SIZE_T
 /* Function to convert a sizeof an item to sizeof item */

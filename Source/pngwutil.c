@@ -234,7 +234,7 @@ void png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height, int bi
    /* initialize zlib with PNG info */
    png_ptr->zstream.zalloc = png_zalloc;
    png_ptr->zstream.zfree = png_zfree;
-   png_ptr->zstream.opaque = (voidpf)png_ptr;
+   png_ptr->zstream.opaque = (void *)png_ptr;
    if (!(png_ptr->do_filter))
    {
       if (png_ptr->color_type == PNG_COLOR_TYPE_PALETTE ||

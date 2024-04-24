@@ -36,8 +36,8 @@ struct internal_state {int dummy;}; /* for buggy compilers */
 #endif
 
 #ifndef STDC
-extern voidp  malloc (uint32_t size);
-extern void   free   (voidpf ptr);
+extern void *  malloc (uint32_t size);
+extern void   free   (void * ptr);
 #endif
 
 #define ALLOC(size) malloc(size)
@@ -110,7 +110,7 @@ local gzFile gz_open (path, mode, fd)
 
     s->stream.zalloc = (alloc_func)0;
     s->stream.zfree = (free_func)0;
-    s->stream.opaque = (voidpf)0;
+    s->stream.opaque = (void *)0;
     s->stream.next_in = s->inbuf = Z_NULL;
     s->stream.next_out = s->outbuf = Z_NULL;
     s->stream.avail_in = s->stream.avail_out = 0;
@@ -393,7 +393,7 @@ local int destroy (s)
 */
 int ZEXPORT gzread (file, buf, len)
     gzFile file;
-    voidp buf;
+    void * buf;
     unsigned len;
 {
     gz_stream *s = (gz_stream*)file;
@@ -558,7 +558,7 @@ char * ZEXPORT gzgets(file, buf, len)
 */
 int ZEXPORT gzwrite (file, buf, len)
     gzFile file;
-    voidpc buf;
+    void const * buf;
     unsigned len;
 {
     gz_stream *s = (gz_stream*)file;

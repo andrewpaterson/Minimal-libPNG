@@ -10,9 +10,6 @@
 #include "stdint.h"
 
 
-#if (defined(OS_2) || defined(__OS2__)) && !defined(OS2)
-#  define OS2
-#endif
 #if defined(_WINDOWS) && !defined(WINDOWS)
 #  define WINDOWS
 #endif
@@ -120,51 +117,6 @@
 #  endif
 #endif
 
-#if defined(WINDOWS) || defined(WIN32)
-   /* If building or using zlib as a DLL, define ZLIB_DLL.
-    * This is not mandatory, but it offers a little performance increase.
-    */
-#  ifdef ZLIB_DLL
-#    if defined(WIN32)
-#      ifdef ZLIB_INTERNAL
-#        define ZEXTERN extern __declspec(dllexport)
-#      else
-#        define ZEXTERN extern __declspec(dllimport)
-#      endif
-#    endif
-#  endif  /* ZLIB_DLL */
-   /* If building or using zlib with the WINAPI/WINAPIV calling convention,
-    * define ZLIB_WINAPI.
-    * Caution: the standard ZLIB1.DLL is NOT compiled using ZLIB_WINAPI.
-    */
-#  ifdef ZLIB_WINAPI
-#    ifdef 
-#      undef 
-#    endif
-#    include <windows.h>
-     /* No need for _export, use ZLIB.DEF instead. */
-     /* For complete Windows compatibility, use WINAPI, not __stdcall. */
-#    define ZEXPORT WINAPI
-#    ifdef WIN32
-#      define ZEXPORTVA WINAPIV
-#    else
-#      define ZEXPORTVA  CDECL
-#    endif
-#  endif
-#endif
-
-#if defined (__BEOS__)
-#  ifdef ZLIB_DLL
-#    ifdef ZLIB_INTERNAL
-#      define ZEXPORT   __declspec(dllexport)
-#      define ZEXPORTVA __declspec(dllexport)
-#    else
-#      define ZEXPORT   __declspec(dllimport)
-#      define ZEXPORTVA __declspec(dllimport)
-#    endif
-#  endif
-#endif
-
 #ifndef ZEXTERN
 #  define ZEXTERN extern
 #endif
@@ -175,15 +127,6 @@
 #  define ZEXPORTVA
 #endif
 
-#ifdef STDC
-   typedef void const *voidpc;
-   typedef void    *voidpf;
-   typedef void       *voidp;
-#else
-   typedef uint8_t const *voidpc;
-   typedef uint8_t    *voidpf;
-   typedef uint8_t       *voidp;
-#endif
 
 #if 0           /* HAVE_UNISTD_H -- this line is updated by ./configure */
 #  include <sys/types.h> /* for off_t */

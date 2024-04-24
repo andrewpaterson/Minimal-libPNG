@@ -46,7 +46,7 @@ uint32_t ZEXPORT zlibCompileFlags()
     case 8:     flags += 2 << 2;        break;
     default:    flags += 3 << 2;
     }
-    switch (sizeof(voidpf)) {
+    switch (sizeof(void *)) {
     case 2:     break;
     case 4:     flags += 1 << 4;        break;
     case 8:     flags += 2 << 4;        break;
@@ -186,13 +186,13 @@ void zmemzero(dest, len)
 #  define _hfree   hfree
 #endif
 
-voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
+void * zcalloc (void * opaque, unsigned items, unsigned size)
 {
     if (opaque) opaque = 0; /* to make compiler happy */
     return _halloc((int32_t)items, size);
 }
 
-void  zcfree (voidpf opaque, voidpf ptr)
+void  zcfree (void * opaque, void * ptr)
 {
     if (opaque) opaque = 0; /* to make compiler happy */
     _hfree(ptr);
@@ -206,24 +206,24 @@ void  zcfree (voidpf opaque, voidpf ptr)
 #ifndef MY_ZCALLOC /* Any system without a special alloc function */
 
 #ifndef STDC
-extern voidp  malloc (uint32_t size);
-extern voidp  calloc (uint32_t items, uint32_t size);
-extern void   free   (voidpf ptr);
+extern void *  malloc (uint32_t size);
+extern void *  calloc (uint32_t items, uint32_t size);
+extern void   free   (void * ptr);
 #endif
 
-voidpf zcalloc (opaque, items, size)
-    voidpf opaque;
+void * zcalloc (opaque, items, size)
+    void * opaque;
     unsigned items;
     unsigned size;
 {
     if (opaque) items += size - size; /* make compiler happy */
-    return sizeof(uint32_t) > 2 ? (voidpf)malloc(items * size) :
-                              (voidpf)calloc(items, size);
+    return sizeof(uint32_t) > 2 ? (void *)malloc(items * size) :
+                              (void *)calloc(items, size);
 }
 
 void  zcfree (opaque, ptr)
-    voidpf opaque;
-    voidpf ptr;
+    void * opaque;
+    void * ptr;
 {
     free(ptr);
     if (opaque) return; /* make compiler happy */

@@ -101,7 +101,7 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
      (uint32_t)png_ptr->zbuf_size);
    png_ptr->zstream.zalloc = png_zalloc;
    png_ptr->zstream.zfree = png_zfree;
-   png_ptr->zstream.opaque = (voidpf)png_ptr;
+   png_ptr->zstream.opaque = (void *)png_ptr;
 
    switch (inflateInit(&png_ptr->zstream))
    {
@@ -224,7 +224,7 @@ png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struc
      (uint32_t)png_ptr->zbuf_size);
    png_ptr->zstream.zalloc = png_zalloc;
    png_ptr->zstream.zfree = png_zfree;
-   png_ptr->zstream.opaque = (voidpf)png_ptr;
+   png_ptr->zstream.opaque = (void *)png_ptr;
 
    switch (inflateInit(&png_ptr->zstream))
    {
@@ -860,7 +860,7 @@ png_set_read_status_fn(png_structp png_ptr, png_read_status_ptr read_row_fn)
 void
 png_read_png(png_structp png_ptr, png_infop info_ptr,
                            int transforms,
-                           voidp params)
+                           void * params)
 {
    int row;
 

@@ -138,7 +138,7 @@ png_check_sig(uint8_t* sig, int num)
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 /* Function to allocate memory for zlib and clear it to 0. */
-voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
+void * png_zalloc(void * png_ptr, uint32_t items, uint32_t size)
 {
    void* ptr;
    png_structp p=(png_structp)png_ptr;
@@ -157,11 +157,11 @@ voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
    ptr = (void*)png_malloc((png_structp)png_ptr, num_bytes);
    p->flags=save_flags;
 
-   return ((voidpf)ptr);
+   return ((void *)ptr);
 }
 
 /* function to free memory for zlib */
-void png_zfree(voidpf png_ptr, voidpf ptr)
+void png_zfree(void * png_ptr, void * ptr)
 {
    png_free((png_structp)png_ptr, (void*)ptr);
 }

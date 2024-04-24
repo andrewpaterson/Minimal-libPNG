@@ -28,10 +28,11 @@
   (zlib format), rfc1951.txt (deflate format) and rfc1952.txt (gzip format).
 */
 
-#ifndef ZLIB_H
-#define ZLIB_H
+#ifndef __ZLIB_H__
+#define __ZLIB_H__
 
 #include "zconf.h"
+#include "inttypes.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -74,26 +75,26 @@ extern "C" {
   crash even in case of corrupted input.
 */
 
-typedef voidpf (*alloc_func) (voidpf opaque, uint32_t items, uint32_t size);
-typedef void   (*free_func)  (voidpf opaque, voidpf address);
+typedef void* (*alloc_func) (void* opaque, uint32_t items, uint32_t size);
+typedef void   (*free_func)  (void* opaque, void *address);
 
 struct internal_state;
 
 typedef struct z_stream_s {
-    uint8_t    *next_in;  /* next input byte */
-    uint32_t     avail_in;  /* number of bytes available at next_in */
+    uint8_t     *next_in;  /* next input byte */
+    uint32_t    avail_in;  /* number of bytes available at next_in */
     uint32_t    total_in;  /* total nb of input bytes read so far */
 
-    uint8_t    *next_out; /* next output byte should be put there */
-    uint32_t     avail_out; /* remaining free space at next_out */
+    uint8_t     *next_out; /* next output byte should be put there */
+    uint32_t    avail_out; /* remaining free space at next_out */
     uint32_t    total_out; /* total nb of bytes output so far */
 
-    char     *msg;      /* last error message, NULL if no error */
+    char        *msg;      /* last error message, NULL if no error */
     struct internal_state *state; /* not visible by applications */
 
-    alloc_func zalloc;  /* used to allocate the internal state */
-    free_func  zfree;   /* used to free the internal state */
-    voidpf     opaque;  /* private data object passed to zalloc and zfree */
+    alloc_func  zalloc;  /* used to allocate the internal state */
+    free_func   zfree;   /* used to free the internal state */
+    void *      opaque;  /* private data object passed to zalloc and zfree */
 
     int     data_type;  /* best guess about the data type: binary or text */
     uint32_t   adler;      /* adler32 value of the uncompressed data */
@@ -948,7 +949,7 @@ ZEXTERN uint32_t ZEXPORT zlibCompileFlags (void);
     Type sizes, two bits each, 00 = 16 bits, 01 = 32, 10 = 64, 11 = other:
      1.0: size of uint32_t
      3.2: size of uint32_t
-     5.4: size of voidpf (pointer)
+     5.4: size of void * (pointer)
      7.6: size of int32_t
 
     Compiler, assembler, and debug options:
@@ -1047,7 +1048,7 @@ ZEXTERN int ZEXPORT uncompress (uint8_t *dest, uint32_t *destLen, const uint8_t 
 */
 
 
-typedef voidp gzFile;
+typedef void * gzFile;
 
 ZEXTERN gzFile ZEXPORT gzopen  (const char *path, const char *mode);
 /*
@@ -1087,7 +1088,7 @@ ZEXTERN int ZEXPORT gzsetparams (gzFile file, int level, int strategy);
    opened for writing.
 */
 
-ZEXTERN int ZEXPORT    gzread  (gzFile file, voidp buf, unsigned len);
+ZEXTERN int ZEXPORT    gzread  (gzFile file, void * buf, unsigned len);
 /*
      Reads the given number of uncompressed bytes from the compressed file.
    If the input file was not in gzip format, gzread copies the given number
@@ -1095,7 +1096,7 @@ ZEXTERN int ZEXPORT    gzread  (gzFile file, voidp buf, unsigned len);
      gzread returns the number of uncompressed bytes actually read (0 for
    end of file, -1 for error). */
 
-ZEXTERN int ZEXPORT    gzwrite (gzFile file, voidpc buf, unsigned len);
+ZEXTERN int ZEXPORT    gzwrite (gzFile file, void const * buf, unsigned len);
 /*
      Writes the given number of uncompressed bytes into the compressed file.
    gzwrite returns the number of uncompressed bytes actually written
@@ -1322,4 +1323,4 @@ ZEXTERN const uint32_t * ZEXPORT get_crc_table    (void);
 }
 #endif
 
-#endif /* ZLIB_H */
+#endif /* __ZLIB_H__ */
