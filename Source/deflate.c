@@ -198,7 +198,7 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
     zmemzero((uint8_t *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
 
 /* ========================================================================= */
-int ZEXPORT deflateInit_(strm, level, version, stream_size)
+int deflateInit_(strm, level, version, stream_size)
     z_streamp strm;
     int level;
     const char *version;
@@ -210,7 +210,7 @@ int ZEXPORT deflateInit_(strm, level, version, stream_size)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
+int deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
                   version, stream_size)
     z_streamp strm;
     int  level;
@@ -309,7 +309,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
+int deflateSetDictionary (strm, dictionary, dictLength)
     z_streamp strm;
     const uint8_t *dictionary;
     uint32_t  dictLength;
@@ -351,7 +351,7 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateReset (strm)
+int deflateReset (strm)
     z_streamp strm;
 {
     deflate_state *s;
@@ -387,7 +387,7 @@ int ZEXPORT deflateReset (strm)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateSetHeader (strm, head)
+int deflateSetHeader (strm, head)
     z_streamp strm;
     gz_headerp head;
 {
@@ -398,7 +398,7 @@ int ZEXPORT deflateSetHeader (strm, head)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflatePrime (strm, bits, value)
+int deflatePrime (strm, bits, value)
     z_streamp strm;
     int bits;
     int value;
@@ -410,7 +410,7 @@ int ZEXPORT deflatePrime (strm, bits, value)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateParams(strm, level, strategy)
+int deflateParams(strm, level, strategy)
     z_streamp strm;
     int level;
     int strategy;
@@ -448,7 +448,7 @@ int ZEXPORT deflateParams(strm, level, strategy)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateTune(strm, good_length, max_lazy, nice_length, max_chain)
+int deflateTune(strm, good_length, max_lazy, nice_length, max_chain)
     z_streamp strm;
     int good_length;
     int max_lazy;
@@ -483,7 +483,7 @@ int ZEXPORT deflateTune(strm, good_length, max_lazy, nice_length, max_chain)
  * But even the conservative upper bound of about 14% expansion does not
  * seem onerous for output buffer allocation.
  */
-uint32_t ZEXPORT deflateBound(strm, sourceLen)
+uint32_t deflateBound(strm, sourceLen)
     z_streamp strm;
     uint32_t sourceLen;
 {
@@ -546,7 +546,7 @@ local void flush_pending(strm)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflate (strm, flush)
+int deflate (strm, flush)
     z_streamp strm;
     int flush;
 {
@@ -853,7 +853,7 @@ int ZEXPORT deflate (strm, flush)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateEnd (strm)
+int deflateEnd (strm)
     z_streamp strm;
 {
     int status;
@@ -888,7 +888,7 @@ int ZEXPORT deflateEnd (strm)
  * To simplify the source, this is not supported for 16-bit MSDOS (which
  * doesn't have enough memory anyway to duplicate compression states).
  */
-int ZEXPORT deflateCopy (dest, source)
+int deflateCopy (dest, source)
     z_streamp dest;
     z_streamp source;
 {

@@ -49,7 +49,7 @@
 
 
 /* ========================================================================= */
-uint32_t ZEXPORT adler32(adler, buf, len)
+uint32_t adler32(adler, buf, len)
     uint32_t adler;
     const uint8_t *buf;
     uint32_t len;
@@ -120,7 +120,7 @@ uint32_t ZEXPORT adler32(adler, buf, len)
 }
 
 /* ========================================================================= */
-uint32_t ZEXPORT adler32_combine(adler1, adler2, len2)
+uint32_t adler32_combine(adler1, adler2, len2)
     uint32_t adler1;
     uint32_t adler2;
     int32_t len2;

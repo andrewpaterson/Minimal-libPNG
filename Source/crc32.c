@@ -55,7 +55,7 @@ local void gf2_matrix_square (uint32_t *square, uint32_t *mat);
 /* =========================================================================
  * This function can be used by asm versions of crc32()
  */
-const uint32_t *ZEXPORT get_crc_table()
+const uint32_t *get_crc_table()
 {
     return (const uint32_t *)crc_table;
 }
@@ -65,7 +65,7 @@ const uint32_t *ZEXPORT get_crc_table()
 #define DO8 DO1; DO1; DO1; DO1; DO1; DO1; DO1; DO1
 
 /* ========================================================================= */
-uint32_t ZEXPORT crc32(crc, buf, len)
+uint32_t crc32(crc, buf, len)
     uint32_t crc;
     const uint8_t *buf;
     unsigned len;
@@ -216,7 +216,7 @@ local void gf2_matrix_square(square, mat)
 }
 
 /* ========================================================================= */
-uint32_t ZEXPORT crc32_combine(crc1, crc2, len2)
+uint32_t crc32_combine(crc1, crc2, len2)
     uint32_t crc1;
     uint32_t crc2;
     int32_t len2;

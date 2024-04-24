@@ -5,8 +5,8 @@
 
 /* @(#) $Id$ */
 
-#ifndef ZCONF_H
-#define ZCONF_H
+#ifndef __ZCONF_H__
+#define __ZCONF_H__
 #include "stdint.h"
 
 
@@ -54,10 +54,6 @@
 #  define STDC
 #endif
 #if !defined(STDC) && (defined(OS2) || defined(__HOS_AIX__))
-#  define STDC
-#endif
-
-#if defined(__OS400__) && !defined(STDC)    /* iSeries (formerly AS/400). */
 #  define STDC
 #endif
 
@@ -117,57 +113,11 @@
 #  endif
 #endif
 
-#ifndef ZEXTERN
-#  define ZEXTERN extern
-#endif
-#ifndef ZEXPORT
-#  define ZEXPORT
-#endif
-#ifndef ZEXPORTVA
-#  define ZEXPORTVA
-#endif
 
-
-#if 0           /* HAVE_UNISTD_H -- this line is updated by ./configure */
-#  include <sys/types.h> /* for off_t */
-#  include <unistd.h>    /* for SEEK_* and off_t */
-#  ifdef VMS
-#    include <unixio.h>   /* for off_t */
-#  endif
-#  define int32_t off_t
-#endif
 #ifndef SEEK_SET
 #  define SEEK_SET        0       /* Seek from beginning of file.  */
 #  define SEEK_CUR        1       /* Seek from current position.  */
 #  define SEEK_END        2       /* Set file pointer to EOF plus "offset" */
 #endif
 
-#if defined(__OS400__)
-#  define NO_vsnprintf
-#endif
-
-#if defined(__MVS__)
-#  define NO_vsnprintf
-#  ifdef 
-#    undef 
-#  endif
-#endif
-
-/* MVS linker does not support external names larger than 8 bytes */
-#if defined(__MVS__)
-#   pragma map(deflateInit_,"DEIN")
-#   pragma map(deflateInit2_,"DEIN2")
-#   pragma map(deflateEnd,"DEEND")
-#   pragma map(deflateBound,"DEBND")
-#   pragma map(inflateInit_,"ININ")
-#   pragma map(inflateInit2_,"ININ2")
-#   pragma map(inflateEnd,"INEND")
-#   pragma map(inflateSync,"INSY")
-#   pragma map(inflateSetDictionary,"INSEDI")
-#   pragma map(compressBound,"CMBND")
-#   pragma map(inflate_table,"INTABL")
-#   pragma map(inflate_fast,"INFA")
-#   pragma map(inflate_copyright,"INCOPY")
-#endif
-
-#endif /* ZCONF_H */
+#endif // __ZCONF_H__
