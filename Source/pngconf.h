@@ -65,9 +65,6 @@
  * will fit into memory.
  */
 #define PNG_MAX_MALLOC_64K
-#if defined(MAXSEG_64K) && !defined(PNG_MAX_MALLOC_64K)
-#  define PNG_MAX_MALLOC_64K
-#endif
 
  /* This protects us against compilers that run on a windowing system
  * and thus don't have or would rather us not use the stdio types:
@@ -104,7 +101,6 @@
  * ifdef to suit your own needs.
  */
 #ifndef PNGARG
-
 #ifdef OF /* zlib prototype munger */
 #  define PNGARG(arglist) arglist
 #else
