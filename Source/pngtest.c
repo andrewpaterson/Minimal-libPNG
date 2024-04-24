@@ -776,16 +776,6 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
     {
         png_set_PLTE(write_ptr, write_info_ptr, palette, num_palette);
     }
-#if defined(PNG_bKGD_SUPPORTED)
-   {
-      png_color_16p background;
-
-      if (png_get_bKGD(read_ptr, read_info_ptr, &background))
-      {
-         png_set_bKGD(write_ptr, write_info_ptr, background);
-      }
-   }
-#endif
 #if defined(PNG_hIST_SUPPORTED)
    {
       png_uint_16p hist;

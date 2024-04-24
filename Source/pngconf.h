@@ -334,9 +334,6 @@
 #  ifndef PNG_NO_READ_DITHER
 #    define PNG_READ_DITHER_SUPPORTED
 #  endif
-#  ifndef PNG_NO_READ_BACKGROUND
-#    define PNG_READ_BACKGROUND_SUPPORTED
-#  endif
 #  ifndef PNG_NO_READ_16_TO_8
 #    define PNG_READ_16_TO_8_SUPPORTED
 #  endif
@@ -549,10 +546,6 @@
 
 #ifdef PNG_READ_ANCILLARY_CHUNKS_SUPPORTED
 
-#ifndef PNG_NO_READ_bKGD
-#  define PNG_READ_bKGD_SUPPORTED
-#  define PNG_bKGD_SUPPORTED
-#endif
 #ifndef PNG_NO_READ_hIST
 #  define PNG_READ_hIST_SUPPORTED
 #  define PNG_hIST_SUPPORTED
@@ -608,12 +601,6 @@
 
 #ifdef PNG_WRITE_ANCILLARY_CHUNKS_SUPPORTED
 
-#ifndef PNG_NO_WRITE_bKGD
-#  define PNG_WRITE_bKGD_SUPPORTED
-#  ifndef PNG_bKGD_SUPPORTED
-#    define PNG_bKGD_SUPPORTED
-#  endif
-#endif
 #ifndef PNG_NO_WRITE_hIST
 #  define PNG_WRITE_hIST_SUPPORTED
 #  ifndef PNG_hIST_SUPPORTED

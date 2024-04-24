@@ -214,22 +214,6 @@ png_get_signature(png_structp png_ptr, png_infop info_ptr)
       return (NULL);
 }
 
-#if defined(PNG_bKGD_SUPPORTED)
-uint32_t PNGAPI
-png_get_bKGD(png_structp png_ptr, png_infop info_ptr,
-   png_color_16p *background)
-{
-   if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_bKGD)
-      && background != NULL)
-   {
-      png_debug1(1, "in %s retrieval function\n", "bKGD");
-      *background = &(info_ptr->background);
-      return (PNG_INFO_bKGD);
-   }
-   return (0);
-}
-#endif
-
 #if defined(PNG_sRGB_SUPPORTED)
 uint32_t PNGAPI
 png_get_sRGB(png_structp png_ptr, png_infop info_ptr, int *file_srgb_intent)

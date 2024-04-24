@@ -18,19 +18,6 @@
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 
-#if defined(PNG_bKGD_SUPPORTED)
-void PNGAPI
-png_set_bKGD(png_structp png_ptr, png_infop info_ptr, png_color_16p background)
-{
-   png_debug1(1, "in %s storage function\n", "bKGD");
-   if (png_ptr == NULL || info_ptr == NULL)
-      return;
-
-   png_memcpy(&(info_ptr->background), background, sizeof(png_color_16));
-   info_ptr->valid |= PNG_INFO_bKGD;
-}
-#endif
-
 #if defined(PNG_hIST_SUPPORTED)
 void PNGAPI
 png_set_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p hist)

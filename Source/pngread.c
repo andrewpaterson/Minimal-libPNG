@@ -350,9 +350,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
       PNG_IDAT;
       PNG_IEND;
       PNG_PLTE;
-#if defined(PNG_READ_bKGD_SUPPORTED)
-      PNG_bKGD;
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       PNG_hIST;
 #endif
@@ -431,10 +428,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
          png_ptr->mode |= PNG_HAVE_IDAT;
          break;
       }
-#if defined(PNG_READ_bKGD_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_bKGD, 4))
-         png_handle_bKGD(png_ptr, info_ptr, length);
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
          png_handle_hIST(png_ptr, info_ptr, length);
@@ -852,9 +845,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
       PNG_IDAT;
       PNG_IEND;
       PNG_PLTE;
-#if defined(PNG_READ_bKGD_SUPPORTED)
-      PNG_bKGD;
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       PNG_hIST;
 #endif
@@ -914,10 +904,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
       }
       else if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
          png_handle_PLTE(png_ptr, info_ptr, length);
-#if defined(PNG_READ_bKGD_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_bKGD, 4))
-         png_handle_bKGD(png_ptr, info_ptr, length);
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
          png_handle_hIST(png_ptr, info_ptr, length);
@@ -1042,10 +1028,6 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
    png_free(png_ptr, png_ptr->palette_lookup);
    png_free(png_ptr, png_ptr->dither_index);
 #endif
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-   png_free(png_ptr, png_ptr->gamma_from_1);
-   png_free(png_ptr, png_ptr->gamma_to_1);
-#endif
 #ifdef PNG_FREE_ME_SUPPORTED
    if (png_ptr->free_me & PNG_FREE_PLTE)
       png_zfree(png_ptr, png_ptr->palette);
@@ -1055,8 +1037,7 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
       png_zfree(png_ptr, png_ptr->palette);
    png_ptr->flags &= ~PNG_FLAG_FREE_PLTE;
 #endif
-#if defined(PNG_tRNS_SUPPORTED) || \
-    defined(PNG_READ_EXPAND_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
+#if defined(PNG_tRNS_SUPPORTED)
 #ifdef PNG_FREE_ME_SUPPORTED
    if (png_ptr->free_me & PNG_FREE_TRNS)
       png_free(png_ptr, png_ptr->trans);

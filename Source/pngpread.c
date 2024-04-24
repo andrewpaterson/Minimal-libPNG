@@ -117,9 +117,6 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
       PNG_IDAT;
       PNG_IEND;
       PNG_PLTE;
-#if defined(PNG_READ_bKGD_SUPPORTED)
-      PNG_bKGD;
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       PNG_hIST;
 #endif
@@ -294,17 +291,6 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
          return;
       }
       png_handle_tRNS(png_ptr, info_ptr, png_ptr->push_length);
-   }
-#endif
-#if defined(PNG_READ_bKGD_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_bKGD, 4))
-   {
-      if (png_ptr->push_length + 4 > png_ptr->buffer_size)
-      {
-         png_push_save_buffer(png_ptr);
-         return;
-      }
-      png_handle_bKGD(png_ptr, info_ptr, png_ptr->push_length);
    }
 #endif
 #if defined(PNG_READ_hIST_SUPPORTED)

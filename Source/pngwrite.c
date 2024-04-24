@@ -128,10 +128,6 @@ png_write_info(png_structp png_ptr, png_infop info_ptr)
          info_ptr->num_trans, info_ptr->color_type);
       }
 #endif
-#if defined(PNG_WRITE_bKGD_SUPPORTED)
-   if (info_ptr->valid & PNG_INFO_bKGD)
-      png_write_bKGD(png_ptr, &(info_ptr->background), info_ptr->color_type);
-#endif
 #if defined(PNG_WRITE_hIST_SUPPORTED)
    if (info_ptr->valid & PNG_INFO_hIST)
       png_write_hIST(png_ptr, info_ptr->hist, info_ptr->num_palette);

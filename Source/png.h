@@ -682,8 +682,7 @@ typedef struct png_info_struct
    png_color_8 sig_bit; /* significant bits in color channels */
 #endif
 
-#if defined(PNG_tRNS_SUPPORTED) || defined(PNG_READ_EXPAND_SUPPORTED) || \
-defined(PNG_READ_BACKGROUND_SUPPORTED)
+#if defined(PNG_tRNS_SUPPORTED) || defined(PNG_READ_EXPAND_SUPPORTED)
    /* The tRNS chunk supplies transparency data for paletted images and
     * other image types that don't need a full alpha channel.  There are
     * "num_trans" transparency values for a paletted image, stored in the
@@ -695,16 +694,6 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
     */
    png_bytep trans; /* transparent values for paletted image */
    png_color_16 trans_values; /* transparent color for non-palette image */
-#endif
-
-#if defined(PNG_bKGD_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
-   /* The bKGD chunk gives the suggested image background color if the
-    * display program does not have its own background color and the image
-    * is needs to composited onto a background before display.  The colors
-    * in "background" are normally in the same color space/depth as the
-    * pixel data.  Data is valid if (valid & PNG_INFO_bKGD) is non-zero.
-    */
-   png_color_16 background;
 #endif
 
 #if defined(PNG_pHYs_SUPPORTED)
@@ -1043,35 +1032,10 @@ struct png_struct_def
 #endif
 #endif
 
-#if defined(PNG_bKGD_SUPPORTED)
-   uint8_t background_gamma_type;
-#  ifdef PNG_FLOATING_POINT_SUPPORTED
-   float background_gamma;
-#  endif
-   png_color_16 background;   /* background color in screen gamma space */
-#endif /* PNG_bKGD_SUPPORTED */
-
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
    png_flush_ptr output_flush_fn;/* Function for flushing output */
    uint32_t flush_dist;    /* how many rows apart to flush, 0 - no flush */
    uint32_t flush_rows;    /* number of rows written since last flush */
-#endif
-
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-   int gamma_shift;      /* number of "insignificant" bits 16-bit gamma */
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-   float gamma;          /* file gamma value */
-   float screen_gamma;   /* screen gamma value (display_exponent) */
-#endif
-#endif
-
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-   png_bytep gamma_table;     /* gamma table for 8-bit depth files */
-   png_bytep gamma_from_1;    /* converts from 1.0 to screen */
-   png_bytep gamma_to_1;      /* converts from file to 1.0 */
-   png_uint_16pp gamma_16_table; /* gamma table for 16-bit depth files */
-   png_uint_16pp gamma_16_from_1; /* converts from 1.0 to screen */
-   png_uint_16pp gamma_16_to_1; /* converts from file to 1.0 */
 #endif
 
 #if defined(PNG_sBIT_SUPPORTED)
@@ -1082,8 +1046,7 @@ struct png_struct_def
    png_color_8 shift;         /* shift for significant bit tranformation */
 #endif
 
-#if defined(PNG_tRNS_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED) \
- || defined(PNG_READ_EXPAND_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
+#if defined(PNG_tRNS_SUPPORTED) || defined(PNG_READ_EXPAND_SUPPORTED)
    png_bytep trans;           /* transparency values for paletted files */
    png_color_16 trans_values; /* transparency values for non-paletted files */
 #endif
@@ -1153,11 +1116,6 @@ struct png_struct_def
    uint16_t rgb_to_gray_blue_coeff;
 #endif
    uint32_t mng_features_permitted;
-
-/* New member added in libpng-1.0.7 */
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-   png_fixed_point int_gamma;
-#endif
 
 /* New members added in libpng-1.0.2 but first enabled by default in 1.2.0 */
 #ifdef PNG_USER_MEM_SUPPORTED
@@ -1394,19 +1352,6 @@ extern PNG_EXPORT(int,png_set_interlace_handling) PNGARG((png_structp png_ptr));
 #if defined(PNG_READ_INVERT_SUPPORTED) || defined(PNG_WRITE_INVERT_SUPPORTED)
 /* Invert monochrome files */
 extern PNG_EXPORT(void,png_set_invert_mono) PNGARG((png_structp png_ptr));
-#endif
-
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-/* Handle alpha and tRNS by replacing with a background color. */
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-extern PNG_EXPORT(void,png_set_background) PNGARG((png_structp png_ptr,
-   png_color_16p background_color, int background_gamma_code,
-   int need_expand, double background_gamma));
-#endif
-#define PNG_BACKGROUND_GAMMA_UNKNOWN 0
-#define PNG_BACKGROUND_GAMMA_SCREEN  1
-#define PNG_BACKGROUND_GAMMA_FILE    2
-#define PNG_BACKGROUND_GAMMA_UNIQUE  3
 #endif
 
 #if defined(PNG_READ_16_TO_8_SUPPORTED)
@@ -1900,16 +1845,6 @@ png_ptr, png_infop info_ptr));
 /* Returns pointer to signature string read from PNG header */
 extern PNG_EXPORT(png_bytep,png_get_signature) PNGARG((png_structp png_ptr,
 png_infop info_ptr));
-
-#if defined(PNG_bKGD_SUPPORTED)
-extern PNG_EXPORT(uint32_t,png_get_bKGD) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_color_16p *background));
-#endif
-
-#if defined(PNG_bKGD_SUPPORTED)
-extern PNG_EXPORT(void,png_set_bKGD) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_color_16p background));
-#endif
 
 #if defined(PNG_hIST_SUPPORTED)
 extern PNG_EXPORT(uint32_t,png_get_hIST) PNGARG((png_structp png_ptr,
@@ -2558,11 +2493,6 @@ PNG_EXTERN void png_write_tRNS PNGARG((png_structp png_ptr, png_bytep trans,
    png_color_16p values, int number, int color_type));
 #endif
 
-#if defined(PNG_WRITE_bKGD_SUPPORTED)
-PNG_EXTERN void png_write_bKGD PNGARG((png_structp png_ptr,
-   png_color_16p values, int color_type));
-#endif
-
 #if defined(PNG_WRITE_hIST_SUPPORTED)
 PNG_EXTERN void png_write_hIST PNGARG((png_structp png_ptr, png_uint_16p hist,
    int num_hist));
@@ -2719,11 +2649,6 @@ PNG_EXTERN void png_do_shift PNGARG((png_row_infop row_info, png_bytep row,
    png_color_8p bit_depth));
 #endif
 
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-PNG_EXTERN void png_do_background PNGARG((png_row_infop row_info, png_bytep row,
-   png_color_16p trans_values, png_color_16p background));
-#endif
-
 #if defined(PNG_READ_EXPAND_SUPPORTED)
 PNG_EXTERN void png_do_expand_palette PNGARG((png_row_infop row_info,
    png_bytep row, png_colorp palette, png_bytep trans, int num_trans));
@@ -2742,11 +2667,6 @@ PNG_EXTERN void png_handle_PLTE PNGARG((png_structp png_ptr, png_infop info_ptr,
    uint32_t length));
 PNG_EXTERN void png_handle_IEND PNGARG((png_structp png_ptr, png_infop info_ptr,
    uint32_t length));
-
-#if defined(PNG_READ_bKGD_SUPPORTED)
-PNG_EXTERN void png_handle_bKGD PNGARG((png_structp png_ptr, png_infop info_ptr,
-   uint32_t length));
-#endif
 
 #if defined(PNG_READ_hIST_SUPPORTED)
 PNG_EXTERN void png_handle_hIST PNGARG((png_structp png_ptr, png_infop info_ptr,
