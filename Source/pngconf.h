@@ -100,23 +100,6 @@
  * need to drag the empty declaration out in front of here, or change the
  * ifdef to suit your own needs.
  */
-#ifndef PNGARG
-#ifdef OF /* zlib prototype munger */
-#  define PNGARG(arglist) arglist
-#else
-
-#ifdef _NO_PROTO
-#  define PNGARG(arglist) ()
-#  ifndef PNG_TYPECAST_NULL
-#     define PNG_TYPECAST_NULL
-#  endif
-#else
-#  define PNGARG(arglist) arglist
-#endif /* _NO_PROTO */
-
-#endif /* OF */
-
-#endif /* PNGARG */
 
 
 #if !defined(PNG_SETJMP_NOT_SUPPORTED) && !defined(PNG_NO_SETJMP_SUPPORTED)

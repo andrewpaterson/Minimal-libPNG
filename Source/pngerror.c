@@ -18,9 +18,9 @@
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 static void /* PRIVATE */
-png_default_error PNGARG((png_structp png_ptr, const char* error_message));
+png_default_error(png_structp png_ptr, const char* error_message);
 static void /* PRIVATE */
-png_default_warning PNGARG((png_structp png_ptr, const char* warning_message));
+png_default_warning(png_structp png_ptr, const char* warning_message);
 
 /* This function is called whenever there is a fatal error.  This function
  * should not be changed.  If there is a need to handle errors differently,

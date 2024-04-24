@@ -666,7 +666,7 @@ png_access_version_number(void)
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 #ifdef PNG_SIZE_T
 /* Added at libpng version 1.2.6 */
-   PNG_EXTERN size_t PNGAPI png_convert_size PNGARG((size_t size));
+   PNG_EXTERN size_t PNGAPI png_convert_size ((size_t size));
 size_t PNGAPI
 png_convert_size(size_t size)
 {

@@ -66,7 +66,7 @@ static float t_start, t_stop, t_decode, t_encode, t_misc;
 
 static int verbose = 0;
 
-int test_one_file PNGARG((const char *inname, const char *outname));
+int test_one_file(const char *inname, const char *outname);
 
 #ifdef __TURBOC__
 #include <mem.h>
@@ -361,8 +361,8 @@ static int maximum_allocation = 0;
 static int total_allocation = 0;
 static int num_allocations = 0;
 
-void* png_debug_malloc PNGARG((png_structp png_ptr, uint32_t size));
-void png_debug_free PNGARG((png_structp png_ptr, void* ptr));
+void* png_debug_malloc ((png_structp png_ptr, uint32_t size));
+void png_debug_free ((png_structp png_ptr, void* ptr));
 
 void*
 png_debug_malloc(png_structp png_ptr, uint32_t size)
