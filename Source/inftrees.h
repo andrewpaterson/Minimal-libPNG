@@ -50,6 +50,4 @@ typedef enum {
     DISTS
 } codetype;
 
-extern int inflate_table OF((codetype type, uint16_t *lens,
-                             unsigned codes, code **table,
-                             unsigned *bits, uint16_t *work));
+extern int inflate_table(codetype type, uint16_t *lens, unsigned codes, code **table, unsigned *bits, uint16_t *work);

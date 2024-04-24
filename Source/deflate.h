@@ -279,13 +279,11 @@ typedef struct internal_state {
  */
 
         /* in trees.c */
-void _tr_init         OF((deflate_state *s));
-int  _tr_tally        OF((deflate_state *s, unsigned dist, unsigned lc));
-void _tr_flush_block  OF((deflate_state *s, charf *buf, ulg stored_len,
-                          int eof));
-void _tr_align        OF((deflate_state *s));
-void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
-                          int eof));
+void _tr_init        (deflate_state *s);
+int  _tr_tally       (deflate_state *s, unsigned dist, unsigned lc);
+void _tr_flush_block (deflate_state *s, charf *buf, ulg stored_len, int eof);
+void _tr_align       (deflate_state *s);
+void _tr_stored_block(deflate_state *s, charf *buf, ulg stored_len, int eof);
 
 #define d_code(dist) \
    ((dist) < 256 ? _dist_code[dist] : _dist_code[256+((dist)>>7)])

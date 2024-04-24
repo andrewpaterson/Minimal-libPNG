@@ -108,7 +108,7 @@
 #ifndef PNGARG
 
 #ifdef OF /* zlib prototype munger */
-#  define PNGARG(arglist) OF(arglist)
+#  define PNGARG(arglist) arglist
 #else
 
 #ifdef _NO_PROTO

@@ -36,8 +36,8 @@ struct internal_state {int dummy;}; /* for buggy compilers */
 #endif
 
 #ifndef STDC
-extern voidp  malloc OF((uInt size));
-extern void   free   OF((voidpf ptr));
+extern voidp  malloc (uInt size);
+extern void   free   (voidpf ptr);
 #endif
 
 #define ALLOC(size) malloc(size)
@@ -73,13 +73,13 @@ typedef struct gz_stream {
 } gz_stream;
 
 
-local gzFile gz_open      OF((const char *path, const char *mode, int  fd));
-local int do_flush        OF((gzFile file, int flush));
-local int    get_byte     OF((gz_stream *s));
-local void   check_header OF((gz_stream *s));
-local int    destroy      OF((gz_stream *s));
-local void   putLong      OF((FILE *file, uLong x));
-local uLong  getLong      OF((gz_stream *s));
+local gzFile gz_open     (const char *path, const char *mode, int  fd);
+local int    do_flush     (gzFile file, int flush);
+local int    get_byte    (gz_stream *s);
+local void   check_header(gz_stream *s);
+local int    destroy     (gz_stream *s);
+local void   putLong     (FILE *file, uLong x);
+local uLong  getLong     (gz_stream *s);
 
 /* ===========================================================================
      Opens a gzip (.gz) file for reading or writing. The mode parameter
