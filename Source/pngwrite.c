@@ -336,7 +336,7 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
    a png_error() will longjmp here.  Since the jmpbuf is then meaningless we
    abort instead of returning. */
    if (setjmp(png_ptr->jmpbuf))
-      PNG_ABORT();
+      abort();
 #endif
    return (png_ptr);
 }

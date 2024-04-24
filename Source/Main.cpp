@@ -37,20 +37,6 @@ bool LoadPNG(char* file_name)
 		return false;
 	}
 
-	/* Set error handling if you are using the setjmp/longjmp method (this is
-	* the normal method of doing things with libpng).  REQUIRED unless you
-	* set up your own error handlers in the png_create_read_struct() earlier.
-	*/
-
-	if (setjmp(png_jmpbuf(png_ptr)))
-	{
-		/* Free all of the memory associated with the png_ptr and info_ptr */
-		png_destroy_read_struct(&png_ptr, &info_ptr, (png_info**)NULL);
-		fclose(fp);
-		/* If we get here, we had a problem reading the file */
-		return false;
-	}
-
 	/* Set up the input control if you are using standard C streams */
 	png_init_io(png_ptr, fp);
 

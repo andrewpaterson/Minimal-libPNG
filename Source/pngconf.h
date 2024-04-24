@@ -575,10 +575,6 @@ typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* defined(PNG_1_2_X) */
 
-#ifndef PNG_ABORT
-#  define PNG_ABORT() abort()
-#endif
-
 #ifdef PNG_SETJMP_SUPPORTED
 #  define png_jmpbuf(png_ptr) ((png_ptr)->jmpbuf)
 #else

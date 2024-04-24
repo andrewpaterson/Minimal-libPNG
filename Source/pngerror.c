@@ -209,7 +209,7 @@ static void png_default_error(png_structp png_ptr, const char* error_message)
        longjmp(png_ptr->jmpbuf, 1);
    }
 #else
-   PNG_ABORT();
+   abort();
 #endif
 #ifdef PNG_NO_CONSOLE_IO
    /* make compiler happy */ ;

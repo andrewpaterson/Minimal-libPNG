@@ -639,7 +639,7 @@ size_t
 png_convert_size(size_t size)
 {
   if (size > (size_t)-1)
-     PNG_ABORT();  /* We haven't got access to png_ptr, so no png_error() */
+     abort();  /* We haven't got access to png_ptr, so no png_error() */
   return ((size_t)size);
 }
 #endif /* PNG_SIZE_T */
