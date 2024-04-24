@@ -126,7 +126,7 @@ png_sig_cmp(uint8_t* sig, size_t start, size_t num_to_check)
    return ((int)(png_memcmp(&sig[start], &png_signature[start], num_to_check)));
 }
 
-#if defined(PNG_1_0_X) || defined(PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* (Obsolete) function to check signature bytes.  It does not allow one
  * to check a partial signature.  This function might be removed in the
  * future - use png_sig_cmp().  Returns true (nonzero) if the file is a PNG.
@@ -141,12 +141,7 @@ png_check_sig(uint8_t* sig, int num)
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 /* Function to allocate memory for zlib and clear it to 0. */
-#ifdef PNG_1_0_X
-voidpf
-#else
-voidpf /* private */
-#endif
-png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
+voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
 {
    void* ptr;
    png_structp p=(png_structp)png_ptr;
@@ -165,31 +160,11 @@ png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
    ptr = (void*)png_malloc((png_structp)png_ptr, num_bytes);
    p->flags=save_flags;
 
-#if defined(PNG_1_0_X) && !defined(PNG_NO_ZALLOC_ZERO)
-   if (ptr == NULL)
-       return ((voidpf)ptr);
-
-   if (num_bytes > (uint32_t)0x8000L)
-   {
-      png_memset(ptr, 0, (size_t)0x8000L);
-      png_memset((uint8_t*)ptr + (size_t)0x8000L, 0,
-         (size_t)(num_bytes - (uint32_t)0x8000L));
-   }
-   else
-   {
-      png_memset(ptr, 0, (size_t)num_bytes);
-   }
-#endif
    return ((voidpf)ptr);
 }
 
 /* function to free memory for zlib */
-#ifdef PNG_1_0_X
-void
-#else
-void /* private */
-#endif
-png_zfree(voidpf png_ptr, voidpf ptr)
+void png_zfree(voidpf png_ptr, voidpf ptr)
 {
    png_free((png_structp)png_ptr, (void*)ptr);
 }
@@ -287,10 +262,9 @@ png_destroy_info_struct(png_structp png_ptr, png_info** info_ptr_ptr)
  * and applications using it are urged to use png_create_info_struct()
  * instead.
  */
-#if defined(PNG_1_0_X) || defined(PNG_1_2_X)
+#if defined(PNG_1_2_X)
 #undef png_info_init
-void
-png_info_init(png_info* info_ptr)
+void png_info_init(png_info* info_ptr)
 {
    /* We only come here via pre-1.0.12-compiled applications */
    png_info_init_3(&info_ptr, 0);

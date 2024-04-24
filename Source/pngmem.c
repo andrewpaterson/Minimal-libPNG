@@ -184,9 +184,6 @@ png_free_default(png_structp png_ptr, void* ptr)
 }
 
 
-#if defined(PNG_1_0_X)
-#  define png_malloc_warn png_malloc
-#else
 /* This function was added at libpng version 1.2.3.  The png_malloc_warn()
  * function will set up png_malloc() to issue a png_warning and return NULL
  * instead of issuing a png_error, if it fails to allocate the requested
@@ -205,7 +202,6 @@ png_malloc_warn(png_structp png_ptr, uint32_t size)
    png_ptr->flags=save_flags;
    return(ptr);
 }
-#endif
 
 void*
 png_memcpy_check (png_structp png_ptr, void* s1, void* s2,

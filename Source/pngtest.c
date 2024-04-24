@@ -87,16 +87,8 @@ static int status_dots=1;
 #  define png_jmpbuf(png_ptr) png_ptr->jmpbuf
 #endif
 
-void
-#ifdef PNG_1_0_X
-
-#endif
-read_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
-void
-#ifdef PNG_1_0_X
-
-#endif
-read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
+void read_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
+void read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
     if(png_ptr == NULL || row_number > PNG_UINT_31_MAX) return;
     if(status_pass != pass)
@@ -114,16 +106,8 @@ read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
     fprintf(stdout, "r");
 }
 
-void
-#ifdef PNG_1_0_X
-
-#endif
-write_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
-void
-#ifdef PNG_1_0_X
-
-#endif
-write_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
+void write_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
+void write_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
     if(png_ptr == NULL || row_number > PNG_UINT_31_MAX || pass > 7) return;
     fprintf(stdout, "w");
@@ -135,16 +119,8 @@ write_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
    but merely examine the row filters.  We set this to 256 rather than
    5 in case illegal filter values are present.) */
 static uint32_t filters_used[256];
-void
-#ifdef PNG_1_0_X
-
-#endif
-count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data);
-void
-#ifdef PNG_1_0_X
-
-#endif
-count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
+void count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data);
+void count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
 {
     if(png_ptr != NULL && row_info != NULL)
       ++filters_used[*(data-1)];
@@ -157,16 +133,8 @@ count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
 
 static uint32_t zero_samples;
 
-void
-#ifdef PNG_1_0_X
-
-#endif
-count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* data);
-void
-#ifdef PNG_1_0_X
-
-#endif
-count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
+void count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* data);
+void count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
 {
    uint8_t* dp = data;
    if(png_ptr == NULL)return;

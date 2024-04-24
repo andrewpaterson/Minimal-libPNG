@@ -729,7 +729,7 @@ typedef png_info **png_infopp;
 #define PNG_UINT_31_MAX ((uint32_t)0x7fffffffL)
 #define PNG_UINT_32_MAX ((uint32_t)(-1))
 #define PNG_SIZE_MAX ((size_t)(-1))
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* PNG_MAX_UINT is deprecated; use PNG_UINT_31_MAX instead. */
 #define PNG_MAX_UINT PNG_UINT_31_MAX
 #endif
@@ -1175,7 +1175,7 @@ extern void png_write_chunk_end(png_structp png_ptr);
 /* Allocate and initialize the info structure */
 extern png_infop png_create_info_struct(png_structp png_ptr);
 
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* Initialize the info structure (old interface - DEPRECATED) */
 extern void png_info_init(png_infop info_ptr);
 #undef png_info_init
@@ -1196,12 +1196,10 @@ extern void png_read_info(png_structp png_ptr, png_infop info_ptr);
 #if defined(PNG_READ_EXPAND_SUPPORTED)
 /* Expand data to 24-bit RGB, or 8-bit grayscale, with alpha if available. */
 extern void png_set_expand(png_structp png_ptr);
-#if !defined(PNG_1_0_X)
 extern void png_set_expand_gray_1_2_4_to_8(png_structp png_ptr);
-#endif
 extern void png_set_palette_to_rgb(png_structp png_ptr);
 extern void png_set_tRNS_to_alpha(png_structp png_ptr);
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
+#if defined (PNG_1_2_X)
 /* Deprecated */
 extern void png_set_gray_1_2_4_to_8(png_structp png_ptr);
 #endif
@@ -1247,9 +1245,7 @@ extern void png_set_filler(png_structp png_ptr, uint32_t filler, int flags);
 #define PNG_FILLER_BEFORE 0
 #define PNG_FILLER_AFTER 1
 /* Add an alpha byte to 8-bit Gray or 24-bit RGB images. */
-#if !defined(PNG_1_0_X)
 extern void png_set_add_alpha(png_structp png_ptr, uint32_t filler, int flags);
-#endif
 #endif /* PNG_READ_FILLER_SUPPORTED || PNG_WRITE_FILLER_SUPPORTED */
 
 #if defined(PNG_READ_SWAP_SUPPORTED) || defined(PNG_WRITE_SWAP_SUPPORTED)
@@ -1558,23 +1554,11 @@ extern void png_progressive_combine_row(png_structp png_ptr, uint8_t* old_row, u
 
 extern void* png_malloc(png_structp png_ptr, uint32_t size);
 
-#if defined(PNG_1_0_X)
-#  define png_malloc_warn png_malloc
-#else
 /* Added at libpng version 1.2.4 */
 extern void* png_malloc_warn(png_structp png_ptr, uint32_t size);
-#endif
 
 /* frees a pointer allocated by png_malloc() */
 extern void png_free(png_structp png_ptr, void* ptr);
-
-#if defined(PNG_1_0_X)
-/* Function to allocate memory for zlib. */
-extern voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size);
-
-/* Function to free memory for zlib */
-extern void png_zfree(voidpf png_ptr, voidpf ptr);
-#endif
 
 /* Free data that was allocated internally */
 extern void png_free_data(png_structp png_ptr, png_infop info_ptr, uint32_t free_me, int num);
@@ -2125,7 +2109,7 @@ PNG_EXPORT_VAR (const uint8_t) png_tRNS[5];
 PNG_EXPORT_VAR (const uint8_t) png_zTXt[5];
 #endif /* PNG_USE_GLOBAL_ARRAYS */
 
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* Initialize png_ptr struct for reading, and allocate any other memory.
  * (old interface - DEPRECATED - use png_create_read_struct instead).
  */
@@ -2135,11 +2119,11 @@ extern void png_read_init(png_structp png_ptr);
 #endif
 
 extern void png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struct_size);
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
+#if defined(PNG_1_2_X)
 extern void png_read_init_2(png_structp png_ptr, const char* user_png_ver, size_t png_struct_size, size_t png_info_size);
 #endif
 
-#if defined(PNG_1_0_X) || defined (PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* Initialize png_ptr struct for writing, and allocate any other memory.
  * (old interface - DEPRECATED - use png_create_write_struct instead).
  */
@@ -2163,7 +2147,6 @@ void png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn, void* mem_ptr)
 /* Free any memory that info_ptr points to and reset struct. */
 void png_info_destroy(png_structp png_ptr, png_infop info_ptr);
 
-#ifndef PNG_1_0_X
 /* Function to allocate memory for zlib. */
 voidpf png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size);
 
@@ -2188,11 +2171,6 @@ void png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length);
 void png_default_flush(png_structp png_ptr);
 #endif
 #endif
-#else /* PNG_1_0_X */
-#ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
-#endif
-#endif /* PNG_1_0_X */
 
 /* Reset the CRC variable */
 void png_reset_crc(png_structp png_ptr);

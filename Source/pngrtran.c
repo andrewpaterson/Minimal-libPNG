@@ -527,7 +527,6 @@ png_set_palette_to_rgb(png_structp png_ptr)
    png_ptr->transformations |= (PNG_EXPAND | PNG_EXPAND_tRNS);
 }
 
-#if !defined(PNG_1_0_X)
 /* Expand grayscale images of less than 8-bit depth to 8 bits. */
 void
 png_set_expand_gray_1_2_4_to_8(png_structp png_ptr)
@@ -536,9 +535,8 @@ png_set_expand_gray_1_2_4_to_8(png_structp png_ptr)
    if(png_ptr == NULL) return;
    png_ptr->transformations |= PNG_EXPAND_tRNS;
 }
-#endif
 
-#if defined(PNG_1_0_X) || defined(PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* Expand grayscale images of less than 8-bit depth to 8 bits. */
 /* Deprecated as of libpng-1.2.9 */
 void
@@ -788,10 +786,8 @@ png_read_transform_info(png_structp png_ptr, png_info* info_ptr)
    {
       info_ptr->channels++;
       /* if adding a true alpha channel not just filler */
-#if !defined(PNG_1_0_X)
       if (png_ptr->transformations & PNG_ADD_ALPHA)
         info_ptr->color_type |= PNG_COLOR_MASK_ALPHA;
-#endif
    }
 #endif
 

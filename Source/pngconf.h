@@ -333,12 +333,6 @@
 
 #endif /* PNG_WRITE_SUPPORTED */
 
-#ifndef PNG_1_0_X
-#  ifndef PNG_NO_ERROR_NUMBERS
-#    define PNG_ERROR_NUMBERS_SUPPORTED
-#  endif
-#endif /* PNG_1_0_X */
-
 #if defined(PNG_READ_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED)
 #  ifndef PNG_NO_USER_TRANSFORM_PTR
@@ -372,20 +366,16 @@
 #define PNG_THREAD_UNSAFE_OK
 */
 
-#if !defined(PNG_1_0_X)
 #if !defined(PNG_NO_USER_MEM) && !defined(PNG_USER_MEM_SUPPORTED)
 #  define PNG_USER_MEM_SUPPORTED
 #endif
-#endif /* PNG_1_0_X */
 
 /* Added at libpng-1.2.6 */
-#if !defined(PNG_1_0_X)
 #ifndef PNG_SET_USER_LIMITS_SUPPORTED
 #if !defined(PNG_NO_SET_USER_LIMITS) && !defined(PNG_SET_USER_LIMITS_SUPPORTED)
 #  define PNG_SET_USER_LIMITS_SUPPORTED
 #endif
 #endif
-#endif /* PNG_1_0_X */
 
 /* Added at libpng-1.0.16 and 1.2.6.  To accept all valid PNGS no matter
  * how large, set these limits to 0x7fffffffL
@@ -596,7 +586,7 @@ typedef double          **png_doublepp;
 /* Pointers to pointers to pointers; i.e., pointer to array */
 typedef char            ***png_charppp;
 
-#if defined(PNG_1_0_X) || defined(PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* SPC -  Is this stuff deprecated? */
 /* It'll be removed as of libpng-1.3.0 - GR-P */
 /* libpng typedefs for types in zlib. If zlib changes
@@ -606,7 +596,7 @@ typedef char            ***png_charppp;
 typedef char*      png_zcharp;
 typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
-#endif /* (PNG_1_0_X) || defined(PNG_1_2_X) */
+#endif /* defined(PNG_1_2_X) */
 
 /* Do not use global arrays (helps with building DLL's)
  * They are no longer used in libpng itself, since version 1.0.5c,

@@ -46,11 +46,9 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
    if (png_ptr == NULL)
       return (NULL);
 
-#if !defined(PNG_1_0_X)
 #ifdef PNG_MMX_CODE_SUPPORTED
    png_init_mmx_flags(png_ptr);   /* 1.2.0 addition */
 #endif
-#endif /* PNG_1_0_X */
 
    /* added at libpng-1.2.6 */
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
@@ -149,7 +147,7 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
    return (png_ptr);
 }
 
-#if defined(PNG_1_0_X) || defined(PNG_1_2_X)
+#if defined(PNG_1_2_X)
 /* Initialize PNG structure for reading, and allocate any memory needed.
    This interface is deprecated in favour of the png_create_read_struct(),
    and it will disappear as of libpng-1.3.0. */
@@ -203,7 +201,7 @@ png_read_init_2(png_structp png_ptr, const char* user_png_ver, size_t png_struct
      }
    png_read_init_3(&png_ptr, user_png_ver, png_struct_size);
 }
-#endif /* PNG_1_0_X || PNG_1_2_X */
+#endif /* PNG_1_2_X */
 
 void
 png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struct_size)

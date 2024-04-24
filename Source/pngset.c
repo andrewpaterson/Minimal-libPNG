@@ -580,7 +580,6 @@ png_set_invalid(png_structp png_ptr, png_info* info_ptr, int mask)
 }
 
 
-#ifndef PNG_1_0_X
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
 /* this function was added to libpng 1.2.6 */
 void
@@ -597,5 +596,4 @@ png_set_user_limits (png_structp png_ptr, uint32_t user_width_max,
 }
 #endif /* ?PNG_SET_USER_LIMITS_SUPPORTED */
 
-#endif /* ?PNG_1_0_X */
 #endif /* PNG_READ_SUPPORTED || PNG_WRITE_SUPPORTED */
