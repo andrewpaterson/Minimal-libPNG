@@ -46,10 +46,6 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
    if (png_ptr == NULL)
       return (NULL);
 
-#ifdef PNG_MMX_CODE_SUPPORTED
-   png_init_mmx_flags(png_ptr);   /* 1.2.0 addition */
-#endif
-
    /* added at libpng-1.2.6 */
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
    png_ptr->user_width_max=PNG_USER_WIDTH_MAX;

@@ -1070,9 +1070,8 @@ png_check_chunk_name(png_structp png_ptr, uint8_t* chunk_name)
    a zero indicates the pixel is to be skipped.  This is in addition
    to any alpha or transparency value associated with the pixel.  If
    you want all pixels to be combined, pass 0xff (255) in mask.  */
-#ifndef PNG_HAVE_MMX_COMBINE_ROW
-void /* PRIVATE */
-png_combine_row(png_structp png_ptr, uint8_t* row, int mask)
+
+void png_combine_row(png_structp png_ptr, uint8_t* row, int mask)
 {
    png_debug(1,"in png_combine_row\n");
    if (mask == 0xff)
@@ -1238,16 +1237,9 @@ png_combine_row(png_structp png_ptr, uint8_t* row, int mask)
       }
    }
 }
-#endif /* !PNG_HAVE_MMX_COMBINE_ROW */
 
 #ifdef PNG_READ_INTERLACING_SUPPORTED
-#ifndef PNG_HAVE_MMX_READ_INTERLACE   /* else in pngvcrd.c, pnggccrd.c */
-/* OLD pre-1.0.9 interface:
-void png_do_read_interlace(png_row_infop row_info, uint8_t* row, int pass,
-   uint32_t transformations)
- */
-void /* PRIVATE */
-png_do_read_interlace(png_structp png_ptr)
+void png_do_read_interlace(png_structp png_ptr)
 {
    png_row_infop row_info = &(png_ptr->row_info);
    uint8_t* row = png_ptr->row_buf + 1;
@@ -1424,12 +1416,9 @@ png_do_read_interlace(png_structp png_ptr)
       row_info->rowbytes = PNG_ROWBYTES(row_info->pixel_depth,final_width);
    }
 }
-#endif /* !PNG_HAVE_MMX_READ_INTERLACE */
 #endif /* PNG_READ_INTERLACING_SUPPORTED */
 
-#ifndef PNG_HAVE_MMX_READ_FILTER_ROW
-void /* PRIVATE */
-png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* row,
+void png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* row,
    uint8_t* prev_row, int filter)
 {
    png_debug(1, "in png_read_filter_row\n");
@@ -1550,7 +1539,6 @@ png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* row,
          break;
    }
 }
-#endif /* !PNG_HAVE_MMX_READ_FILTER_ROW */
 
 void /* PRIVATE */
 png_read_finish_row(png_structp png_ptr)

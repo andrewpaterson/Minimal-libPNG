@@ -360,12 +360,6 @@
 #  define PNG_EASY_ACCESS_SUPPORTED
 #endif
 
-/* If you are sure that you don't need thread safety and you are compiling
-   with PNG_USE_PNGCCRD for an MMX application, you can define this for
-   faster execution.  See pnggccrd.c.
-#define PNG_THREAD_UNSAFE_OK
-*/
-
 #if !defined(PNG_NO_USER_MEM) && !defined(PNG_USER_MEM_SUPPORTED)
 #  define PNG_USER_MEM_SUPPORTED
 #endif
@@ -648,25 +642,5 @@ typedef z_stream*   png_zstreamp;
 #  undef PNG_ZBUF_SIZE
 #  define PNG_ZBUF_SIZE 65536L
 #endif
-
-#ifdef PNG_READ_SUPPORTED
-/* Prior to libpng-1.0.9, this block was in pngasmrd.h */
-#if defined(PNG_INTERNAL)
-
-/* These are the default thresholds before the MMX code kicks in; if either
- * rowbytes or bitdepth is below the threshold, plain C code is used.  These
- * can be overridden at runtime via the png_set_mmx_thresholds() call in
- * libpng 1.2.0 and later.  The values below were chosen by Intel.
- */
-
-#ifndef PNG_MMX_ROWBYTES_THRESHOLD_DEFAULT
-#  define PNG_MMX_ROWBYTES_THRESHOLD_DEFAULT  128  /*  >=  */
-#endif
-#ifndef PNG_MMX_BITDEPTH_THRESHOLD_DEFAULT
-#  define PNG_MMX_BITDEPTH_THRESHOLD_DEFAULT  9    /*  >=  */   
-#endif
-
-#endif /* PNG_INTERNAL */
-#endif /* PNG_READ_SUPPORTED */
 
 #endif /* PNGCONF_H */
