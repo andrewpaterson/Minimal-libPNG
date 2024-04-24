@@ -65,9 +65,9 @@ typedef struct gz_stream {
     char     *path;   /* path name for debugging only */
     int      transparent; /* 1 if input file is not a .gz file */
     char     mode;    /* 'w' or 'r' */
-    z_off_t  start;   /* start of compressed data in file (header skipped) */
-    z_off_t  in;      /* bytes into deflate or inflate */
-    z_off_t  out;     /* bytes out of deflate or inflate */
+    int32_t  start;   /* start of compressed data in file (header skipped) */
+    int32_t  in;      /* bytes into deflate or inflate */
+    int32_t  out;     /* bytes out of deflate or inflate */
     int      back;    /* one character push-back */
     int      last;    /* true if push-back is last character */
 } gz_stream;
@@ -503,7 +503,7 @@ int ZEXPORT gzread (file, buf, len)
 int ZEXPORT gzgetc(file)
     gzFile file;
 {
-    unsigned char c;
+    uint8_t c;
 
     return gzread(file, &c, 1) == 1 ? c : -1;
 }
@@ -654,14 +654,14 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
 #endif
 
 /* ===========================================================================
-      Writes c, converted to an unsigned char, into the compressed file.
+      Writes c, converted to an uint8_t, into the compressed file.
    gzputc returns the value that was written, or -1 in case of error.
 */
 int ZEXPORT gzputc(file, c)
     gzFile file;
     int c;
 {
-    unsigned char cc = (unsigned char) c; /* required for big endian systems */
+    uint8_t cc = (uint8_t) c; /* required for big endian systems */
 
     return gzwrite(file, &cc, 1) == 1 ? (int)cc : -1;
 }
@@ -746,9 +746,9 @@ int ZEXPORT gzflush (file, flush)
       SEEK_END is not implemented, returns error.
       In this version of the library, gzseek can be extremely slow.
 */
-z_off_t ZEXPORT gzseek (file, offset, whence)
+int32_t ZEXPORT gzseek (file, offset, whence)
     gzFile file;
-    z_off_t offset;
+    int32_t offset;
     int whence;
 {
     gz_stream *s = (gz_stream*)file;
@@ -860,7 +860,7 @@ int ZEXPORT gzrewind (file)
    given compressed file. This position represents a number of bytes in the
    uncompressed data stream.
 */
-z_off_t ZEXPORT gztell (file)
+int32_t ZEXPORT gztell (file)
     gzFile file;
 {
     return gzseek(file, 0L, SEEK_CUR);

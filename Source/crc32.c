@@ -36,9 +36,9 @@
 #  define REV(w) (((w)>>24)+(((w)>>8)&0xff00)+ \
                 (((w)&0xff00)<<8)+(((w)&0xff)<<24))
    local uint32_t crc32_little OF((uint32_t,
-                        const unsigned char *, unsigned));
+                        const uint8_t *, unsigned));
    local uint32_t crc32_big OF((uint32_t,
-                        const unsigned char *, unsigned));
+                        const uint8_t *, unsigned));
 #  define TBLS 8
 #else
 #  define TBLS 1
@@ -90,7 +90,7 @@ local void make_crc_table()
     uint32_t poly;                 /* polynomial exclusive-or pattern */
     /* terms of polynomial defining this crc (except x^32): */
     static volatile int first = 1;      /* flag to limit concurrent making */
-    static const unsigned char p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
+    static const uint8_t p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
 
     /* See if another task is already doing this (not thread-safe, but better
        than nothing -- significantly reduces duration of vulnerability in
@@ -100,7 +100,7 @@ local void make_crc_table()
 
         /* make exclusive-or pattern from polynomial (0xedb88320UL) */
         poly = 0UL;
-        for (n = 0; n < sizeof(p)/sizeof(unsigned char); n++)
+        for (n = 0; n < sizeof(p)/sizeof(uint8_t); n++)
             poly |= 1UL << (31 - p[n]);
 
         /* generate a crc for every 8-bit value */
@@ -198,7 +198,7 @@ const uint32_t *ZEXPORT get_crc_table()
 /* ========================================================================= */
 uint32_t ZEXPORT crc32(crc, buf, len)
     uint32_t crc;
-    const unsigned char *buf;
+    const uint8_t *buf;
     unsigned len;
 {
     if (buf == Z_NULL) return 0UL;
@@ -213,7 +213,7 @@ uint32_t ZEXPORT crc32(crc, buf, len)
         uint32_t endian;
 
         endian = 1;
-        if (*((unsigned char *)(&endian)))
+        if (*((uint8_t *)(&endian)))
             return crc32_little(crc, buf, len);
         else
             return crc32_big(crc, buf, len);
@@ -241,7 +241,7 @@ uint32_t ZEXPORT crc32(crc, buf, len)
 /* ========================================================================= */
 local uint32_t crc32_little(crc, buf, len)
     uint32_t crc;
-    const unsigned char *buf;
+    const uint8_t *buf;
     unsigned len;
 {
     register uint32_t c;
@@ -263,7 +263,7 @@ local uint32_t crc32_little(crc, buf, len)
         DOLIT4;
         len -= 4;
     }
-    buf = (const unsigned char *)buf4;
+    buf = (const uint8_t *)buf4;
 
     if (len) do {
         c = crc_table[0][(c ^ *buf++) & 0xff] ^ (c >> 8);
@@ -281,7 +281,7 @@ local uint32_t crc32_little(crc, buf, len)
 /* ========================================================================= */
 local uint32_t crc32_big(crc, buf, len)
     uint32_t crc;
-    const unsigned char *buf;
+    const uint8_t *buf;
     unsigned len;
 {
     register uint32_t c;
@@ -305,7 +305,7 @@ local uint32_t crc32_big(crc, buf, len)
         len -= 4;
     }
     buf4++;
-    buf = (const unsigned char *)buf4;
+    buf = (const uint8_t *)buf4;
 
     if (len) do {
         c = crc_table[4][(c >> 24) ^ *buf++] ^ (c << 8);
@@ -350,7 +350,7 @@ local void gf2_matrix_square(square, mat)
 uLong ZEXPORT crc32_combine(crc1, crc2, len2)
     uLong crc1;
     uLong crc2;
-    z_off_t len2;
+    int32_t len2;
 {
     int n;
     uint32_t row;

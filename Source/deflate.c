@@ -336,7 +336,7 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
     }
     zmemcpy(s->window, dictionary, length);
     s->strstart = length;
-    s->block_start = (long)length;
+    s->block_start = (int32_t)length;
 
     /* Insert all strings in the hash table (except for the last two bytes).
      * s->lookahead stays null, so s->ins_h will be recomputed at the next
@@ -1082,7 +1082,7 @@ local uInt longest_match(s, cur_match)
          * the output of deflate is not affected by the uninitialized values.
          */
 #if (defined(UNALIGNED_OK) && MAX_MATCH == 258)
-        /* This code assumes sizeof(unsigned short) == 2. Do not use
+        /* This code assumes sizeof(uint16_t) == 2. Do not use
          * UNALIGNED_OK if your compiler uses a different size.
          */
         if (*(ushf*)(match+best_len-1) != scan_end ||
@@ -1293,7 +1293,7 @@ local void fill_window(s)
             zmemcpy(s->window, s->window+wsize, (unsigned)wsize);
             s->match_start -= wsize;
             s->strstart    -= wsize; /* we now have strstart >= MAX_DIST */
-            s->block_start -= (long) wsize;
+            s->block_start -= (int32_t) wsize;
 
             /* Slide the hash table (could be avoided with 32 bit values
                at the expense of memory usage). We slide even when level == 0
@@ -1363,7 +1363,7 @@ local void fill_window(s)
    _tr_flush_block(s, (s->block_start >= 0L ? \
                    (charf *)&s->window[(unsigned)s->block_start] : \
                    (charf *)Z_NULL), \
-                (ulg)((long)s->strstart - s->block_start), \
+                (ulg)((int32_t)s->strstart - s->block_start), \
                 (eof)); \
    s->block_start = s->strstart; \
    flush_pending(s->strm); \
@@ -1405,7 +1405,7 @@ local block_state deflate_stored(s, flush)
         if (s->lookahead <= 1) {
 
             Assert(s->strstart < s->w_size+MAX_DIST(s) ||
-                   s->block_start >= (long)s->w_size, "slide too late");
+                   s->block_start >= (int32_t)s->w_size, "slide too late");
 
             fill_window(s);
             if (s->lookahead == 0 && flush == Z_NO_FLUSH) return need_more;

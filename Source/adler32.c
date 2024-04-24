@@ -124,7 +124,7 @@ uLong ZEXPORT adler32(adler, buf, len)
 uLong ZEXPORT adler32_combine(adler1, adler2, len2)
     uLong adler1;
     uLong adler2;
-    z_off_t len2;
+    int32_t len2;
 {
     uint32_t sum1;
     uint32_t sum2;

@@ -29,9 +29,9 @@
 #endif
 /* compile with -Dlocal if your debugger can't find static symbols */
 
-typedef unsigned char  uch;
+typedef uint8_t  uch;
 typedef uch  uchf;
-typedef unsigned short ush;
+typedef uint16_t ush;
 typedef ush  ushf;
 typedef uint32_t  ulg;
 

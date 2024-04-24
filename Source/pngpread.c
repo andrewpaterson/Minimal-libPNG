@@ -90,7 +90,7 @@ png_push_read_sig(png_structp png_ptr, png_infop info_ptr)
 
    png_push_fill_buffer(png_ptr, &(info_ptr->signature[num_checked]),
       num_to_check);
-   png_ptr->sig_bytes = (png_byte)(png_ptr->sig_bytes+num_to_check);
+   png_ptr->sig_bytes = (uint8_t)(png_ptr->sig_bytes+num_to_check);
 
    if (png_sig_cmp(info_ptr->signature, num_checked, num_to_check))
    {
@@ -156,7 +156,7 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
     */
    if (!(png_ptr->mode & PNG_HAVE_CHUNK_HEADER))
    {
-      png_byte chunk_length[4];
+      uint8_t chunk_length[4];
 
       if (png_ptr->buffer_size < 8)
       {
@@ -382,7 +382,7 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
 }
 
 void /* PRIVATE */
-png_push_crc_skip(png_structp png_ptr, png_uint_32 skip)
+png_push_crc_skip(png_structp png_ptr, uint32_t skip)
 {
    png_ptr->process_mode = PNG_SKIP_MODE;
    png_ptr->skip_length = skip;
@@ -395,7 +395,7 @@ png_push_crc_finish(png_structp png_ptr)
    {
       png_size_t save_size;
 
-      if (png_ptr->skip_length < (png_uint_32)png_ptr->save_buffer_size)
+      if (png_ptr->skip_length < (uint32_t)png_ptr->save_buffer_size)
          save_size = (png_size_t)png_ptr->skip_length;
       else
          save_size = png_ptr->save_buffer_size;
@@ -411,7 +411,7 @@ png_push_crc_finish(png_structp png_ptr)
    {
       png_size_t save_size;
 
-      if (png_ptr->skip_length < (png_uint_32)png_ptr->current_buffer_size)
+      if (png_ptr->skip_length < (uint32_t)png_ptr->current_buffer_size)
          save_size = (png_size_t)png_ptr->skip_length;
       else
          save_size = png_ptr->current_buffer_size;
@@ -508,7 +508,7 @@ png_push_save_buffer(png_structp png_ptr)
       new_max = png_ptr->save_buffer_size + png_ptr->current_buffer_size + 256;
       old_buffer = png_ptr->save_buffer;
       png_ptr->save_buffer = (png_bytep)png_malloc(png_ptr,
-         (png_uint_32)new_max);
+         (uint32_t)new_max);
       png_memcpy(png_ptr->save_buffer, old_buffer, png_ptr->save_buffer_size);
       png_free(png_ptr, old_buffer);
       png_ptr->save_buffer_max = new_max;
@@ -542,7 +542,7 @@ png_push_read_IDAT(png_structp png_ptr)
 #endif
    if (!(png_ptr->mode & PNG_HAVE_CHUNK_HEADER))
    {
-      png_byte chunk_length[4];
+      uint8_t chunk_length[4];
 
       if (png_ptr->buffer_size < 8)
       {
@@ -570,11 +570,11 @@ png_push_read_IDAT(png_structp png_ptr)
    {
       png_size_t save_size;
 
-      if (png_ptr->idat_size < (png_uint_32)png_ptr->save_buffer_size)
+      if (png_ptr->idat_size < (uint32_t)png_ptr->save_buffer_size)
       {
          save_size = (png_size_t)png_ptr->idat_size;
          /* check for overflow */
-         if((png_uint_32)save_size != png_ptr->idat_size)
+         if((uint32_t)save_size != png_ptr->idat_size)
             png_error(png_ptr, "save_size overflowed in pngpread");
       }
       else
@@ -592,11 +592,11 @@ png_push_read_IDAT(png_structp png_ptr)
    {
       png_size_t save_size;
 
-      if (png_ptr->idat_size < (png_uint_32)png_ptr->current_buffer_size)
+      if (png_ptr->idat_size < (uint32_t)png_ptr->current_buffer_size)
       {
          save_size = (png_size_t)png_ptr->idat_size;
          /* check for overflow */
-         if((png_uint_32)save_size != png_ptr->idat_size)
+         if((uint32_t)save_size != png_ptr->idat_size)
             png_error(png_ptr, "save_size overflowed in pngpread");
       }
       else
@@ -938,10 +938,10 @@ png_read_push_finish_row(png_structp png_ptr)
  * name or a critical chunk), the chunk is (currently) silently ignored.
  */
 void /* PRIVATE */
-png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, png_uint_32
+png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, uint32_t
    length)
 {
-   png_uint_32 skip=0;
+   uint32_t skip=0;
    png_check_chunk_name(png_ptr, png_ptr->chunk_name);
 
    if (!(png_ptr->chunk_name[0] & 0x20))
@@ -967,11 +967,11 @@ png_push_handle_unknown(png_structp png_ptr, png_infop info_ptr, png_uint_32
        png_unknown_chunk chunk;
 
 #ifdef PNG_MAX_MALLOC_64K
-       if (length > (png_uint_32)65535L)
+       if (length > (uint32_t)65535L)
        {
            png_warning(png_ptr, "unknown chunk too large to fit in memory");
-           skip = length - (png_uint_32)65535L;
-           length = (png_uint_32)65535L;
+           skip = length - (uint32_t)65535L;
+           length = (uint32_t)65535L;
        }
 #endif
 

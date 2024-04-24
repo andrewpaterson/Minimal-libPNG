@@ -70,18 +70,18 @@ z_streamp strm;
 unsigned start;         /* inflate()'s starting value for strm->avail_out */
 {
     struct inflate_state *state;
-    unsigned char *in;      /* local strm->next_in */
-    unsigned char *last;    /* while in < last, enough input available */
-    unsigned char *out;     /* local strm->next_out */
-    unsigned char *beg;     /* inflate()'s initial strm->next_out */
-    unsigned char *end;     /* while out < end, enough space available */
+    uint8_t *in;      /* local strm->next_in */
+    uint8_t *last;    /* while in < last, enough input available */
+    uint8_t *out;     /* local strm->next_out */
+    uint8_t *beg;     /* inflate()'s initial strm->next_out */
+    uint8_t *end;     /* while out < end, enough space available */
 #ifdef INFLATE_STRICT
     unsigned dmax;              /* maximum distance from zlib header */
 #endif
     unsigned wsize;             /* window size or zero if not using window */
     unsigned whave;             /* valid bytes in the window */
     unsigned write;             /* window write index */
-    unsigned char *window;  /* allocated sliding window, if wsize != 0 */
+    uint8_t *window;  /* allocated sliding window, if wsize != 0 */
     uint32_t hold;         /* local strm->hold */
     unsigned bits;              /* local strm->bits */
     code const *lcode;      /* local strm->lencode */
@@ -93,7 +93,7 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                                 /*  window position, window bytes to copy */
     unsigned len;               /* match length, unused bytes */
     unsigned dist;              /* match distance */
-    unsigned char *from;    /* where to copy match from */
+    uint8_t *from;    /* where to copy match from */
 
     /* copy state to local variables */
     state = (struct inflate_state *)strm->state;
@@ -135,7 +135,7 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
             Tracevv((stderr, this.val >= 0x20 && this.val < 0x7f ?
                     "inflate:         literal '%c'\n" :
                     "inflate:         literal 0x%02x\n", this.val));
-            PUP(out) = (unsigned char)(this.val);
+            PUP(out) = (uint8_t)(this.val);
         }
         else if (op & 16) {                     /* length base */
             len = (unsigned)(this.val);

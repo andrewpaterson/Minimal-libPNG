@@ -120,7 +120,7 @@ png_destroy_struct_2(png_voidp struct_ptr, png_free_ptr free_fn,
    have the ability to do that. */
 
 png_voidp PNGAPI
-png_malloc(png_structp png_ptr, png_uint_32 size)
+png_malloc(png_structp png_ptr, uint32_t size)
 {
    png_voidp ret;
 
@@ -138,7 +138,7 @@ png_malloc(png_structp png_ptr, png_uint_32 size)
 }
 
 png_voidp PNGAPI
-png_malloc_default(png_structp png_ptr, png_uint_32 size)
+png_malloc_default(png_structp png_ptr, uint32_t size)
 {
    png_voidp ret;
 #endif /* PNG_USER_MEM_SUPPORTED */
@@ -147,7 +147,7 @@ png_malloc_default(png_structp png_ptr, png_uint_32 size)
       return (NULL);
 
 #ifdef PNG_MAX_MALLOC_64K
-   if (size > (png_uint_32)65536L)
+   if (size > (uint32_t)65536L)
    {
 #ifndef PNG_USER_MEM_SUPPORTED
       if(png_ptr->flags&PNG_FLAG_MALLOC_NULL_MEM_OK) == 0)
@@ -231,10 +231,10 @@ png_free_default(png_structp png_ptr, png_voidp ptr)
  * memory.
  */
 png_voidp PNGAPI
-png_malloc_warn(png_structp png_ptr, png_uint_32 size)
+png_malloc_warn(png_structp png_ptr, uint32_t size)
 {
    png_voidp ptr;
-   png_uint_32 save_flags;
+   uint32_t save_flags;
    if(png_ptr == NULL) return (NULL);
 
    save_flags=png_ptr->flags;
@@ -247,12 +247,12 @@ png_malloc_warn(png_structp png_ptr, png_uint_32 size)
 
 png_voidp PNGAPI
 png_memcpy_check (png_structp png_ptr, png_voidp s1, png_voidp s2,
-   png_uint_32 length)
+   uint32_t length)
 {
    png_size_t size;
 
    size = (png_size_t)length;
-   if ((png_uint_32)size != length)
+   if ((uint32_t)size != length)
       png_error(png_ptr,"Overflow in png_memcpy_check.");
 
    return(png_memcpy (s1, s2, size));
@@ -260,12 +260,12 @@ png_memcpy_check (png_structp png_ptr, png_voidp s1, png_voidp s2,
 
 png_voidp PNGAPI
 png_memset_check (png_structp png_ptr, png_voidp s1, int value,
-   png_uint_32 length)
+   uint32_t length)
 {
    png_size_t size;
 
    size = (png_size_t)length;
-   if ((png_uint_32)size != length)
+   if ((uint32_t)size != length)
       png_error(png_ptr,"Overflow in png_memset_check.");
 
    return (png_memset (s1, value, size));

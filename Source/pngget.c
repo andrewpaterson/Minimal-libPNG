@@ -13,8 +13,8 @@
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 
-png_uint_32 PNGAPI
-png_get_valid(png_structp png_ptr, png_infop info_ptr, png_uint_32 flag)
+uint32_t PNGAPI
+png_get_valid(png_structp png_ptr, png_infop info_ptr, uint32_t flag)
 {
    if (png_ptr != NULL && info_ptr != NULL)
       return(info_ptr->valid & flag);
@@ -22,7 +22,7 @@ png_get_valid(png_structp png_ptr, png_infop info_ptr, png_uint_32 flag)
       return(0);
 }
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_rowbytes(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -44,7 +44,7 @@ png_get_rows(png_structp png_ptr, png_infop info_ptr)
 
 #ifdef PNG_EASY_ACCESS_SUPPORTED
 /* easy access to info, added in libpng-0.99 */
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_image_width(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -54,7 +54,7 @@ png_get_image_width(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_image_height(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -64,7 +64,7 @@ png_get_image_height(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_bit_depth(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -74,7 +74,7 @@ png_get_bit_depth(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_color_type(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -84,7 +84,7 @@ png_get_color_type(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_filter_type(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -94,7 +94,7 @@ png_get_filter_type(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_interlace_type(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -104,7 +104,7 @@ png_get_interlace_type(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_compression_type(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -114,7 +114,7 @@ png_get_compression_type(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_x_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -132,7 +132,7 @@ png_get_x_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_y_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -150,7 +150,7 @@ png_get_y_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
    return (0);
 }
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_pixels_per_meter(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -196,7 +196,7 @@ png_get_pixel_aspect_ratio(png_structp png_ptr, png_infop info_ptr)
 
 #endif  /* PNG_EASY_ACCESS_SUPPORTED */
 
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_channels(png_structp png_ptr, png_infop info_ptr)
 {
    if (png_ptr != NULL && info_ptr != NULL)
@@ -215,7 +215,7 @@ png_get_signature(png_structp png_ptr, png_infop info_ptr)
 }
 
 #if defined(PNG_bKGD_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_bKGD(png_structp png_ptr, png_infop info_ptr,
    png_color_16p *background)
 {
@@ -233,7 +233,7 @@ png_get_bKGD(png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_gAMA_SUPPORTED)
 #ifdef PNG_FLOATING_POINT_SUPPORTED
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_gAMA(png_structp png_ptr, png_infop info_ptr, double *file_gamma)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_gAMA)
@@ -247,7 +247,7 @@ png_get_gAMA(png_structp png_ptr, png_infop info_ptr, double *file_gamma)
 }
 #endif
 #ifdef PNG_FIXED_POINT_SUPPORTED
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_gAMA_fixed(png_structp png_ptr, png_infop info_ptr,
     png_fixed_point *int_file_gamma)
 {
@@ -264,7 +264,7 @@ png_get_gAMA_fixed(png_structp png_ptr, png_infop info_ptr,
 #endif
 
 #if defined(PNG_sRGB_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_sRGB(png_structp png_ptr, png_infop info_ptr, int *file_srgb_intent)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_sRGB)
@@ -280,18 +280,18 @@ png_get_sRGB(png_structp png_ptr, png_infop info_ptr, int *file_srgb_intent)
 
 
 #if defined(PNG_sPLT_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_sPLT(png_structp png_ptr, png_infop info_ptr,
              png_sPLT_tpp spalettes)
 {
    if (png_ptr != NULL && info_ptr != NULL && spalettes != NULL)
      *spalettes = info_ptr->splt_palettes;
-   return ((png_uint_32)info_ptr->splt_palettes_num);
+   return ((uint32_t)info_ptr->splt_palettes_num);
 }
 #endif
 
 #if defined(PNG_hIST_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p *hist)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_hIST)
@@ -305,9 +305,9 @@ png_get_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p *hist)
 }
 #endif
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_IHDR(png_structp png_ptr, png_infop info_ptr,
-   png_uint_32 *width, png_uint_32 *height, int *bit_depth,
+   uint32_t *width, uint32_t *height, int *bit_depth,
    int *color_type, int *interlace_type, int *compression_type,
    int *filter_type)
 
@@ -353,9 +353,9 @@ png_get_IHDR(png_structp png_ptr, png_infop info_ptr,
 
 
 #if defined(PNG_pCAL_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_pCAL(png_structp png_ptr, png_infop info_ptr,
-   png_charp *purpose, png_int_32 *X0, png_int_32 *X1, int *type, int *nparams,
+   png_charp *purpose, int32_t *X0, int32_t *X1, int *type, int *nparams,
    png_charp *units, png_charpp *params)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_pCAL)
@@ -378,11 +378,11 @@ png_get_pCAL(png_structp png_ptr, png_infop info_ptr,
 
 
 #if defined(PNG_pHYs_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_pHYs(png_structp png_ptr, png_infop info_ptr,
-   png_uint_32 *res_x, png_uint_32 *res_y, int *unit_type)
+   uint32_t *res_x, uint32_t *res_y, int *unit_type)
 {
-   png_uint_32 retval = 0;
+   uint32_t retval = 0;
 
    if (png_ptr != NULL && info_ptr != NULL &&
       (info_ptr->valid & PNG_INFO_pHYs))
@@ -408,7 +408,7 @@ png_get_pHYs(png_structp png_ptr, png_infop info_ptr,
 }
 #endif
 
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_PLTE(png_structp png_ptr, png_infop info_ptr, png_colorp *palette,
    int *num_palette)
 {
@@ -425,7 +425,7 @@ png_get_PLTE(png_structp png_ptr, png_infop info_ptr, png_colorp *palette,
 }
 
 #if defined(PNG_sBIT_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_sBIT(png_structp png_ptr, png_infop info_ptr, png_color_8p *sig_bit)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_sBIT)
@@ -441,7 +441,7 @@ png_get_sBIT(png_structp png_ptr, png_infop info_ptr, png_color_8p *sig_bit)
 
 
 #if defined(PNG_tIME_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_tIME(png_structp png_ptr, png_infop info_ptr, png_timep *mod_time)
 {
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_tIME)
@@ -456,11 +456,11 @@ png_get_tIME(png_structp png_ptr, png_infop info_ptr, png_timep *mod_time)
 #endif
 
 #if defined(PNG_tRNS_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_tRNS(png_structp png_ptr, png_infop info_ptr,
    png_bytep *trans, int *num_trans, png_color_16p *trans_values)
 {
-   png_uint_32 retval = 0;
+   uint32_t retval = 0;
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_tRNS))
    {
       png_debug1(1, "in %s retrieval function\n", "tRNS");
@@ -495,21 +495,21 @@ png_get_tRNS(png_structp png_ptr, png_infop info_ptr,
 #endif
 
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_unknown_chunks(png_structp png_ptr, png_infop info_ptr,
              png_unknown_chunkpp unknowns)
 {
    if (png_ptr != NULL && info_ptr != NULL && unknowns != NULL)
      *unknowns = info_ptr->unknown_chunks;
-   return ((png_uint_32)info_ptr->unknown_chunks_num);
+   return ((uint32_t)info_ptr->unknown_chunks_num);
 }
 #endif
 
 #if defined(PNG_READ_RGB_TO_GRAY_SUPPORTED)
-png_byte PNGAPI
+uint8_t PNGAPI
 png_get_rgb_to_gray_status (png_structp png_ptr)
 {
-   return (png_byte)(png_ptr? png_ptr->rgb_to_gray_status : 0);
+   return (uint8_t)(png_ptr? png_ptr->rgb_to_gray_status : 0);
 }
 #endif
 
@@ -522,21 +522,21 @@ png_get_user_chunk_ptr(png_structp png_ptr)
 #endif
 
 #ifdef PNG_WRITE_SUPPORTED
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_compression_buffer_size(png_structp png_ptr)
 {
-   return (png_uint_32)(png_ptr? png_ptr->zbuf_size : 0L);
+   return (uint32_t)(png_ptr? png_ptr->zbuf_size : 0L);
 }
 #endif
 
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
 /* these functions were added to libpng 1.2.6 */
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_user_width_max (png_structp png_ptr)
 {
     return (png_ptr? png_ptr->user_width_max : 0);
 }
-png_uint_32 PNGAPI
+uint32_t PNGAPI
 png_get_user_height_max (png_structp png_ptr)
 {
     return (png_ptr? png_ptr->user_height_max : 0);

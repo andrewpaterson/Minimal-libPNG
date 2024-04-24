@@ -195,7 +195,7 @@
 #endif
 
 #if !defined(__MACTYPES__)
-typedef unsigned char  Byte;  /* 8 bits */
+typedef uint8_t  Byte;  /* 8 bits */
 #endif
 typedef unsigned int   uInt;  /* 16 bits or more */
 typedef uint32_t  uLong; /* 32 bits or more */
@@ -227,15 +227,12 @@ typedef uLong  uLongf;
 #  ifdef VMS
 #    include <unixio.h>   /* for off_t */
 #  endif
-#  define z_off_t off_t
+#  define int32_t off_t
 #endif
 #ifndef SEEK_SET
 #  define SEEK_SET        0       /* Seek from beginning of file.  */
 #  define SEEK_CUR        1       /* Seek from current position.  */
 #  define SEEK_END        2       /* Set file pointer to EOF plus "offset" */
-#endif
-#ifndef z_off_t
-#  define z_off_t long
 #endif
 
 #if defined(__OS400__)

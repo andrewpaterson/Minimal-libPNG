@@ -43,10 +43,10 @@ png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-   png_uint_32 check;
+   uint32_t check;
 
    if(png_ptr == NULL) return;
-   check = (png_uint_32)fwrite(data, 1, length, (png_FILE_p)(png_ptr->io_ptr));
+   check = (uint32_t)fwrite(data, 1, length, (png_FILE_p)(png_ptr->io_ptr));
    if (check != length)
       png_error(png_ptr, "Write Error");
 }
@@ -62,13 +62,13 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-   png_uint_32 check;
-   png_byte *near_data;  /* Needs to be "png_byte *" instead of "png_bytep" */
+   uint32_t check;
+   uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "png_bytep" */
    png_FILE_p io_ptr;
 
    if(png_ptr == NULL) return;
    /* Check if data really is near. If so, use usual code. */
-   near_data = (png_byte *)CVT_PTR_NOCHECK(data);
+   near_data = (uint8_t *)CVT_PTR_NOCHECK(data);
    io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)near_data == data)
    {
@@ -76,7 +76,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    }
    else
    {
-      png_byte buf[NEAR_BUF_SIZE];
+      uint8_t buf[NEAR_BUF_SIZE];
       png_size_t written, remaining, err;
       check = 0;
       remaining = length;

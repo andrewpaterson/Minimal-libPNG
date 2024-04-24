@@ -136,7 +136,7 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
       }
       else
       {
-         buffer[iout++] = (png_byte)c;
+         buffer[iout++] = (uint8_t)c;
       }
    }
 
@@ -308,7 +308,7 @@ png_get_error_ptr(png_structp png_ptr)
 
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
 void PNGAPI
-png_set_strip_error_numbers(png_structp png_ptr, png_uint_32 strip_mode)
+png_set_strip_error_numbers(png_structp png_ptr, uint32_t strip_mode)
 {
    if(png_ptr != NULL)
    {

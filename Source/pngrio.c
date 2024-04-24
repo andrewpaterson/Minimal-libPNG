@@ -69,12 +69,12 @@ static void PNGAPI
 png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    int check;
-   png_byte *n_data;
+   uint8_t *n_data;
    png_FILE_p io_ptr;
 
    if(png_ptr == NULL) return;
    /* Check if data really is near. If so, use usual code. */
-   n_data = (png_byte *)CVT_PTR_NOCHECK(data);
+   n_data = (uint8_t *)CVT_PTR_NOCHECK(data);
    io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)n_data == data)
    {
@@ -82,7 +82,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    }
    else
    {
-      png_byte buf[NEAR_BUF_SIZE];
+      uint8_t buf[NEAR_BUF_SIZE];
       png_size_t read, remaining, err;
       check = 0;
       remaining = length;
@@ -100,7 +100,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
       }
       while (remaining != 0);
    }
-   if ((png_uint_32)check != (png_uint_32)length)
+   if ((uint32_t)check != (uint32_t)length)
       png_error(png_ptr, "read Error");
 }
 #endif

@@ -854,7 +854,7 @@ ZEXTERN int ZEXPORT inflateGetHeader OF((z_streamp strm,
 
 /*
 ZEXTERN int ZEXPORT inflateBackInit OF((z_streamp strm, int windowBits,
-                                        unsigned char *window));
+                                        uint8_t *window));
 
      Initialize the internal stream state for decompression using inflateBack()
    calls.  The fields zalloc, zfree and opaque in strm must be initialized
@@ -874,8 +874,8 @@ ZEXTERN int ZEXPORT inflateBackInit OF((z_streamp strm, int windowBits,
    match the version of the header file.
 */
 
-typedef unsigned (*in_func) OF((void *, unsigned char **));
-typedef int (*out_func) OF((void *, unsigned char *, unsigned));
+typedef unsigned (*in_func) OF((void *, uint8_t **));
+typedef int (*out_func) OF((void *, uint8_t *, unsigned));
 
 ZEXTERN int ZEXPORT inflateBack OF((z_streamp strm,
                                     in_func in, void *in_desc,
@@ -961,7 +961,7 @@ ZEXTERN uLong ZEXPORT zlibCompileFlags OF((void));
      1.0: size of uInt
      3.2: size of uLong
      5.4: size of voidpf (pointer)
-     7.6: size of z_off_t
+     7.6: size of int32_t
 
     Compiler, assembler, and debug options:
      8: DEBUG
@@ -1150,7 +1150,7 @@ ZEXTERN char * ZEXPORT gzgets OF((gzFile file, char *buf, int len));
 
 ZEXTERN int ZEXPORT    gzputc OF((gzFile file, int c));
 /*
-      Writes c, converted to an unsigned char, into the compressed file.
+      Writes c, converted to an uint8_t, into the compressed file.
    gzputc returns the value that was written, or -1 in case of error.
 */
 
@@ -1180,8 +1180,8 @@ ZEXTERN int ZEXPORT    gzflush OF((gzFile file, int flush));
    degrade compression.
 */
 
-ZEXTERN z_off_t ZEXPORT    gzseek OF((gzFile file,
-                                      z_off_t offset, int whence));
+ZEXTERN int32_t ZEXPORT    gzseek OF((gzFile file,
+                                      int32_t offset, int whence));
 /*
       Sets the starting position for the next gzread or gzwrite on the
    given compressed file. The offset represents a number of bytes in the
@@ -1205,7 +1205,7 @@ ZEXTERN int ZEXPORT    gzrewind OF((gzFile file));
    gzrewind(file) is equivalent to (int)gzseek(file, 0L, SEEK_SET)
 */
 
-ZEXTERN z_off_t ZEXPORT    gztell OF((gzFile file));
+ZEXTERN int32_t ZEXPORT    gztell OF((gzFile file));
 /*
      Returns the starting position for the next gzread or gzwrite on the
    given compressed file. This position represents a number of bytes in the
@@ -1274,7 +1274,7 @@ ZEXTERN uLong ZEXPORT adler32 OF((uLong adler, const Bytef *buf, uInt len));
 */
 
 ZEXTERN uLong ZEXPORT adler32_combine OF((uLong adler1, uLong adler2,
-                                          z_off_t len2));
+                                          int32_t len2));
 /*
      Combine two Adler-32 checksums into one.  For two sequences of bytes, seq1
    and seq2 with lengths len1 and len2, Adler-32 checksums were calculated for
@@ -1298,7 +1298,7 @@ ZEXTERN uLong ZEXPORT crc32   OF((uLong crc, const Bytef *buf, uInt len));
      if (crc != original_crc) error();
 */
 
-ZEXTERN uLong ZEXPORT crc32_combine OF((uLong crc1, uLong crc2, z_off_t len2));
+ZEXTERN uLong ZEXPORT crc32_combine OF((uLong crc1, uLong crc2, int32_t len2));
 
 /*
      Combine two CRC-32 check values into one.  For two sequences of bytes,
@@ -1325,7 +1325,7 @@ ZEXTERN int ZEXPORT deflateInit2_ OF((z_streamp strm, int  level, int  method,
 ZEXTERN int ZEXPORT inflateInit2_ OF((z_streamp strm, int  windowBits,
                                       const char *version, int stream_size));
 ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
-                                         unsigned char *window,
+                                         uint8_t *window,
                                          const char *version,
                                          int stream_size));
 #define deflateInit(strm, level) \

@@ -52,7 +52,7 @@ uLong ZEXPORT zlibCompileFlags()
     case 8:     flags += 2 << 4;        break;
     default:    flags += 3 << 4;
     }
-    switch (sizeof(z_off_t)) {
+    switch (sizeof(int32_t)) {
     case 2:     break;
     case 4:     flags += 1 << 6;        break;
     case 8:     flags += 2 << 6;        break;
@@ -267,7 +267,7 @@ void  zcfree (voidpf opaque, voidpf ptr)
 voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
 {
     if (opaque) opaque = 0; /* to make compiler happy */
-    return _halloc((long)items, size);
+    return _halloc((int32_t)items, size);
 }
 
 void  zcfree (voidpf opaque, voidpf ptr)

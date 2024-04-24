@@ -28,7 +28,7 @@ local void fixedtables OF((struct inflate_state *state));
 int ZEXPORT inflateBackInit_(strm, windowBits, window, version, stream_size)
 z_streamp strm;
 int windowBits;
-unsigned char *window;
+uint8_t *window;
 const char *version;
 int stream_size;
 {
@@ -246,18 +246,18 @@ out_func out;
 void *out_desc;
 {
     struct inflate_state *state;
-    unsigned char *next;    /* next input */
-    unsigned char *put;     /* next output */
+    uint8_t *next;    /* next input */
+    uint8_t *put;     /* next output */
     unsigned have, left;        /* available input and output */
     uint32_t hold;         /* bit buffer */
     unsigned bits;              /* bits in bit buffer */
     unsigned copy;              /* number of stored or match bytes to copy */
-    unsigned char *from;    /* where to copy match bytes from */
+    uint8_t *from;    /* where to copy match bytes from */
     code this;                  /* current decoding table entry */
     code last;                  /* parent table entry */
     unsigned len;               /* length to copy for repeats, bits to drop */
     int ret;                    /* return code */
-    static const unsigned short order[19] = /* permutation of code lengths */
+    static const uint16_t order[19] = /* permutation of code lengths */
         {16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
 
     /* Check that the strm exists and that the state was initialized */
@@ -368,7 +368,7 @@ void *out_desc;
             state->have = 0;
             while (state->have < state->ncode) {
                 NEEDBITS(3);
-                state->lens[order[state->have++]] = (unsigned short)BITS(3);
+                state->lens[order[state->have++]] = (uint16_t)BITS(3);
                 DROPBITS(3);
             }
             while (state->have < 19)
@@ -431,7 +431,7 @@ void *out_desc;
                         break;
                     }
                     while (copy--)
-                        state->lens[state->have++] = (unsigned short)len;
+                        state->lens[state->have++] = (uint16_t)len;
                 }
             }
 
@@ -497,7 +497,7 @@ void *out_desc;
                         "inflate:         literal '%c'\n" :
                         "inflate:         literal 0x%02x\n", this.val));
                 ROOM();
-                *put++ = (unsigned char)(state->length);
+                *put++ = (uint8_t)(state->length);
                 left--;
                 state->mode = LEN;
                 break;

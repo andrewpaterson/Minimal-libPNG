@@ -100,12 +100,12 @@ void
 #ifdef PNG_1_0_X
 PNGAPI
 #endif
-read_row_callback(png_structp png_ptr, png_uint_32 row_number, int pass);
+read_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
 void
 #ifdef PNG_1_0_X
 PNGAPI
 #endif
-read_row_callback(png_structp png_ptr, png_uint_32 row_number, int pass)
+read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
     if(png_ptr == NULL || row_number > PNG_UINT_31_MAX) return;
     if(status_pass != pass)
@@ -127,12 +127,12 @@ void
 #ifdef PNG_1_0_X
 PNGAPI
 #endif
-write_row_callback(png_structp png_ptr, png_uint_32 row_number, int pass);
+write_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
 void
 #ifdef PNG_1_0_X
 PNGAPI
 #endif
-write_row_callback(png_structp png_ptr, png_uint_32 row_number, int pass)
+write_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
     if(png_ptr == NULL || row_number > PNG_UINT_31_MAX || pass > 7) return;
     fprintf(stdout, "w");
@@ -143,7 +143,7 @@ write_row_callback(png_structp png_ptr, png_uint_32 row_number, int pass)
 /* Example of using user transform callback (we don't transform anything,
    but merely examine the row filters.  We set this to 256 rather than
    5 in case illegal filter values are present.) */
-static png_uint_32 filters_used[256];
+static uint32_t filters_used[256];
 void
 #ifdef PNG_1_0_X
 PNGAPI
@@ -164,7 +164,7 @@ count_filters(png_structp png_ptr, png_row_infop row_info, png_bytep data)
 /* example of using user transform callback (we don't transform anything,
    but merely count the zero samples) */
 
-static png_uint_32 zero_samples;
+static uint32_t zero_samples;
 
 void
 #ifdef PNG_1_0_X
@@ -181,12 +181,12 @@ count_zero_samples(png_structp png_ptr, png_row_infop row_info, png_bytep data)
    if(png_ptr == NULL)return;
 
    /* contents of row_info:
-    *  png_uint_32 width      width of row
-    *  png_uint_32 rowbytes   number of bytes in row
-    *  png_byte color_type    color type of pixels
-    *  png_byte bit_depth     bit depth of samples
-    *  png_byte channels      number of channels (1-4)
-    *  png_byte pixel_depth   bits per pixel (depth*channels)
+    *  uint32_t width      width of row
+    *  uint32_t rowbytes   number of bytes in row
+    *  uint8_t color_type    color type of pixels
+    *  uint8_t bit_depth     bit depth of samples
+    *  uint8_t channels      number of channels (1-4)
+    *  uint8_t pixel_depth   bits per pixel (depth*channels)
     */
 
 
@@ -195,7 +195,7 @@ count_zero_samples(png_structp png_ptr, png_row_infop row_info, png_bytep data)
     if(row_info->color_type == 0 || row_info->color_type == 3)
     {
        int pos=0;
-       png_uint_32 n, nstop;
+       uint32_t n, nstop;
        for (n=0, nstop=row_info->width; n<nstop; n++)
        {
           if(row_info->bit_depth == 1)
@@ -236,7 +236,7 @@ count_zero_samples(png_structp png_ptr, png_row_infop row_info, png_bytep data)
     }
     else /* other color types */
     {
-       png_uint_32 n, nstop;
+       uint32_t n, nstop;
        int channel;
        int color_channels = row_info->channels;
        if(row_info->color_type > 3)color_channels--;
@@ -303,11 +303,11 @@ static void
 pngtest_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    int check;
-   png_byte *n_data;
+   uint8_t *n_data;
    png_FILE_p io_ptr;
 
    /* Check if data really is near. If so, use usual code. */
-   n_data = (png_byte *)CVT_PTR_NOCHECK(data);
+   n_data = (uint8_t *)CVT_PTR_NOCHECK(data);
    io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)n_data == data)
    {
@@ -315,7 +315,7 @@ pngtest_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    }
    else
    {
-      png_byte buf[NEAR_BUF_SIZE];
+      uint8_t buf[NEAR_BUF_SIZE];
       png_size_t read, remaining, err;
       check = 0;
       remaining = length;
@@ -355,7 +355,7 @@ pngtest_flush(png_structp png_ptr)
 static void
 pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-   png_uint_32 check;
+   uint32_t check;
 
    WRITEFILE((png_FILE_p)png_ptr->io_ptr,  data, length, check);
    if (check != length)
@@ -375,12 +375,12 @@ pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 static void
 pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-   png_uint_32 check;
-   png_byte *near_data;  /* Needs to be "png_byte *" instead of "png_bytep" */
+   uint32_t check;
+   uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "png_bytep" */
    png_FILE_p io_ptr;
 
    /* Check if data really is near. If so, use usual code. */
-   near_data = (png_byte *)CVT_PTR_NOCHECK(data);
+   near_data = (uint8_t *)CVT_PTR_NOCHECK(data);
    io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)near_data == data)
    {
@@ -388,7 +388,7 @@ pngtest_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    }
    else
    {
-      png_byte buf[NEAR_BUF_SIZE];
+      uint8_t buf[NEAR_BUF_SIZE];
       png_size_t written, remaining, err;
       check = 0;
       remaining = length;
@@ -456,7 +456,7 @@ pngtest_error(png_structp png_ptr, png_const_charp message)
    by setting MAXSEG_64K in zlib zconf.h *or* PNG_MAX_MALLOC_64K. */
 typedef struct memory_information
 {
-   png_uint_32               size;
+   uint32_t               size;
    png_voidp                 pointer;
    struct memory_information *next;
 } memory_information;
@@ -468,11 +468,11 @@ static int maximum_allocation = 0;
 static int total_allocation = 0;
 static int num_allocations = 0;
 
-png_voidp png_debug_malloc PNGARG((png_structp png_ptr, png_uint_32 size));
+png_voidp png_debug_malloc PNGARG((png_structp png_ptr, uint32_t size));
 void png_debug_free PNGARG((png_structp png_ptr, png_voidp ptr));
 
 png_voidp
-png_debug_malloc(png_structp png_ptr, png_uint_32 size)
+png_debug_malloc(png_structp png_ptr, uint32_t size)
 {
 
    /* png_malloc has already tested for NULL; png_create_struct calls
@@ -488,7 +488,7 @@ png_debug_malloc(png_structp png_ptr, png_uint_32 size)
       memory_infop pinfo;
       png_set_mem_fn(png_ptr, NULL, NULL, NULL);
       pinfo = (memory_infop)png_malloc(png_ptr,
-         (png_uint_32)png_sizeof (*pinfo));
+         (uint32_t)png_sizeof (*pinfo));
       pinfo->size = size;
       current_allocation += size;
       total_allocation += size;
@@ -586,8 +586,8 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
    png_infop write_end_info_ptr = NULL;
 #endif
    png_bytep row_buf;
-   png_uint_32 y;
-   png_uint_32 width, height;
+   uint32_t y;
+   uint32_t width, height;
    int num_pass, pass;
    int bit_depth, color_type;
 #ifdef PNG_SETJMP_SUPPORTED
@@ -842,7 +842,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
    {
       png_charp purpose, units;
       png_charpp params;
-      png_int_32 X0, X1;
+      int32_t X0, X1;
       int type, nparams;
 
       if (png_get_pCAL(read_ptr, read_info_ptr, &purpose, &X0, &X1, &type,
@@ -855,7 +855,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #endif
 #if defined(PNG_pHYs_SUPPORTED)
    {
-      png_uint_32 res_x, res_y;
+      uint32_t res_x, res_y;
       int unit_type;
 
       if (png_get_pHYs(read_ptr, read_info_ptr, &res_x, &res_y, &unit_type))
@@ -1048,7 +1048,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #ifdef PNG_EASY_ACCESS_SUPPORTED
    if(verbose)
    {
-      png_uint_32 iwidth, iheight;
+      uint32_t iwidth, iheight;
       iwidth = png_get_image_width(write_ptr, write_info_ptr);
       iheight = png_get_image_height(write_ptr, write_info_ptr);
       fprintf(STDERR, "Image width = %lu, height = %lu\n",
