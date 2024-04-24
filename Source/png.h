@@ -422,14 +422,8 @@ extern "C" {
 /* Version information for C files, stored in png.c.  This had better match
  * the version above.
  */
-#ifdef PNG_USE_GLOBAL_ARRAYS
 PNG_EXPORT_VAR (const char) png_libpng_ver[18];
-  /* need room for 99.99.99beta99z */
-#else
-#define png_libpng_ver png_get_header_ver(NULL)
-#endif
 
-#ifdef PNG_USE_GLOBAL_ARRAYS
 /* This was removed in version 1.0.5c */
 /* Structures to facilitate easy interlacing.  See png.c for more details */
 PNG_EXPORT_VAR (const int) png_pass_start[7];
@@ -441,7 +435,6 @@ PNG_EXPORT_VAR (const int) png_pass_dsp_mask[7];
 /* This isn't currently used.  If you need it, see png.c for more details.
 PNG_EXPORT_VAR (const int) png_pass_height[7];
 */
-#endif
 
 #endif /* PNG_NO_EXTERN */
 
@@ -2050,13 +2043,7 @@ extern void png_save_uint_16(uint8_t* buf, unsigned int i);
 /* variables declared in png.c - only it needs to define PNG_NO_EXTERN */
 #if !defined(PNG_NO_EXTERN) || defined(PNG_ALWAYS_EXTERN)
 /* place to hold the signature string for a PNG file. */
-#ifdef PNG_USE_GLOBAL_ARRAYS
    PNG_EXPORT_VAR (const uint8_t) png_sig[8];
-#else
-#if 0
-#define png_sig png_sig_bytes(NULL)
-#endif
-#endif
 #endif /* PNG_NO_EXTERN */
 
 /* Constant strings for known chunk types.  If you need to add a chunk,
@@ -2085,7 +2072,6 @@ extern void png_save_uint_16(uint8_t* buf, unsigned int i);
 #define PNG_tRNS const uint8_t png_tRNS[5] = {116,  82,  78,  83, '\0'}
 #define PNG_zTXt const uint8_t png_zTXt[5] = {122,  84,  88, 116, '\0'}
 
-#ifdef PNG_USE_GLOBAL_ARRAYS
 PNG_EXPORT_VAR (const uint8_t) png_IHDR[5];
 PNG_EXPORT_VAR (const uint8_t) png_IDAT[5];
 PNG_EXPORT_VAR (const uint8_t) png_IEND[5];
@@ -2107,7 +2093,6 @@ PNG_EXPORT_VAR (const uint8_t) png_tEXt[5];
 PNG_EXPORT_VAR (const uint8_t) png_tIME[5];
 PNG_EXPORT_VAR (const uint8_t) png_tRNS[5];
 PNG_EXPORT_VAR (const uint8_t) png_zTXt[5];
-#endif /* PNG_USE_GLOBAL_ARRAYS */
 
 #if defined(PNG_1_2_X)
 /* Initialize png_ptr struct for reading, and allocate any other memory.

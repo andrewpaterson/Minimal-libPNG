@@ -2325,8 +2325,5 @@ void png_do_dither(png_row_infop row_info, uint8_t* row,
 #endif
 
 #ifdef PNG_FLOATING_POINT_SUPPORTED
-
-/* To do: install integer version of png_build_gamma_table here */
 #endif
-
 #endif /* PNG_READ_SUPPORTED */

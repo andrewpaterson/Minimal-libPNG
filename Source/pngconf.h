@@ -34,22 +34,9 @@
  * it should not make much difference how big this is.
  */
 
-#ifndef PNG_ZBUF_SIZE
-#  define PNG_ZBUF_SIZE 8192
-#endif
-
-/* Enable if you want a write-only libpng */
-
-#ifndef PNG_NO_READ_SUPPORTED
-#  define PNG_READ_SUPPORTED
-#endif
-
-/* Enable if you want a read-only libpng */
-
-#ifndef PNG_NO_WRITE_SUPPORTED
-#  define PNG_WRITE_SUPPORTED
-#endif
-
+#define PNG_ZBUF_SIZE 8192
+#define PNG_READ_SUPPORTED
+#define PNG_WRITE_SUPPORTED
 
 #ifndef PNG_NO_FLOATING_POINT_SUPPORTED
 #  ifndef PNG_FLOATING_POINT_SUPPORTED
@@ -547,7 +534,7 @@
  * out of the info structure.
  */
 #ifndef PNG_NO_INFO_IMAGE
-#  define PNG_INFO_IMAGE_SUPPORTED
+#define PNG_INFO_IMAGE_SUPPORTED
 #endif
 
 /* Suggest testing for specific compiler first before testing for
@@ -596,8 +583,6 @@ typedef z_stream*   png_zstreamp;
  * They are no longer used in libpng itself, since version 1.0.5c,
  * but might be required for some pre-1.0.5c applications.
  */
-#define PNG_USE_GLOBAL_ARRAYS
-
 #define PNG_EXPORT_VAR(type) extern  type
 
 /* User may want to use these so they are not in PNG_INTERNAL. Any library

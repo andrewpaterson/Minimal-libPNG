@@ -18,7 +18,6 @@ typedef version_1_2_16 Your_png_h_is_not_version_1_2_16;
 /* Version information for C files.  This had better match the version
  * string defined in png.h.  */
 
-#ifdef PNG_USE_GLOBAL_ARRAYS
 /* png_libpng_ver was changed to a function in version 1.0.5c */
 const char png_libpng_ver[18] = PNG_LIBPNG_VER_STRING;
 
@@ -80,7 +79,6 @@ const int png_pass_dsp_mask[]
    = {0xff, 0x0f, 0xff, 0x33, 0xff, 0x55, 0xff};
 
 #endif /* PNG_READ_SUPPORTED */
-#endif /* PNG_USE_GLOBAL_ARRAYS */
 
 /* Tells libpng that we have already handled the first "num_bytes" bytes
  * of the PNG file signature.  If the PNG data is embedded into another
