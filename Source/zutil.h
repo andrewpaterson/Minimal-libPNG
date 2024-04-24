@@ -86,40 +86,12 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
      fopen((name), (mode), "mbc=60", "ctx=stm", "rfm=fix", "mrs=512")
 #endif
 
-#if defined(ATARI) || defined(atarist)
-#  define OS_CODE  0x05
-#endif
-
-#ifdef OS2
-#  define OS_CODE  0x06
-#  ifdef M_I86
-     #include <malloc.h>
-#  endif
-#endif
-
-#if defined(MACOS) || defined(TARGET_OS_MAC)
-#  define OS_CODE  0x07
-#  if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
-#    include <unix.h> /* for fdopen */
-#  else
-#    ifndef fdopen
-#      define fdopen(fd,mode) NULL /* No fdopen() */
-#    endif
-#  endif
-#endif
-
 #ifdef TOPS20
 #  define OS_CODE  0x0a
 #endif
 
 #ifdef WIN32
-#  ifndef __CYGWIN__  /* Cygwin is Unix, not Win32 */
 #    define OS_CODE  0x0b
-#  endif
-#endif
-
-#ifdef __50SERIES /* Prime/PRIMOS */
-#  define OS_CODE  0x0f
 #endif
 
 #if defined(_BEOS_) || defined(RISCOS)

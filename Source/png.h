@@ -1287,8 +1287,7 @@ extern PNG_EXPORT(void,png_set_gray_to_rgb) PNGARG((png_structp png_ptr));
 #if defined(PNG_READ_RGB_TO_GRAY_SUPPORTED)
 /* Reduce RGB to grayscale. */
 #ifdef PNG_FLOATING_POINT_SUPPORTED
-extern PNG_EXPORT(void,png_set_rgb_to_gray) PNGARG((png_structp png_ptr,
-   int error_action, double red, double green ));
+extern PNG_EXPORT(void,png_set_rgb_to_gray) PNGARG((png_structp png_ptr, int error_action, double red, double green ));
 #endif
 extern PNG_EXPORT(void,png_set_rgb_to_gray_fixed) PNGARG((png_structp png_ptr,
    int error_action, png_fixed_point red, png_fixed_point green ));
@@ -1836,8 +1835,7 @@ png_ptr, png_infop info_ptr));
 
 /* Returns pixel aspect ratio, computed from pHYs chunk data.  */
 #ifdef PNG_FLOATING_POINT_SUPPORTED
-extern PNG_EXPORT(float, png_get_pixel_aspect_ratio) PNGARG((png_structp
-png_ptr, png_infop info_ptr));
+extern PNG_EXPORT(float, png_get_pixel_aspect_ratio) PNGARG((png_structp png_ptr, png_infop info_ptr));
 #endif
 
 #endif /* PNG_EASY_ACCESS_SUPPORTED */
@@ -2746,27 +2744,6 @@ PNG_EXTERN void png_read_push_finish_row PNGARG((png_structp png_ptr));
 
 #endif /* PNG_PROGRESSIVE_READ_SUPPORTED */
 
-#if defined(PNG_INCH_CONVERSIONS) && defined(PNG_FLOATING_POINT_SUPPORTED)
-PNG_EXTERN uint32_t png_get_pixels_per_inch PNGARG((png_structp png_ptr,
-png_infop info_ptr));
-
-PNG_EXTERN uint32_t png_get_x_pixels_per_inch PNGARG((png_structp png_ptr,
-png_infop info_ptr));
-
-PNG_EXTERN uint32_t png_get_y_pixels_per_inch PNGARG((png_structp png_ptr,
-png_infop info_ptr));
-
-PNG_EXTERN float png_get_x_offset_inches PNGARG((png_structp png_ptr,
-png_infop info_ptr));
-
-PNG_EXTERN float png_get_y_offset_inches PNGARG((png_structp png_ptr,
-png_infop info_ptr));
-
-#if defined(PNG_pHYs_SUPPORTED)
-PNG_EXTERN uint32_t png_get_pHYs_dpi PNGARG((png_structp png_ptr,
-png_infop info_ptr, uint32_t *res_x, uint32_t *res_y, int *unit_type));
-#endif /* PNG_pHYs_SUPPORTED */
-#endif  /* PNG_INCH_CONVERSIONS && PNG_FLOATING_POINT_SUPPORTED */
 
 /* Maintainer: Put new private prototypes here ^ and in libpngpf.3 */
 

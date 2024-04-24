@@ -124,21 +124,6 @@
 
 #endif /* PNGARG */
 
-/* Try to determine if we are compiling on a Mac.  Note that testing for
- * just __MWERKS__ is not good enough, because the Codewarrior is now used
- * on non-Mac platforms.
- */
-#ifndef MACOS
-#  if (defined(__MWERKS__) && defined(macintosh)) || defined(applec) || \
-      defined(THINK_C) || defined(__SC__) || defined(TARGET_OS_MAC)
-#    define MACOS
-#  endif
-#endif
-
-/* enough people need this for various reasons to include it here */
-#if !defined(MACOS) && !defined(RISCOS)
-#  include <sys/types.h>
-#endif
 
 #if !defined(PNG_SETJMP_NOT_SUPPORTED) && !defined(PNG_NO_SETJMP_SUPPORTED)
 #  define PNG_SETJMP_SUPPORTED
@@ -199,28 +184,7 @@
  */
 
 #if defined(PNG_FLOATING_POINT_SUPPORTED)
-#  if defined(MACOS)
-     /* We need to check that <math.h> hasn't already been included earlier
-      * as it seems it doesn't agree with <fp.h>, yet we should really use
-      * <fp.h> if possible.
-      */
-#    if !defined(__MATH_H__) && !defined(__MATH_H) && !defined(__cmath__)
-#      include <fp.h>
-#    endif
-#  else
 #    include <math.h>
-#  endif
-#  if defined(_AMIGA) && defined(__SASC) && defined(_M68881)
-     /* Amiga SAS/C: We must include builtin FPU functions when compiling using
-      * MATH=68881
-      */
-#    include <m68881.h>
-#  endif
-#endif
-
-/* Codewarrior on NT has linking problems without this. */
-#if (defined(__MWERKS__) && defined(WIN32)) || defined(__STDC__)
-#  define PNG_ALWAYS_EXTERN
 #endif
 
 /* I have no idea why is this necessary... */
