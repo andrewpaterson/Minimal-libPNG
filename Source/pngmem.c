@@ -51,14 +51,14 @@ void* png_create_struct_2(int type, png_malloc_ptr malloc_fn, void* mem_ptr)
       png_ptr->mem_ptr=mem_ptr;
       struct_ptr = (*(malloc_fn))(png_ptr, size);
       if (struct_ptr != NULL)
-         png_memset(struct_ptr, 0, size);
+         memset(struct_ptr, 0, size);
       return (struct_ptr);
    }
 #endif /* PNG_USER_MEM_SUPPORTED */
 
    struct_ptr = (void*)malloc(size);
    if (struct_ptr != NULL)
-      png_memset(struct_ptr, 0, size);
+      memset(struct_ptr, 0, size);
 
    return (struct_ptr);
 }
@@ -208,7 +208,7 @@ png_memcpy_check (png_structp png_ptr, void* s1, void* s2,
    if ((uint32_t)size != length)
       png_error(png_ptr,"Overflow in png_memcpy_check.");
 
-   return(png_memcpy (s1, s2, size));
+   return(memcpy (s1, s2, size));
 }
 
 void*
@@ -221,7 +221,7 @@ png_memset_check (png_structp png_ptr, void* s1, int value,
    if ((uint32_t)size != length)
       png_error(png_ptr,"Overflow in png_memset_check.");
 
-   return (png_memset (s1, value, size));
+   return (memset (s1, value, size));
 
 }
 

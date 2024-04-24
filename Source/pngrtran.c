@@ -285,7 +285,7 @@ png_set_dither(png_structp png_ptr, png_colorp palette,
             sizeof (png_dsortp)));
          for (i = 0; i < 769; i++)
             hash[i] = NULL;
-/*         png_memset(hash, 0, 769 * sizeof (png_dsortp)); */
+/*         memset(hash, 0, 769 * sizeof (png_dsortp)); */
 
          num_new_palette = num_palette;
 
@@ -435,13 +435,13 @@ png_set_dither(png_structp png_ptr, png_colorp palette,
       png_ptr->palette_lookup = (uint8_t* )png_malloc(png_ptr,
          (uint32_t)(num_entries * sizeof (uint8_t)));
 
-      png_memset(png_ptr->palette_lookup, 0, num_entries *
+      memset(png_ptr->palette_lookup, 0, num_entries *
          sizeof (uint8_t));
 
       distance = (uint8_t*)png_malloc(png_ptr, (uint32_t)(num_entries *
          sizeof(uint8_t)));
 
-      png_memset(distance, 0xff, num_entries * sizeof(uint8_t));
+      memset(distance, 0xff, num_entries * sizeof(uint8_t));
 
       for (i = 0; i < num_palette; i++)
       {

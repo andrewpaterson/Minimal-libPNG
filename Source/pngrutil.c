@@ -953,7 +953,7 @@ void png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length
 
    if (png_ptr->mode & PNG_HAVE_IDAT)
    {
-      if (png_memcmp(png_ptr->chunk_name, png_IDAT, 4))  /* not an IDAT */
+      if (memcmp(png_ptr->chunk_name, png_IDAT, 4))  /* not an IDAT */
          png_ptr->mode |= PNG_AFTER_IDAT;
    }
 
@@ -986,7 +986,7 @@ void png_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t length
            length = (uint32_t)65535L;
        }
 #endif
-       png_strcpy((char*)chunk.name, (char*)png_ptr->chunk_name);
+       strcpy((char*)chunk.name, (char*)png_ptr->chunk_name);
        chunk.data = (uint8_t*)png_malloc(png_ptr, length);
        chunk.size = (size_t)length;
        png_crc_read(png_ptr, (uint8_t*)chunk.data, length);
@@ -1057,7 +1057,7 @@ void png_combine_row(png_structp png_ptr, uint8_t* row, int mask)
    png_debug(1,"in png_combine_row\n");
    if (mask == 0xff)
    {
-      png_memcpy(row, png_ptr->row_buf + 1,
+      memcpy(row, png_ptr->row_buf + 1,
          PNG_ROWBYTES(png_ptr->row_info.pixel_depth, png_ptr->width));
    }
    else
@@ -1202,7 +1202,7 @@ void png_combine_row(png_structp png_ptr, uint8_t* row, int mask)
             {
                if (m & mask)
                {
-                  png_memcpy(dp, sp, pixel_bytes);
+                  memcpy(dp, sp, pixel_bytes);
                }
 
                sp += pixel_bytes;
@@ -1377,10 +1377,10 @@ void png_do_read_interlace(png_structp png_ptr)
                uint8_t v[8];
                int j;
 
-               png_memcpy(v, sp, pixel_bytes);
+               memcpy(v, sp, pixel_bytes);
                for (j = 0; j < jstop; j++)
                {
-                  png_memcpy(dp, v, pixel_bytes);
+                  memcpy(dp, v, pixel_bytes);
                   dp -= pixel_bytes;
                }
                sp -= pixel_bytes;
@@ -1578,7 +1578,7 @@ void png_read_finish_row(png_structp png_ptr)
                png_ptr->idat_size = png_get_uint_31(png_ptr, chunk_length);
                png_reset_crc(png_ptr);
                png_crc_read(png_ptr, png_ptr->chunk_name, 4);
-               if (png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
+               if (memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
                   png_error(png_ptr, "Not enough image data");
 
             }

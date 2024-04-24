@@ -641,7 +641,7 @@ size_t png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key)
    png_debug(1, "in png_check_keyword\n");
    *new_key = NULL;
 
-   if (key == NULL || (key_len = png_strlen(key)) == 0)
+   if (key == NULL || (key_len = strlen(key)) == 0)
    {
       png_warning(png_ptr, "zero length keyword");
       return ((size_t)0);
@@ -764,7 +764,7 @@ void png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0,
 
    purpose_len = png_check_keyword(png_ptr, purpose, &new_purpose) + 1;
    png_debug1(3, "pCAL purpose length = %d\n", (int)purpose_len);
-   units_len = png_strlen(units) + (nparams == 0 ? 0 : 1);
+   units_len = strlen(units) + (nparams == 0 ? 0 : 1);
    png_debug1(3, "pCAL units length = %d\n", (int)units_len);
    total_len = purpose_len + units_len + 10;
 
@@ -775,7 +775,7 @@ void png_write_pCAL(png_structp png_ptr, char* purpose, int32_t X0,
       null terminator for the last parameter. */
    for (i = 0; i < nparams; i++)
    {
-      params_len[i] = (int)png_strlen(params[i]) + (i == nparams - 1 ? 0 : 1);
+      params_len[i] = (int)strlen(params[i]) + (i == nparams - 1 ? 0 : 1);
       png_debug2(3, "pCAL parameter %d length = %lu\n", i, params_len[i]);
       total_len += (size_t)params_len[i];
    }
@@ -848,7 +848,7 @@ void png_write_start_row(png_structp png_ptr)
    {
      /* set up previous row buffer */
       png_ptr->prev_row = (uint8_t*)png_malloc(png_ptr, (uint32_t)buf_size);
-      png_memset(png_ptr->prev_row, 0, buf_size);
+      memset(png_ptr->prev_row, 0, buf_size);
 
       if (png_ptr->do_filter & PNG_FILTER_UP)
       {
@@ -947,7 +947,7 @@ void png_write_finish_row(png_structp png_ptr)
       if (png_ptr->pass < 7)
       {
          if (png_ptr->prev_row != NULL)
-            png_memset(png_ptr->prev_row, 0,
+            memset(png_ptr->prev_row, 0,
                (size_t)(PNG_ROWBYTES(png_ptr->usr_channels*
                png_ptr->usr_bit_depth,png_ptr->width))+1);
          return;
@@ -1134,7 +1134,7 @@ void png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass)
                sp = row + (size_t)i * pixel_bytes;
                /* move the pixel */
                if (dp != sp)
-                  png_memcpy(dp, sp, pixel_bytes);
+                  memcpy(dp, sp, pixel_bytes);
                /* next pixel */
                dp += pixel_bytes;
             }

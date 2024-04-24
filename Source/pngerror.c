@@ -139,7 +139,7 @@ static void png_format_buffer(png_structp png_ptr, char* buffer, const char* err
    {
       buffer[iout++] = ':';
       buffer[iout++] = ' ';
-      png_strncpy(buffer+iout, error_message, 63);
+      strncpy(buffer+iout, error_message, 63);
       buffer[iout+63] = 0;
    }
 }

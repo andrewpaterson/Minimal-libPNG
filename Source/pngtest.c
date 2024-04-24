@@ -366,7 +366,7 @@ png_debug_malloc(png_structp png_ptr, uint32_t size)
       pinfo->next = pinformation;
       pinformation = pinfo;
       /* Make sure the caller isn't assuming zeroed memory. */
-      png_memset(pinfo->pointer, 0xdd, pinfo->size);
+      memset(pinfo->pointer, 0xdd, pinfo->size);
       if(verbose)
          printf("png_malloc %lu bytes at %x\n",(uint32_t)size,
           pinfo->pointer);
@@ -402,7 +402,7 @@ png_debug_free(png_structp png_ptr, void* ptr)
                fprintf(STDERR, "Duplicate free of memory\n");
             /* We must free the list element too, but first kill
                the memory that is to be freed. */
-            png_memset(ptr, 0x55, pinfo->size);
+            memset(ptr, 0x55, pinfo->size);
             png_free_default(png_ptr, pinfo);
             pinfo=NULL;
             break;
@@ -878,7 +878,7 @@ test_one_file(const char *inname, const char *outname)
       if (!num_in)
          break;
 
-      if (png_memcmp(inbuf, outbuf, num_in))
+      if (memcmp(inbuf, outbuf, num_in))
       {
          fprintf(STDERR, "\nFiles %s and %s are different\n", inname, outname);
          if(wrote_question == 0)

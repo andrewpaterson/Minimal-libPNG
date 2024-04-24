@@ -548,16 +548,16 @@ typedef double          *png_doublep;
 #endif
 
 /* Pointers to pointers; i.e. arrays */
-typedef uint8_t        **png_bytepp;
+typedef uint8_t      **png_bytepp;
 typedef uint32_t     **png_uint_32pp;
 typedef int32_t      **png_int_32pp;
 typedef uint16_t     **png_uint_16pp;
 typedef int16_t      **png_int_16pp;
-typedef const char  **png_const_charpp;
-typedef char            **png_charpp;
+typedef const char   **png_const_charpp;
+typedef char         **png_charpp;
 typedef png_fixed_point **png_fixed_point_pp;
 #ifdef PNG_FLOATING_POINT_SUPPORTED
-typedef double          **png_doublepp;
+typedef double       **png_doublepp;
 #endif
 
 /* Pointers to pointers to pointers; i.e., pointer to array */
@@ -580,24 +580,6 @@ typedef z_stream*   png_zstreamp;
 #else
 #  define png_jmpbuf(png_ptr) \
    (LIBPNG_WAS_COMPILED_WITH__PNG_SETJMP_NOT_SUPPORTED)
-#endif
-
-#  define CVT_PTR(ptr)         (ptr)
-#  define CVT_PTR_NOCHECK(ptr) (ptr)
-#  define png_strcpy  strcpy
-#  define png_strncpy strncpy     /* Added to v 1.2.6 */
-#  define png_strlen  strlen
-#  define png_memcmp  memcmp      /* SJT: added */
-#  define png_memcpy  memcpy
-#  define png_memset  memset
-/* End of memory model independent support */
-
-/* Just a little check that someone hasn't tried to define something
- * contradictory.
- */
-#if (PNG_ZBUF_SIZE > 65536L) && defined(PNG_MAX_MALLOC_64K)
-#  undef PNG_ZBUF_SIZE
-#  define PNG_ZBUF_SIZE 65536L
 #endif
 
 #endif /* PNGCONF_H */

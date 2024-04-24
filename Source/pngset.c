@@ -154,7 +154,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   length = (uint32_t)png_strlen(purpose) + 1;
+   length = (uint32_t)strlen(purpose) + 1;
    png_debug1(3, "allocating purpose for info (%lu bytes)\n", length);
    info_ptr->pcal_purpose = (char*)png_malloc_warn(png_ptr, length);
    if (info_ptr->pcal_purpose == NULL)
@@ -162,7 +162,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
        png_warning(png_ptr, "Insufficient memory for pCAL purpose.");
        return;
      }
-   png_memcpy(info_ptr->pcal_purpose, purpose, (size_t)length);
+   memcpy(info_ptr->pcal_purpose, purpose, (size_t)length);
 
    png_debug(3, "storing X0, X1, type, and nparams in info\n");
    info_ptr->pcal_X0 = X0;
@@ -170,7 +170,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
    info_ptr->pcal_type = (uint8_t)type;
    info_ptr->pcal_nparams = (uint8_t)nparams;
 
-   length = (uint32_t)png_strlen(units) + 1;
+   length = (uint32_t)strlen(units) + 1;
    png_debug1(3, "allocating units for info (%lu bytes)\n", length);
    info_ptr->pcal_units = (char*)png_malloc_warn(png_ptr, length);
    if (info_ptr->pcal_units == NULL)
@@ -178,7 +178,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
        png_warning(png_ptr, "Insufficient memory for pCAL units.");
        return;
      }
-   png_memcpy(info_ptr->pcal_units, units, (size_t)length);
+   memcpy(info_ptr->pcal_units, units, (size_t)length);
 
    info_ptr->pcal_params = (png_charpp)png_malloc_warn(png_ptr,
       (uint32_t)((nparams + 1) * sizeof(char*)));
@@ -192,7 +192,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
 
    for (i = 0; i < nparams; i++)
    {
-      length = (uint32_t)png_strlen(params[i]) + 1;
+      length = (uint32_t)strlen(params[i]) + 1;
       png_debug2(3, "allocating parameter %d for info (%lu bytes)\n", i, length);
       info_ptr->pcal_params[i] = (char*)png_malloc_warn(png_ptr, length);
       if (info_ptr->pcal_params[i] == NULL)
@@ -200,7 +200,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
           png_warning(png_ptr, "Insufficient memory for pCAL parameter.");
           return;
         }
-      png_memcpy(info_ptr->pcal_params[i], params[i], (size_t)length);
+      memcpy(info_ptr->pcal_params[i], params[i], (size_t)length);
    }
 
    info_ptr->valid |= PNG_INFO_pCAL;
@@ -260,9 +260,9 @@ png_set_PLTE(png_structp png_ptr, png_info* info_ptr,
       in case of an invalid PNG file that has too-large sample values. */
    png_ptr->palette = (png_colorp)png_malloc(png_ptr,
       PNG_MAX_PALETTE_LENGTH * sizeof(png_color));
-   png_memset(png_ptr->palette, 0, PNG_MAX_PALETTE_LENGTH *
+   memset(png_ptr->palette, 0, PNG_MAX_PALETTE_LENGTH *
       sizeof(png_color));
-   png_memcpy(png_ptr->palette, palette, num_palette * sizeof (png_color));
+   memcpy(png_ptr->palette, palette, num_palette * sizeof (png_color));
    info_ptr->palette = png_ptr->palette;
    info_ptr->num_palette = png_ptr->num_palette = (uint16_t)num_palette;
 
@@ -284,7 +284,7 @@ png_set_sBIT(png_structp png_ptr, png_info* info_ptr,
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   png_memcpy(&(info_ptr->sig_bit), sig_bit, sizeof (png_color_8));
+   memcpy(&(info_ptr->sig_bit), sig_bit, sizeof (png_color_8));
    info_ptr->valid |= PNG_INFO_sBIT;
 }
 #endif
@@ -336,7 +336,7 @@ png_set_tRNS(png_structp png_ptr, png_info* info_ptr,
        png_ptr->trans = info_ptr->trans = (uint8_t*)png_malloc(png_ptr,
            (uint32_t)PNG_MAX_PALETTE_LENGTH);
        if (num_trans <= PNG_MAX_PALETTE_LENGTH)
-         png_memcpy(info_ptr->trans, trans, (size_t)num_trans);
+         memcpy(info_ptr->trans, trans, (size_t)num_trans);
 #ifdef PNG_FREE_ME_SUPPORTED
        info_ptr->free_me |= PNG_FREE_TRNS;
 #else
@@ -346,7 +346,7 @@ png_set_tRNS(png_structp png_ptr, png_info* info_ptr,
 
    if (trans_values != NULL)
    {
-      png_memcpy(&(info_ptr->trans_values), trans_values,
+      memcpy(&(info_ptr->trans_values), trans_values,
          sizeof(png_color_16));
       if (num_trans == 0)
         num_trans = 1;
@@ -375,7 +375,7 @@ png_set_sPLT(png_structp png_ptr,
       return;
     }
 
-    png_memcpy(np, info_ptr->splt_palettes,
+    memcpy(np, info_ptr->splt_palettes,
            info_ptr->splt_palettes_num * sizeof(png_sPLT_t));
     png_free(png_ptr, info_ptr->splt_palettes);
     info_ptr->splt_palettes=NULL;
@@ -385,13 +385,13 @@ png_set_sPLT(png_structp png_ptr,
         png_sPLT_tp to = np + info_ptr->splt_palettes_num + i;
         png_sPLT_tp from = entries + i;
 
-        to->name = (char*)png_malloc(png_ptr, (uint32_t)png_strlen(from->name) + 1);
+        to->name = (char*)png_malloc(png_ptr, (uint32_t)strlen(from->name) + 1);
         /* TODO: use png_malloc_warn */
-        png_strcpy(to->name, from->name);
+        strcpy(to->name, from->name);
         to->entries = (png_sPLT_entryp)png_malloc(png_ptr,
             from->nentries * sizeof(png_sPLT_entry));
         /* TODO: use png_malloc_warn */
-        png_memcpy(to->entries, from->entries,
+        memcpy(to->entries, from->entries,
             from->nentries * sizeof(png_sPLT_entry));
         to->nentries = from->nentries;
         to->depth = from->depth;
@@ -424,7 +424,7 @@ png_set_unknown_chunks(png_structp png_ptr,
        return;
     }
 
-    png_memcpy(np, info_ptr->unknown_chunks,
+    memcpy(np, info_ptr->unknown_chunks,
            info_ptr->unknown_chunks_num * sizeof(png_unknown_chunk));
     png_free(png_ptr, info_ptr->unknown_chunks);
     info_ptr->unknown_chunks=NULL;
@@ -434,7 +434,7 @@ png_set_unknown_chunks(png_structp png_ptr,
         png_unknown_chunkp to = np + info_ptr->unknown_chunks_num + i;
         png_unknown_chunkp from = unknowns + i;
 
-        png_strncpy((char*)to->name, (char*)from->name, 5);
+        strncpy((char*)to->name, (char*)from->name, 5);
         to->data = (uint8_t*)png_malloc_warn(png_ptr, (uint32_t)from->size);
         if (to->data == NULL)
         {
@@ -442,7 +442,7 @@ png_set_unknown_chunks(png_structp png_ptr,
         }
         else
         {
-           png_memcpy(to->data, from->data, from->size);
+           memcpy(to->data, from->data, from->size);
            to->size = from->size;
 
            /* note our location in the read or write sequence */
@@ -509,12 +509,12 @@ png_set_keep_unknown_chunks(png_structp png_ptr, int keep, uint8_t*
        (uint32_t)(5*(num_chunks+old_num_chunks)));
     if(png_ptr->chunk_list != NULL)
     {
-       png_memcpy(new_list, png_ptr->chunk_list,
+       memcpy(new_list, png_ptr->chunk_list,
           (size_t)(5*old_num_chunks));
        png_free(png_ptr, png_ptr->chunk_list);
        png_ptr->chunk_list=NULL;
     }
-    png_memcpy(new_list+5*old_num_chunks, chunk_list,
+    memcpy(new_list+5*old_num_chunks, chunk_list,
        (size_t)(5*num_chunks));
     for (p=new_list+5*old_num_chunks+4, i = 0; i<num_chunks; i++, p+=5)
        *p=(uint8_t)keep;

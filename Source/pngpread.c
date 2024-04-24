@@ -131,11 +131,11 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
       png_ptr->mode |= PNG_HAVE_CHUNK_HEADER;
    }
 
-   if (!png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
+   if (!memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
      if(png_ptr->mode & PNG_AFTER_IDAT)
         png_ptr->mode |= PNG_HAVE_CHUNK_AFTER_IDAT;
 
-   if (!png_memcmp(png_ptr->chunk_name, png_IHDR, 4))
+   if (!memcmp(png_ptr->chunk_name, png_IHDR, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -144,7 +144,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
       }
       png_handle_IHDR(png_ptr, info_ptr, png_ptr->push_length);
    }
-   else if (!png_memcmp(png_ptr->chunk_name, png_IEND, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_IEND, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -164,12 +164,12 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
          png_push_save_buffer(png_ptr);
          return;
       }
-      if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+      if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
          png_ptr->mode |= PNG_HAVE_IDAT;
       png_handle_unknown(png_ptr, info_ptr, png_ptr->push_length);
-      if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
+      if (!memcmp(png_ptr->chunk_name, png_PLTE, 4))
          png_ptr->mode |= PNG_HAVE_PLTE;
-      else if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
       {
          if (!(png_ptr->mode & PNG_HAVE_IHDR))
             png_error(png_ptr, "Missing IHDR before IDAT");
@@ -179,7 +179,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
       }
    }
 #endif
-   else if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_PLTE, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -188,7 +188,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
       }
       png_handle_PLTE(png_ptr, info_ptr, png_ptr->push_length);
    }
-   else if (!png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
+   else if (!memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
    {
       /* If we reach an IDAT chunk, this means we have read all of the
        * header chunks, and we can start reading the image (or if this
@@ -219,7 +219,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
       return;
    }
 #if defined(PNG_READ_sBIT_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_sBIT, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_sBIT, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -230,7 +230,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    }
 #endif
 #if defined(PNG_READ_sRGB_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_sRGB, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_sRGB, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -241,7 +241,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    }
 #endif
 #if defined(PNG_READ_sPLT_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_sPLT, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_sPLT, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -252,7 +252,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    }
 #endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_tRNS, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_tRNS, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -263,7 +263,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    }
 #endif
 #if defined(PNG_READ_hIST_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_hIST, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -274,7 +274,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    }
 #endif
 #if defined(PNG_READ_pHYs_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_pHYs, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_pHYs, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -285,7 +285,7 @@ void png_push_read_chunk(png_structp png_ptr, png_info* info_ptr)
    }
 #endif
 #if defined(PNG_READ_pCAL_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_pCAL, 4))
+   else if (!memcmp(png_ptr->chunk_name, png_pCAL, 4))
    {
       if (png_ptr->push_length + 4 > png_ptr->buffer_size)
       {
@@ -377,7 +377,7 @@ png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length)
       else
          save_size = png_ptr->save_buffer_size;
 
-      png_memcpy(ptr, png_ptr->save_buffer_ptr, save_size);
+      memcpy(ptr, png_ptr->save_buffer_ptr, save_size);
       length -= save_size;
       ptr += save_size;
       png_ptr->buffer_size -= save_size;
@@ -393,7 +393,7 @@ png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length)
       else
          save_size = png_ptr->current_buffer_size;
 
-      png_memcpy(ptr, png_ptr->current_buffer_ptr, save_size);
+      memcpy(ptr, png_ptr->current_buffer_ptr, save_size);
       png_ptr->buffer_size -= save_size;
       png_ptr->current_buffer_size -= save_size;
       png_ptr->current_buffer_ptr += save_size;
@@ -433,13 +433,13 @@ void png_push_save_buffer(png_structp png_ptr)
       old_buffer = png_ptr->save_buffer;
       png_ptr->save_buffer = (uint8_t*)png_malloc(png_ptr,
          (uint32_t)new_max);
-      png_memcpy(png_ptr->save_buffer, old_buffer, png_ptr->save_buffer_size);
+      memcpy(png_ptr->save_buffer, old_buffer, png_ptr->save_buffer_size);
       png_free(png_ptr, old_buffer);
       png_ptr->save_buffer_max = new_max;
    }
    if (png_ptr->current_buffer_size)
    {
-      png_memcpy(png_ptr->save_buffer + png_ptr->save_buffer_size,
+      memcpy(png_ptr->save_buffer + png_ptr->save_buffer_size,
          png_ptr->current_buffer_ptr, png_ptr->current_buffer_size);
       png_ptr->save_buffer_size += png_ptr->current_buffer_size;
       png_ptr->current_buffer_size = 0;
@@ -475,7 +475,7 @@ void png_push_read_IDAT(png_structp png_ptr)
       png_crc_read(png_ptr, png_ptr->chunk_name, 4);
       png_ptr->mode |= PNG_HAVE_CHUNK_HEADER;
 
-      if (png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
+      if (memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
       {
          png_ptr->process_mode = PNG_READ_CHUNK_MODE;
          if (!(png_ptr->flags & PNG_FLAG_ZLIB_FINISHED))
@@ -864,7 +864,7 @@ void png_push_handle_unknown(png_structp png_ptr, png_info* info_ptr, uint32_t
        }
 #endif
 
-       png_strcpy((char*)chunk.name, (char*)png_ptr->chunk_name);
+       strcpy((char*)chunk.name, (char*)png_ptr->chunk_name);
        chunk.data = (uint8_t*)png_malloc(png_ptr, length);
        png_crc_read(png_ptr, chunk.data, length);
        chunk.size = length;

@@ -120,7 +120,7 @@ png_sig_cmp(uint8_t* sig, size_t start, size_t num_to_check)
    if (start + num_to_check > 8)
       num_to_check = 8 - start;
 
-   return ((int)(png_memcmp(&sig[start], &png_signature[start], num_to_check)));
+   return ((int)(memcmp(&sig[start], &png_signature[start], num_to_check)));
 }
 
 #if defined(PNG_1_2_X)
@@ -283,7 +283,7 @@ png_info_init_3(png_info** ptr_ptr, size_t png_info_struct_size)
      }
 
    /* set everything to 0 */
-   png_memset(info_ptr, 0, sizeof (png_info));
+   memset(info_ptr, 0, sizeof (png_info));
 }
 
 #ifdef PNG_FREE_ME_SUPPORTED
@@ -608,7 +608,7 @@ png_handle_as_unknown(png_structp png_ptr, uint8_t* chunk_name)
       return 0;
    p=png_ptr->chunk_list+png_ptr->num_chunk_list*5-5;
    for (i = png_ptr->num_chunk_list; i; i--, p-=5)
-      if (!png_memcmp(chunk_name, p, 4))
+      if (!memcmp(chunk_name, p, 4))
         return ((int)*(p+4));
    return 0;
 }

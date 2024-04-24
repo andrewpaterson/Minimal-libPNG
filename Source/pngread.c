@@ -230,7 +230,7 @@ png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struc
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* save jump buffer and error functions */
-   png_memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
+   memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
 #endif
 
    if(sizeof(png_struct) > png_struct_size)
@@ -241,11 +241,11 @@ png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struc
      }
 
    /* reset all variables to 0 */
-   png_memset(png_ptr, 0, sizeof (png_struct));
+   memset(png_ptr, 0, sizeof (png_struct));
 
 #ifdef PNG_SETJMP_SUPPORTED
    /* restore jump buffer */
-   png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
+   memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
    /* added at libpng-1.2.6 */
@@ -329,23 +329,23 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
       /* This should be a binary subdivision search or a hash for
        * matching the chunk name rather than a linear search.
        */
-      if (!png_memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
+      if (!memcmp(png_ptr->chunk_name, (uint8_t*)png_IDAT, 4))
         if(png_ptr->mode & PNG_AFTER_IDAT)
           png_ptr->mode |= PNG_HAVE_CHUNK_AFTER_IDAT;
 
-      if (!png_memcmp(png_ptr->chunk_name, png_IHDR, 4))
+      if (!memcmp(png_ptr->chunk_name, png_IHDR, 4))
          png_handle_IHDR(png_ptr, info_ptr, length);
-      else if (!png_memcmp(png_ptr->chunk_name, png_IEND, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_IEND, 4))
          png_handle_IEND(png_ptr, info_ptr, length);
 #ifdef PNG_HANDLE_AS_UNKNOWN_SUPPORTED
       else if (png_handle_as_unknown(png_ptr, png_ptr->chunk_name))
       {
-         if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+         if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
             png_ptr->mode |= PNG_HAVE_IDAT;
          png_handle_unknown(png_ptr, info_ptr, length);
-         if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
+         if (!memcmp(png_ptr->chunk_name, png_PLTE, 4))
             png_ptr->mode |= PNG_HAVE_PLTE;
-         else if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+         else if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
          {
             if (!(png_ptr->mode & PNG_HAVE_IHDR))
                png_error(png_ptr, "Missing IHDR before IDAT");
@@ -356,9 +356,9 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
          }
       }
 #endif
-      else if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_PLTE, 4))
          png_handle_PLTE(png_ptr, info_ptr, length);
-      else if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
       {
          if (!(png_ptr->mode & PNG_HAVE_IHDR))
             png_error(png_ptr, "Missing IHDR before IDAT");
@@ -371,31 +371,31 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
          break;
       }
 #if defined(PNG_READ_hIST_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_hIST, 4))
          png_handle_hIST(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_pCAL_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_pCAL, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_pCAL, 4))
          png_handle_pCAL(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_pHYs_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_pHYs, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_pHYs, 4))
          png_handle_pHYs(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_sBIT_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_sBIT, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_sBIT, 4))
          png_handle_sBIT(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_sRGB_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_sRGB, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_sRGB, 4))
          png_handle_sRGB(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_sPLT_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_sPLT, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_sPLT, 4))
          png_handle_sPLT(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_tRNS, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_tRNS, 4))
          png_handle_tRNS(png_ptr, info_ptr, length);
 #endif
       else
@@ -567,7 +567,7 @@ void png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
 
             png_reset_crc(png_ptr);
             png_crc_read(png_ptr, png_ptr->chunk_name, 4);
-            if (png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+            if (memcmp(png_ptr->chunk_name, png_IDAT, 4))
                png_error(png_ptr, "Not enough image data");
          }
          png_ptr->zstream.avail_in = (uint32_t)png_ptr->zbuf_size;
@@ -782,24 +782,24 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 
       png_debug1(0, "Reading %s chunk.\n", png_ptr->chunk_name);
 
-      if (!png_memcmp(png_ptr->chunk_name, png_IHDR, 4))
+      if (!memcmp(png_ptr->chunk_name, png_IHDR, 4))
          png_handle_IHDR(png_ptr, info_ptr, length);
-      else if (!png_memcmp(png_ptr->chunk_name, png_IEND, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_IEND, 4))
          png_handle_IEND(png_ptr, info_ptr, length);
 #ifdef PNG_HANDLE_AS_UNKNOWN_SUPPORTED
       else if (png_handle_as_unknown(png_ptr, png_ptr->chunk_name))
       {
-         if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+         if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
          {
             if ((length > 0) || (png_ptr->mode & PNG_HAVE_CHUNK_AFTER_IDAT))
                png_error(png_ptr, "Too many IDAT's found");
          }
          png_handle_unknown(png_ptr, info_ptr, length);
-         if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
+         if (!memcmp(png_ptr->chunk_name, png_PLTE, 4))
             png_ptr->mode |= PNG_HAVE_PLTE;
       }
 #endif
-      else if (!png_memcmp(png_ptr->chunk_name, png_IDAT, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_IDAT, 4))
       {
          /* Zero length IDATs are legal after the last IDAT has been
           * read, but not after other chunks have been read.
@@ -808,30 +808,30 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
             png_error(png_ptr, "Too many IDAT's found");
          png_crc_finish(png_ptr, length);
       }
-      else if (!png_memcmp(png_ptr->chunk_name, png_PLTE, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_PLTE, 4))
          png_handle_PLTE(png_ptr, info_ptr, length);
 #if defined(PNG_READ_hIST_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_hIST, 4))
          png_handle_hIST(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_pCAL_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_pCAL, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_pCAL, 4))
          png_handle_pCAL(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_pHYs_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_pHYs, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_pHYs, 4))
          png_handle_pHYs(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_sBIT_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_sBIT, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_sBIT, 4))
          png_handle_sBIT(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_sRGB_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_sRGB, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_sRGB, 4))
          png_handle_sRGB(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_tRNS, 4))
+      else if (!memcmp(png_ptr->chunk_name, png_tRNS, 4))
          png_handle_tRNS(png_ptr, info_ptr, length);
 #endif
       else
@@ -974,7 +974,7 @@ void png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_inf
     * being used again.
     */
 #ifdef PNG_SETJMP_SUPPORTED
-   png_memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
+   memcpy(tmp_jmp, png_ptr->jmpbuf, sizeof (jmp_buf));
 #endif
 
    error_fn = png_ptr->error_fn;
@@ -984,7 +984,7 @@ void png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_inf
    free_fn = png_ptr->free_fn;
 #endif
 
-   png_memset(png_ptr, 0, sizeof (png_struct));
+   memset(png_ptr, 0, sizeof (png_struct));
 
    png_ptr->error_fn = error_fn;
    png_ptr->warning_fn = warning_fn;
@@ -994,7 +994,7 @@ void png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_inf
 #endif
 
 #ifdef PNG_SETJMP_SUPPORTED
-   png_memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
+   memcpy(png_ptr->jmpbuf, tmp_jmp, sizeof (jmp_buf));
 #endif
 
 }

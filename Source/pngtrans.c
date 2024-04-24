@@ -292,8 +292,8 @@ void png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags)
                sp += 8; dp += 6;
                for (i = 1; i < row_width; i++)
                {
-                  /* This could be (although png_memcpy is probably slower):
-                  png_memcpy(dp, sp, 6);
+                  /* This could be (although memcpy is probably slower):
+                  memcpy(dp, sp, 6);
                   sp += 8;
                   dp += 6;
                   */
@@ -312,8 +312,8 @@ void png_do_strip_filler(png_row_infop row_info, uint8_t* row, uint32_t flags)
                /* This converts from XXRRGGBB or AARRGGBB to RRGGBB */
                for (i = 0; i < row_width; i++)
                {
-                  /* This could be (although png_memcpy is probably slower):
-                  png_memcpy(dp, sp, 6);
+                  /* This could be (although memcpy is probably slower):
+                  memcpy(dp, sp, 6);
                   sp += 8;
                   dp += 6;
                   */
