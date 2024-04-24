@@ -212,8 +212,6 @@
 #endif                               /* about interlacing capability!  You'll */
               /* still have interlacing unless you change the following line: */
 
-#define PNG_READ_INTERLACING_SUPPORTED /* required for PNG-compliant decoders */
-
 #ifndef PNG_NO_READ_COMPOSITE_NODIV
 #  ifndef PNG_NO_READ_COMPOSITED_NODIV  /* libpng-1.0.x misspelling */
 #    define PNG_READ_COMPOSITE_NODIV_SUPPORTED   /* well tested on Intel, SGI */
@@ -258,13 +256,6 @@
 #    define PNG_WRITE_USER_TRANSFORM_SUPPORTED
 #  endif
 #endif /* PNG_WRITE_TRANSFORMS_SUPPORTED */
-
-#if !defined(PNG_NO_WRITE_INTERLACING_SUPPORTED) && \
-    !defined(PNG_WRITE_INTERLACING_SUPPORTED)
-#define PNG_WRITE_INTERLACING_SUPPORTED  /* not required for PNG-compliant
-                                            encoders, but can cause trouble
-                                            if left undefined */
-#endif
 
 #if !defined(PNG_NO_WRITE_WEIGHTED_FILTER) && \
     !defined(PNG_WRITE_WEIGHTED_FILTER) && \

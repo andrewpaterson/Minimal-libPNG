@@ -560,11 +560,7 @@ test_one_file(const char *inname, const char *outname)
           &color_type, &interlace_type, &compression_type, &filter_type))
       {
          png_set_IHDR(write_ptr, write_info_ptr, width, height, bit_depth,
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-            color_type, interlace_type, compression_type, filter_type);
-#else
-            color_type, PNG_INTERLACE_NONE, compression_type, filter_type);
-#endif
+         color_type, PNG_INTERLACE_NONE, compression_type, filter_type);
       }
    }
     png_colorp palette;
@@ -674,15 +670,7 @@ test_one_file(const char *inname, const char *outname)
 #endif /* SINGLE_ROWBUF_ALLOC */
    png_debug(0, "Writing row data\n");
 
-#if defined(PNG_READ_INTERLACING_SUPPORTED) || \
-  defined(PNG_WRITE_INTERLACING_SUPPORTED)
-   num_pass = png_set_interlace_handling(read_ptr);
-#  ifdef PNG_WRITE_SUPPORTED
-   png_set_interlace_handling(write_ptr);
-#  endif
-#else
    num_pass=1;
-#endif
 
 #ifdef PNGTEST_TIMING
    t_stop = (float)clock();

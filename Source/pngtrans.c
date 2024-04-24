@@ -60,22 +60,6 @@ png_set_shift(png_structp png_ptr, png_color_8p true_bits)
 }
 #endif
 
-#if defined(PNG_READ_INTERLACING_SUPPORTED) || \
-    defined(PNG_WRITE_INTERLACING_SUPPORTED)
-int
-png_set_interlace_handling(png_structp png_ptr)
-{
-   png_debug(1, "in png_set_interlace handling\n");
-   if (png_ptr && png_ptr->interlaced)
-   {
-      png_ptr->transformations |= PNG_INTERLACE;
-      return (7);
-   }
-
-   return (1);
-}
-#endif
-
 #if defined(PNG_READ_FILLER_SUPPORTED) || defined(PNG_WRITE_FILLER_SUPPORTED)
 /* Add a filler byte on read, or remove a filler or alpha byte on write.
  * The filler type has changed in v0.95 to allow future 2-byte fillers

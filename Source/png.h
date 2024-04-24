@@ -1253,11 +1253,6 @@ extern void png_set_packing(png_structp png_ptr);
 extern void png_set_shift(png_structp png_ptr, png_color_8p true_bits);
 #endif
 
-#if defined(PNG_READ_INTERLACING_SUPPORTED) || defined(PNG_WRITE_INTERLACING_SUPPORTED)
-/* Have the code handle the interlacing.  Returns the number of passes. */
-extern int png_set_interlace_handling(png_structp png_ptr);
-#endif
-
 #if defined(PNG_READ_INVERT_SUPPORTED) || defined(PNG_WRITE_INVERT_SUPPORTED)
 /* Invert monochrome files */
 extern void png_set_invert_mono(png_structp png_ptr);
@@ -2237,16 +2232,7 @@ void png_write_start_row(png_structp png_ptr);
 /* combine a row of data, dealing with alpha, etc. if requested */
 void png_combine_row(png_structp png_ptr, uint8_t* row, int mask);
 
-#if defined(PNG_READ_INTERLACING_SUPPORTED)
-void png_do_read_interlace(png_structp png_ptr);
-#endif
-
 /* GRR TO DO (2.0 or whenever):  simplify other internal calling interfaces */
-
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-/* grab pixels out of a row for an interlaced pass */
-void png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass);
-#endif
 
 /* unfilter a row */
 void png_read_filter_row(png_structp png_ptr, png_row_infop row_info, uint8_t* row, uint8_t* prev_row, int filter);

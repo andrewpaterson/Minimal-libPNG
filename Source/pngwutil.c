@@ -202,16 +202,7 @@ void png_write_IHDR(png_structp png_ptr, uint32_t width, uint32_t height, int bi
       filter_type = PNG_FILTER_TYPE_BASE;
    }
 
-#ifdef PNG_WRITE_INTERLACING_SUPPORTED
-   if (interlace_type != PNG_INTERLACE_NONE &&
-      interlace_type != PNG_INTERLACE_ADAM7)
-   {
-      png_warning(png_ptr, "Invalid interlace type specified");
-      interlace_type = PNG_INTERLACE_ADAM7;
-   }
-#else
    interlace_type=PNG_INTERLACE_NONE;
-#endif
 
    /* save off the relevent information */
    png_ptr->bit_depth = (uint8_t)bit_depth;
@@ -872,29 +863,8 @@ void png_write_start_row(png_structp png_ptr)
       }
    }
 
-#ifdef PNG_WRITE_INTERLACING_SUPPORTED
-   /* if interlaced, we need to set up width and height of pass */
-   if (png_ptr->interlaced)
-   {
-      if (!(png_ptr->transformations & PNG_INTERLACE))
-      {
-         png_ptr->num_rows = (png_ptr->height + png_pass_yinc[0] - 1 -
-            png_pass_ystart[0]) / png_pass_yinc[0];
-         png_ptr->usr_width = (png_ptr->width + png_pass_inc[0] - 1 -
-            png_pass_start[0]) / png_pass_inc[0];
-      }
-      else
-      {
-         png_ptr->num_rows = png_ptr->height;
-         png_ptr->usr_width = png_ptr->width;
-      }
-   }
-   else
-#endif
-   {
-      png_ptr->num_rows = png_ptr->height;
-      png_ptr->usr_width = png_ptr->width;
-   }
+   png_ptr->num_rows = png_ptr->height;
+   png_ptr->usr_width = png_ptr->width;
    png_ptr->zstream.avail_out = (uint32_t)png_ptr->zbuf_size;
    png_ptr->zstream.next_out = png_ptr->zbuf;
 }
@@ -911,49 +881,6 @@ void png_write_finish_row(png_structp png_ptr)
    /* see if we are done */
    if (png_ptr->row_number < png_ptr->num_rows)
       return;
-
-#ifdef PNG_WRITE_INTERLACING_SUPPORTED
-   /* if interlaced, go to next pass */
-   if (png_ptr->interlaced)
-   {
-      png_ptr->row_number = 0;
-      if (png_ptr->transformations & PNG_INTERLACE)
-      {
-         png_ptr->pass++;
-      }
-      else
-      {
-         /* loop until we find a non-zero width or height pass */
-         do
-         {
-            png_ptr->pass++;
-            if (png_ptr->pass >= 7)
-               break;
-            png_ptr->usr_width = (png_ptr->width +
-               png_pass_inc[png_ptr->pass] - 1 -
-               png_pass_start[png_ptr->pass]) /
-               png_pass_inc[png_ptr->pass];
-            png_ptr->num_rows = (png_ptr->height +
-               png_pass_yinc[png_ptr->pass] - 1 -
-               png_pass_ystart[png_ptr->pass]) /
-               png_pass_yinc[png_ptr->pass];
-            if (png_ptr->transformations & PNG_INTERLACE)
-               break;
-         } while (png_ptr->usr_width == 0 || png_ptr->num_rows == 0);
-
-      }
-
-      /* reset the row above the image for the next pass */
-      if (png_ptr->pass < 7)
-      {
-         if (png_ptr->prev_row != NULL)
-            memset(png_ptr->prev_row, 0,
-               (size_t)(PNG_ROWBYTES(png_ptr->usr_channels*
-               png_ptr->usr_bit_depth,png_ptr->width))+1);
-         return;
-      }
-   }
-#endif
 
    /* if we get here, we've just written the last row, so we need
       to flush the compressor */
@@ -991,166 +918,6 @@ void png_write_finish_row(png_structp png_ptr)
    deflateReset(&png_ptr->zstream);
    png_ptr->zstream.data_type = Z_BINARY;
 }
-
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-/* Pick out the correct pixels for the interlace pass.
- * The basic idea here is to go through the row with a source
- * pointer and a destination pointer (sp and dp), and copy the
- * correct pixels for the pass.  As the row gets compacted,
- * sp will always be >= dp, so we should never overwrite anything.
- * See the default: case for the easiest code to understand.
- */
-void png_do_write_interlace(png_row_infop row_info, uint8_t* row, int pass)
-{
-   png_debug(1, "in png_do_write_interlace\n");
-   /* we don't have to do anything on the last pass (6) */
-#if defined(PNG_USELESS_TESTS_SUPPORTED)
-   if (row != NULL && row_info != NULL && pass < 6)
-#else
-   if (pass < 6)
-#endif
-   {
-      /* each pixel depth is handled separately */
-      switch (row_info->pixel_depth)
-      {
-         case 1:
-         {
-            uint8_t* sp;
-            uint8_t* dp;
-            int shift;
-            int d;
-            int value;
-            uint32_t i;
-            uint32_t row_width = row_info->width;
-
-            dp = row;
-            d = 0;
-            shift = 7;
-            for (i = png_pass_start[pass]; i < row_width;
-               i += png_pass_inc[pass])
-            {
-               sp = row + (size_t)(i >> 3);
-               value = (int)(*sp >> (7 - (int)(i & 0x07))) & 0x01;
-               d |= (value << shift);
-
-               if (shift == 0)
-               {
-                  shift = 7;
-                  *dp++ = (uint8_t)d;
-                  d = 0;
-               }
-               else
-                  shift--;
-
-            }
-            if (shift != 7)
-               *dp = (uint8_t)d;
-            break;
-         }
-         case 2:
-         {
-            uint8_t* sp;
-            uint8_t* dp;
-            int shift;
-            int d;
-            int value;
-            uint32_t i;
-            uint32_t row_width = row_info->width;
-
-            dp = row;
-            shift = 6;
-            d = 0;
-            for (i = png_pass_start[pass]; i < row_width;
-               i += png_pass_inc[pass])
-            {
-               sp = row + (size_t)(i >> 2);
-               value = (*sp >> ((3 - (int)(i & 0x03)) << 1)) & 0x03;
-               d |= (value << shift);
-
-               if (shift == 0)
-               {
-                  shift = 6;
-                  *dp++ = (uint8_t)d;
-                  d = 0;
-               }
-               else
-                  shift -= 2;
-            }
-            if (shift != 6)
-                   *dp = (uint8_t)d;
-            break;
-         }
-         case 4:
-         {
-            uint8_t* sp;
-            uint8_t* dp;
-            int shift;
-            int d;
-            int value;
-            uint32_t i;
-            uint32_t row_width = row_info->width;
-
-            dp = row;
-            shift = 4;
-            d = 0;
-            for (i = png_pass_start[pass]; i < row_width;
-               i += png_pass_inc[pass])
-            {
-               sp = row + (size_t)(i >> 1);
-               value = (*sp >> ((1 - (int)(i & 0x01)) << 2)) & 0x0f;
-               d |= (value << shift);
-
-               if (shift == 0)
-               {
-                  shift = 4;
-                  *dp++ = (uint8_t)d;
-                  d = 0;
-               }
-               else
-                  shift -= 4;
-            }
-            if (shift != 4)
-               *dp = (uint8_t)d;
-            break;
-         }
-         default:
-         {
-            uint8_t* sp;
-            uint8_t* dp;
-            uint32_t i;
-            uint32_t row_width = row_info->width;
-            size_t pixel_bytes;
-
-            /* start at the beginning */
-            dp = row;
-            /* find out how many bytes each pixel takes up */
-            pixel_bytes = (row_info->pixel_depth >> 3);
-            /* loop through the row, only looking at the pixels that
-               matter */
-            for (i = png_pass_start[pass]; i < row_width;
-               i += png_pass_inc[pass])
-            {
-               /* find out where the original pixel is */
-               sp = row + (size_t)i * pixel_bytes;
-               /* move the pixel */
-               if (dp != sp)
-                  memcpy(dp, sp, pixel_bytes);
-               /* next pixel */
-               dp += pixel_bytes;
-            }
-            break;
-         }
-      }
-      /* set new row width */
-      row_info->width = (row_info->width +
-         png_pass_inc[pass] - 1 -
-         png_pass_start[pass]) /
-         png_pass_inc[pass];
-         row_info->rowbytes = PNG_ROWBYTES(row_info->pixel_depth,
-            row_info->width);
-   }
-}
-#endif
 
 /* This filters the row, chooses which filter to use, if it has not already
  * been specified by the application, and then writes the row out with the

@@ -434,83 +434,6 @@ void png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
 #endif
    }
 
-#if defined(PNG_READ_INTERLACING_SUPPORTED)
-   /* if interlaced and we do not need a new row, combine row and return */
-   if (png_ptr->interlaced && (png_ptr->transformations & PNG_INTERLACE))
-   {
-      switch (png_ptr->pass)
-      {
-         case 0:
-            if (png_ptr->row_number & 0x07)
-            {
-               if (dsp_row != NULL)
-                  png_combine_row(png_ptr, dsp_row,
-                     png_pass_dsp_mask[png_ptr->pass]);
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 1:
-            if ((png_ptr->row_number & 0x07) || png_ptr->width < 5)
-            {
-               if (dsp_row != NULL)
-                  png_combine_row(png_ptr, dsp_row,
-                     png_pass_dsp_mask[png_ptr->pass]);
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 2:
-            if ((png_ptr->row_number & 0x07) != 4)
-            {
-               if (dsp_row != NULL && (png_ptr->row_number & 4))
-                  png_combine_row(png_ptr, dsp_row,
-                     png_pass_dsp_mask[png_ptr->pass]);
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 3:
-            if ((png_ptr->row_number & 3) || png_ptr->width < 3)
-            {
-               if (dsp_row != NULL)
-                  png_combine_row(png_ptr, dsp_row,
-                     png_pass_dsp_mask[png_ptr->pass]);
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 4:
-            if ((png_ptr->row_number & 3) != 2)
-            {
-               if (dsp_row != NULL && (png_ptr->row_number & 2))
-                  png_combine_row(png_ptr, dsp_row,
-                     png_pass_dsp_mask[png_ptr->pass]);
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 5:
-            if ((png_ptr->row_number & 1) || png_ptr->width < 2)
-            {
-               if (dsp_row != NULL)
-                  png_combine_row(png_ptr, dsp_row,
-                     png_pass_dsp_mask[png_ptr->pass]);
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 6:
-            if (!(png_ptr->row_number & 1))
-            {
-               png_read_finish_row(png_ptr);
-               return;
-            }
-            break;
-      }
-   }
-#endif
-
    if (!(png_ptr->mode & PNG_HAVE_IDAT))
       png_error(png_ptr, "Invalid attempt to read row data");
 
@@ -577,33 +500,11 @@ void png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
    if (png_ptr->transformations || (png_ptr->flags&PNG_FLAG_STRIP_ALPHA))
       png_do_read_transformations(png_ptr);
 
-#if defined(PNG_READ_INTERLACING_SUPPORTED)
-   /* blow up interlaced rows to full size */
-   if (png_ptr->interlaced &&
-      (png_ptr->transformations & PNG_INTERLACE))
-   {
-      if (png_ptr->pass < 6)
-/*       old interface (pre-1.0.9):
-         png_do_read_interlace(&(png_ptr->row_info),
-            png_ptr->row_buf + 1, png_ptr->pass, png_ptr->transformations);
- */
-         png_do_read_interlace(png_ptr);
 
-      if (dsp_row != NULL)
-         png_combine_row(png_ptr, dsp_row,
-            png_pass_dsp_mask[png_ptr->pass]);
-      if (row != NULL)
-         png_combine_row(png_ptr, row,
-            png_pass_mask[png_ptr->pass]);
-   }
-   else
-#endif
-   {
-      if (row != NULL)
-         png_combine_row(png_ptr, row, 0xff);
-      if (dsp_row != NULL)
-         png_combine_row(png_ptr, dsp_row, 0xff);
-   }
+   if (row != NULL)
+       png_combine_row(png_ptr, row, 0xff);
+   if (dsp_row != NULL)
+       png_combine_row(png_ptr, dsp_row, 0xff);
    png_read_finish_row(png_ptr);
 
    if (png_ptr->read_row_fn != NULL)
@@ -696,15 +597,10 @@ png_read_image(png_structp png_ptr, png_bytepp image)
    png_debug(1, "in png_read_image\n");
    if(png_ptr == NULL) return;
 
-#ifdef PNG_READ_INTERLACING_SUPPORTED
-   pass = png_set_interlace_handling(png_ptr);
-#else
    if (png_ptr->interlaced)
       png_error(png_ptr,
         "Cannot read interlaced image -- interlace handler disabled.");
    pass = 1;
-#endif
-
 
    image_height=png_ptr->height;
    png_ptr->num_rows = image_height; /* Make sure this is set correctly */

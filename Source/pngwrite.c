@@ -34,11 +34,7 @@ png_write_info_before_PLTE(png_structp png_ptr, png_info* info_ptr)
    png_write_IHDR(png_ptr, info_ptr->width, info_ptr->height,
       info_ptr->bit_depth, info_ptr->color_type, info_ptr->compression_type,
       info_ptr->filter_type,
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-      info_ptr->interlace_type);
-#else
       0);
-#endif
    /* the rest of these check to see if the valid field has the appropriate
       flag set, and if it does, writes the chunk. */
 #if defined(PNG_WRITE_gAMA_SUPPORTED)
@@ -477,13 +473,7 @@ png_write_image(png_structp png_ptr, png_bytepp image)
       return;
 
    png_debug(1, "in png_write_image\n");
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-   /* intialize interlace handling.  If image is not interlaced,
-      this will set pass to 1 */
-   num_pass = png_set_interlace_handling(png_ptr);
-#else
    num_pass = 1;
-#endif
    /* loop through passes */
    for (pass = 0; pass < num_pass; pass++)
    {
@@ -545,65 +535,6 @@ png_write_row(png_structp png_ptr, uint8_t* row)
       png_write_start_row(png_ptr);
    }
 
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-   /* if interlaced and not interested in row, return */
-   if (png_ptr->interlaced && (png_ptr->transformations & PNG_INTERLACE))
-   {
-      switch (png_ptr->pass)
-      {
-         case 0:
-            if (png_ptr->row_number & 0x07)
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 1:
-            if ((png_ptr->row_number & 0x07) || png_ptr->width < 5)
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 2:
-            if ((png_ptr->row_number & 0x07) != 4)
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 3:
-            if ((png_ptr->row_number & 0x03) || png_ptr->width < 3)
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 4:
-            if ((png_ptr->row_number & 0x03) != 2)
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 5:
-            if ((png_ptr->row_number & 0x01) || png_ptr->width < 2)
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-         case 6:
-            if (!(png_ptr->row_number & 0x01))
-            {
-               png_write_finish_row(png_ptr);
-               return;
-            }
-            break;
-      }
-   }
-#endif
-
    /* set up row info for transformations */
    png_ptr->row_info.color_type = png_ptr->color_type;
    png_ptr->row_info.width = png_ptr->usr_width;
@@ -625,22 +556,6 @@ png_write_row(png_structp png_ptr, uint8_t* row)
    /* Copy user's row into buffer, leaving room for filter byte. */
    png_memcpy_check(png_ptr, png_ptr->row_buf + 1, row,
       png_ptr->row_info.rowbytes);
-
-#if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-   /* handle interlacing */
-   if (png_ptr->interlaced && png_ptr->pass < 6 &&
-      (png_ptr->transformations & PNG_INTERLACE))
-   {
-      png_do_write_interlace(&(png_ptr->row_info),
-         png_ptr->row_buf + 1, png_ptr->pass);
-      /* this should always get caught above, but still ... */
-      if (!(png_ptr->row_info.width))
-      {
-         png_write_finish_row(png_ptr);
-         return;
-      }
-   }
-#endif
 
    /* handle other transformations */
    if (png_ptr->transformations)

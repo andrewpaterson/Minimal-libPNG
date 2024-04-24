@@ -87,7 +87,6 @@ int __cdecl main(int argc, char* argv[])
 	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\gray-alpha-8.png");
 	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\gray-alpha-16.png");
 	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\hello.png");
-	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\hello_interlaced.png");
 	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\palette-1.png");
 	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\palette-2.png");
 	LoadPNG("D:\\Work\\SimplePNG\\testpngs\\palette-4.png");
