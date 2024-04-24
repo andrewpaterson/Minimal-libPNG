@@ -27,7 +27,7 @@ png_default_warning(png_structp png_ptr, const char* warning_message);
  * you should supply a replacement error function and use png_set_error_fn()
  * to replace the error function at run-time.
  */
-void PNGAPI
+void
 png_error(png_structp png_ptr, const char* error_message)
 {
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -79,7 +79,7 @@ png_error(png_structp png_ptr, const char* error_message)
  * you should supply a replacement warning function and use
  * png_set_error_fn() to replace the warning function at run-time.
  */
-void PNGAPI
+void
 png_warning(png_structp png_ptr, const char* warning_message)
 {
    int offset = 0;
@@ -148,7 +148,7 @@ png_format_buffer(png_structp png_ptr, char* buffer, const char* error_message)
    }
 }
 
-void PNGAPI
+void
 png_chunk_error(png_structp png_ptr, const char* error_message)
 {
    char msg[18+64];
@@ -161,7 +161,7 @@ png_chunk_error(png_structp png_ptr, const char* error_message)
    }
 }
 
-void PNGAPI
+void
 png_chunk_warning(png_structp png_ptr, const char* warning_message)
 {
    char msg[18+64];
@@ -270,7 +270,7 @@ png_default_warning(png_structp png_ptr, const char* warning_message)
  * return to the calling routine or serious problems will occur.  The return
  * method used in the default routine calls longjmp(png_ptr->jmpbuf, 1)
  */
-void PNGAPI
+void
 png_set_error_fn(png_structp png_ptr, void* error_ptr,
    png_error_ptr error_fn, png_error_ptr warning_fn)
 {
@@ -286,7 +286,7 @@ png_set_error_fn(png_structp png_ptr, void* error_ptr,
  * functions.  The application should free any memory associated with this
  * pointer before png_write_destroy and png_read_destroy are called.
  */
-void* PNGAPI
+void*
 png_get_error_ptr(png_structp png_ptr)
 {
    if (png_ptr == NULL)
@@ -296,7 +296,7 @@ png_get_error_ptr(png_structp png_ptr)
 
 
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
-void PNGAPI
+void
 png_set_strip_error_numbers(png_structp png_ptr, uint32_t strip_mode)
 {
    if(png_ptr != NULL)

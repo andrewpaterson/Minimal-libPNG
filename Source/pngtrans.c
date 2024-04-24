@@ -14,7 +14,7 @@
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 #if defined(PNG_READ_BGR_SUPPORTED) || defined(PNG_WRITE_BGR_SUPPORTED)
 /* turn on BGR-to-RGB mapping */
-void PNGAPI
+void
 png_set_bgr(png_structp png_ptr)
 {
    png_debug(1, "in png_set_bgr\n");
@@ -25,7 +25,7 @@ png_set_bgr(png_structp png_ptr)
 
 #if defined(PNG_READ_SWAP_SUPPORTED) || defined(PNG_WRITE_SWAP_SUPPORTED)
 /* turn on 16 bit byte swapping */
-void PNGAPI
+void
 png_set_swap(png_structp png_ptr)
 {
    png_debug(1, "in png_set_swap\n");
@@ -37,7 +37,7 @@ png_set_swap(png_structp png_ptr)
 
 #if defined(PNG_READ_PACK_SUPPORTED) || defined(PNG_WRITE_PACK_SUPPORTED)
 /* turn on pixel packing */
-void PNGAPI
+void
 png_set_packing(png_structp png_ptr)
 {
    png_debug(1, "in png_set_packing\n");
@@ -51,7 +51,7 @@ png_set_packing(png_structp png_ptr)
 #endif
 
 #if defined(PNG_READ_SHIFT_SUPPORTED) || defined(PNG_WRITE_SHIFT_SUPPORTED)
-void PNGAPI
+void
 png_set_shift(png_structp png_ptr, png_color_8p true_bits)
 {
    png_debug(1, "in png_set_shift\n");
@@ -63,7 +63,7 @@ png_set_shift(png_structp png_ptr, png_color_8p true_bits)
 
 #if defined(PNG_READ_INTERLACING_SUPPORTED) || \
     defined(PNG_WRITE_INTERLACING_SUPPORTED)
-int PNGAPI
+int
 png_set_interlace_handling(png_structp png_ptr)
 {
    png_debug(1, "in png_set_interlace handling\n");
@@ -83,7 +83,7 @@ png_set_interlace_handling(png_structp png_ptr)
  * for 48-bit input data, as well as to avoid problems with some compilers
  * that don't like bytes as parameters.
  */
-void PNGAPI
+void
 png_set_filler(png_structp png_ptr, uint32_t filler, int filler_loc)
 {
    png_debug(1, "in png_set_filler\n");
@@ -116,7 +116,7 @@ png_set_filler(png_structp png_ptr, uint32_t filler, int filler_loc)
 
 #if !defined(PNG_1_0_X)
 /* Added to libpng-1.2.7 */
-void PNGAPI
+void
 png_set_add_alpha(png_structp png_ptr, uint32_t filler, int filler_loc)
 {
    png_debug(1, "in png_set_add_alpha\n");
@@ -130,7 +130,7 @@ png_set_add_alpha(png_structp png_ptr, uint32_t filler, int filler_loc)
 
 #if defined(PNG_READ_SWAP_ALPHA_SUPPORTED) || \
     defined(PNG_WRITE_SWAP_ALPHA_SUPPORTED)
-void PNGAPI
+void
 png_set_swap_alpha(png_structp png_ptr)
 {
    png_debug(1, "in png_set_swap_alpha\n");
@@ -141,7 +141,7 @@ png_set_swap_alpha(png_structp png_ptr)
 
 #if defined(PNG_READ_INVERT_ALPHA_SUPPORTED) || \
     defined(PNG_WRITE_INVERT_ALPHA_SUPPORTED)
-void PNGAPI
+void
 png_set_invert_alpha(png_structp png_ptr)
 {
    png_debug(1, "in png_set_invert_alpha\n");
@@ -151,7 +151,7 @@ png_set_invert_alpha(png_structp png_ptr)
 #endif
 
 #if defined(PNG_READ_INVERT_SUPPORTED) || defined(PNG_WRITE_INVERT_SUPPORTED)
-void PNGAPI
+void
 png_set_invert_mono(png_structp png_ptr)
 {
    png_debug(1, "in png_set_invert_mono\n");
@@ -478,7 +478,7 @@ png_do_bgr(png_row_infop row_info, uint8_t* row)
 #if defined(PNG_READ_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_LEGACY_SUPPORTED)
-void PNGAPI
+void
 png_set_user_transform_info(png_structp png_ptr, void*
    user_transform_ptr, int user_transform_depth, int user_transform_channels)
 {
@@ -501,7 +501,7 @@ png_set_user_transform_info(png_structp png_ptr, void*
  * associated with this pointer before png_write_destroy and png_read_destroy
  * are called.
  */
-void* PNGAPI
+void*
 png_get_user_transform_ptr(png_structp png_ptr)
 {
    if (png_ptr == NULL) return (NULL);

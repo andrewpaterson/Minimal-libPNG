@@ -89,7 +89,7 @@ const int png_pass_dsp_mask[]
  */
 
 #ifdef PNG_READ_SUPPORTED
-void PNGAPI
+void
 png_set_sig_bytes(png_structp png_ptr, int num_bytes)
 {
    if(png_ptr == NULL) return;
@@ -108,7 +108,7 @@ png_set_sig_bytes(png_structp png_ptr, int num_bytes)
  * respectively, to be less than, to match, or be greater than the correct
  * PNG signature (this is the same behaviour as strcmp, memcmp, etc).
  */
-int PNGAPI
+int
 png_sig_cmp(uint8_t* sig, size_t start, size_t num_to_check)
 {
    uint8_t png_signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
@@ -131,7 +131,7 @@ png_sig_cmp(uint8_t* sig, size_t start, size_t num_to_check)
  * to check a partial signature.  This function might be removed in the
  * future - use png_sig_cmp().  Returns true (nonzero) if the file is a PNG.
  */
-int PNGAPI
+int
 png_check_sig(uint8_t* sig, int num)
 {
   return ((int)!png_sig_cmp(sig, (size_t)0, (size_t)num));
@@ -142,7 +142,7 @@ png_check_sig(uint8_t* sig, int num)
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 /* Function to allocate memory for zlib and clear it to 0. */
 #ifdef PNG_1_0_X
-voidpf PNGAPI
+voidpf
 #else
 voidpf /* private */
 #endif
@@ -185,7 +185,7 @@ png_zalloc(voidpf png_ptr, uint32_t items, uint32_t size)
 
 /* function to free memory for zlib */
 #ifdef PNG_1_0_X
-void PNGAPI
+void
 #else
 void /* private */
 #endif
@@ -235,7 +235,7 @@ png_calculate_crc(png_structp png_ptr, uint8_t* ptr, size_t length)
  * and png_info_init() so that applications that want to use a shared
  * libpng don't have to be recompiled if png_info changes size.
  */
-png_info* PNGAPI
+png_info*
 png_create_info_struct(png_structp png_ptr)
 {
    png_info* info_ptr;
@@ -259,7 +259,7 @@ png_create_info_struct(png_structp png_ptr)
  * png_destroy_write_struct() to free an info struct, but this may be
  * useful for some applications.
  */
-void PNGAPI
+void
 png_destroy_info_struct(png_structp png_ptr, png_info** info_ptr_ptr)
 {
    png_info* info_ptr = NULL;
@@ -289,7 +289,7 @@ png_destroy_info_struct(png_structp png_ptr, png_info** info_ptr_ptr)
  */
 #if defined(PNG_1_0_X) || defined(PNG_1_2_X)
 #undef png_info_init
-void PNGAPI
+void
 png_info_init(png_info* info_ptr)
 {
    /* We only come here via pre-1.0.12-compiled applications */
@@ -297,7 +297,7 @@ png_info_init(png_info* info_ptr)
 }
 #endif
 
-void PNGAPI
+void
 png_info_init_3(png_info** ptr_ptr, size_t png_info_struct_size)
 {
    png_info* info_ptr = *ptr_ptr;
@@ -318,7 +318,7 @@ png_info_init_3(png_info** ptr_ptr, size_t png_info_struct_size)
 }
 
 #ifdef PNG_FREE_ME_SUPPORTED
-void PNGAPI
+void
 png_data_freer(png_structp png_ptr, png_info* info_ptr,
    int freer, uint32_t mask)
 {
@@ -335,7 +335,7 @@ png_data_freer(png_structp png_ptr, png_info* info_ptr,
 }
 #endif
 
-void PNGAPI
+void
 png_free_data(png_structp png_ptr, png_info* info_ptr, uint32_t mask,
    int num)
 {
@@ -547,7 +547,7 @@ png_info_destroy(png_structp png_ptr, png_info* info_ptr)
  * functions.  The application should free any memory associated with this
  * pointer before png_write_destroy() or png_read_destroy() are called.
  */
-void* PNGAPI
+void*
 png_get_io_ptr(png_structp png_ptr)
 {
    if(png_ptr == NULL) return (NULL);
@@ -562,7 +562,7 @@ png_get_io_ptr(png_structp png_ptr)
  * PNG_NO_STDIO, you must use a function of your own because "FILE *" isn't
  * necessarily available.
  */
-void PNGAPI
+void
 png_init_io(png_structp png_ptr, FILE* fp)
 {
    png_debug(1, "in png_init_io\n");
@@ -574,7 +574,7 @@ png_init_io(png_structp png_ptr, FILE* fp)
 
 #if 0
 /* Signature string for a PNG file. */
-uint8_t* PNGAPI
+uint8_t*
 png_sig_bytes(void)
 {
    return ((uint8_t*)"\211\120\116\107\015\012\032\012");
@@ -582,7 +582,7 @@ png_sig_bytes(void)
 #endif
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */
 
-char* PNGAPI
+char*
 png_get_copyright(png_structp png_ptr)
 {
    if (&png_ptr != NULL)  /* silence compiler warning about unused png_ptr */
@@ -601,7 +601,7 @@ png_get_copyright(png_structp png_ptr)
  * png_get_header_ver().  Due to the version_nn_nn_nn typedef guard,
  * it is guaranteed that png.c uses the correct version of png.h.
  */
-char* PNGAPI
+char*
 png_get_libpng_ver(png_structp png_ptr)
 {
    /* Version of *.c files used when building libpng */
@@ -610,7 +610,7 @@ png_get_libpng_ver(png_structp png_ptr)
    return ((char*) "");
 }
 
-char* PNGAPI
+char*
 png_get_header_ver(png_structp png_ptr)
 {
    /* Version of *.h files used when building libpng */
@@ -619,7 +619,7 @@ png_get_header_ver(png_structp png_ptr)
    return ((char*) "");
 }
 
-char* PNGAPI
+char*
 png_get_header_version(png_structp png_ptr)
 {
    /* Returns longer string containing both version and date */
@@ -630,7 +630,7 @@ png_get_header_version(png_structp png_ptr)
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 #ifdef PNG_HANDLE_AS_UNKNOWN_SUPPORTED
-int PNGAPI
+int
 png_handle_as_unknown(png_structp png_ptr, uint8_t* chunk_name)
 {
    /* check chunk_name and return "keep" value if it's on the list, else 0 */
@@ -647,7 +647,7 @@ png_handle_as_unknown(png_structp png_ptr, uint8_t* chunk_name)
 #endif
 
 /* This function, added to libpng-1.0.6g, is untested. */
-int PNGAPI
+int
 png_reset_zstream(png_structp png_ptr)
 {
    if (png_ptr == NULL) return Z_STREAM_ERROR;
@@ -656,7 +656,7 @@ png_reset_zstream(png_structp png_ptr)
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */
 
 /* This function was added to libpng-1.0.7 */
-uint32_t PNGAPI
+uint32_t
 png_access_version_number(void)
 {
    /* Version of *.c files used when building libpng */
@@ -666,8 +666,8 @@ png_access_version_number(void)
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 #ifdef PNG_SIZE_T
 /* Added at libpng version 1.2.6 */
-   PNG_EXTERN size_t PNGAPI png_convert_size ((size_t size));
-size_t PNGAPI
+   PNG_EXTERN size_t png_convert_size ((size_t size));
+size_t
 png_convert_size(size_t size)
 {
   if (size > (size_t)-1)

@@ -20,7 +20,7 @@
 #    define png_strtod(p,a,b) strtod(a,b)
 #endif
 
-uint32_t PNGAPI
+uint32_t
 png_get_uint_31(png_structp png_ptr, uint8_t* buf)
 {
    uint32_t i = png_get_uint_32(buf);
@@ -30,7 +30,7 @@ png_get_uint_31(png_structp png_ptr, uint8_t* buf)
 }
 #ifndef PNG_READ_BIG_ENDIAN_SUPPORTED
 /* Grab an unsigned 32-bit integer from a buffer in big-endian format. */
-uint32_t PNGAPI
+uint32_t
 png_get_uint_32(uint8_t* buf)
 {
    uint32_t i = ((uint32_t)(*buf) << 24) +
@@ -44,7 +44,7 @@ png_get_uint_32(uint8_t* buf)
 /* Grab a signed 32-bit integer from a buffer in big-endian format.  The
  * data is stored in the PNG file in two's complement format, and it is
  * assumed that the machine format for signed integers is the same. */
-int32_t PNGAPI
+int32_t
 png_get_int_32(uint8_t* buf)
 {
    int32_t i = ((int32_t)(*buf) << 24) +
@@ -56,7 +56,7 @@ png_get_int_32(uint8_t* buf)
 }
 
 /* Grab an unsigned 16-bit integer from a buffer in big-endian format. */
-uint16_t PNGAPI
+uint16_t
 png_get_uint_16(uint8_t* buf)
 {
    uint16_t i = (uint16_t)(((uint16_t)(*buf) << 8) +

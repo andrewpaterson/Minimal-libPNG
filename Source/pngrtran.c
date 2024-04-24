@@ -19,7 +19,7 @@
 #if defined(PNG_READ_SUPPORTED)
 
 /* Set the action on getting a CRC error for an ancillary or critical chunk. */
-void PNGAPI
+void
 png_set_crc_action(png_structp png_ptr, int crit_action, int ancil_action)
 {
    png_debug(1, "in png_set_crc_action\n");
@@ -74,7 +74,7 @@ png_set_crc_action(png_structp png_ptr, int crit_action, int ancil_action)
 
 #if defined(PNG_READ_16_TO_8_SUPPORTED)
 /* strip 16 bit depth files to 8 bit depth */
-void PNGAPI
+void
 png_set_strip_16(png_structp png_ptr)
 {
    png_debug(1, "in png_set_strip_16\n");
@@ -84,7 +84,7 @@ png_set_strip_16(png_structp png_ptr)
 #endif
 
 #if defined(PNG_READ_STRIP_ALPHA_SUPPORTED)
-void PNGAPI
+void
 png_set_strip_alpha(png_structp png_ptr)
 {
    png_debug(1, "in png_set_strip_alpha\n");
@@ -112,7 +112,7 @@ typedef struct png_dsort_struct
 typedef png_dsort *      png_dsortp;
 typedef png_dsort **png_dsortpp;
 
-void PNGAPI
+void
 png_set_dither(png_structp png_ptr, png_colorp palette,
    int num_palette, int maximum_colors, uint16_t* histogram,
    int full_dither)
@@ -493,7 +493,7 @@ png_set_dither(png_structp png_ptr, png_colorp palette,
  * less than 8-bit depth to 8-bit depth, and expand tRNS chunks
  * to alpha channels.
  */
-void PNGAPI
+void
 png_set_expand(png_structp png_ptr)
 {
    png_debug(1, "in png_set_expand\n");
@@ -519,7 +519,7 @@ png_set_expand(png_structp png_ptr)
  */
 
 /* Expand paletted images to RGB. */
-void PNGAPI
+void
 png_set_palette_to_rgb(png_structp png_ptr)
 {
    png_debug(1, "in png_set_palette_to_rgb\n");
@@ -529,7 +529,7 @@ png_set_palette_to_rgb(png_structp png_ptr)
 
 #if !defined(PNG_1_0_X)
 /* Expand grayscale images of less than 8-bit depth to 8 bits. */
-void PNGAPI
+void
 png_set_expand_gray_1_2_4_to_8(png_structp png_ptr)
 {
    png_debug(1, "in png_set_expand_gray_1_2_4_to_8\n");
@@ -541,7 +541,7 @@ png_set_expand_gray_1_2_4_to_8(png_structp png_ptr)
 #if defined(PNG_1_0_X) || defined(PNG_1_2_X)
 /* Expand grayscale images of less than 8-bit depth to 8 bits. */
 /* Deprecated as of libpng-1.2.9 */
-void PNGAPI
+void
 png_set_gray_1_2_4_to_8(png_structp png_ptr)
 {
    png_debug(1, "in png_set_gray_1_2_4_to_8\n");
@@ -552,7 +552,7 @@ png_set_gray_1_2_4_to_8(png_structp png_ptr)
 
 
 /* Expand tRNS chunks to alpha channels. */
-void PNGAPI
+void
 png_set_tRNS_to_alpha(png_structp png_ptr)
 {
    png_debug(1, "in png_set_expand\n");
@@ -561,7 +561,7 @@ png_set_tRNS_to_alpha(png_structp png_ptr)
 #endif /* defined(PNG_READ_EXPAND_SUPPORTED) */
 
 #if defined(PNG_READ_GRAY_TO_RGB_SUPPORTED)
-void PNGAPI
+void
 png_set_gray_to_rgb(png_structp png_ptr)
 {
    png_debug(1, "in png_set_gray_to_rgb\n");
@@ -575,7 +575,7 @@ png_set_gray_to_rgb(png_structp png_ptr)
  * for example, to convert a 24 bpp RGB image into an 8 bpp grayscale image.
  */
 
-void PNGAPI
+void
 png_set_rgb_to_gray(png_structp png_ptr, int error_action, double red,
    double green)
 {
@@ -586,7 +586,7 @@ png_set_rgb_to_gray(png_structp png_ptr, int error_action, double red,
 }
 #endif
 
-void PNGAPI
+void
 png_set_rgb_to_gray_fixed(png_structp png_ptr, int error_action,
    png_fixed_point red, png_fixed_point green)
 {
@@ -637,7 +637,7 @@ png_set_rgb_to_gray_fixed(png_structp png_ptr, int error_action,
 #if defined(PNG_READ_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_LEGACY_SUPPORTED)
-void PNGAPI
+void
 png_set_read_user_transform_fn(png_structp png_ptr, png_user_transform_ptr
    read_user_transform_fn)
 {
@@ -1859,7 +1859,7 @@ png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, uint8_t* row)
  * paletted.  Most useful for gamma correction and simplification
  * of code.
  */
-void PNGAPI
+void
 png_build_grayscale_palette(int bit_depth, png_colorp palette)
 {
    int num_palette;

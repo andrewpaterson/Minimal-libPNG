@@ -93,12 +93,12 @@ static int status_dots=1;
 
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 read_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
@@ -120,12 +120,12 @@ read_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 write_row_callback(png_structp png_ptr, uint32_t row_number, int pass);
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 write_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 {
@@ -141,12 +141,12 @@ write_row_callback(png_structp png_ptr, uint32_t row_number, int pass)
 static uint32_t filters_used[256];
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data);
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 count_filters(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
 {
@@ -163,12 +163,12 @@ static uint32_t zero_samples;
 
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* data);
 void
 #ifdef PNG_1_0_X
-PNGAPI
+
 #endif
 count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* data)
 {

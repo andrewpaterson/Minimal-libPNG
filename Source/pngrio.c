@@ -40,7 +40,7 @@ png_read_data(png_structp png_ptr, uint8_t* data, size_t length)
    not reading from a standard C stream, you should create a replacement
    read_data function and use it at run time with png_set_read_fn(), rather
    than changing the library. */
-void PNGAPI
+void
 png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    size_t check;
@@ -70,7 +70,7 @@ png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
                   unsigned int that is the number of bytes to be read.
                   To exit and output any fatal error messages the new write
                   function should call png_error(png_ptr, "Error msg"). */
-void PNGAPI
+void
 png_set_read_fn(png_structp png_ptr, void* io_ptr,
    png_rw_ptr read_data_fn)
 {

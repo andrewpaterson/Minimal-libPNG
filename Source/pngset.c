@@ -19,7 +19,7 @@
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
 
 #if defined(PNG_hIST_SUPPORTED)
-void PNGAPI
+void
 png_set_hIST(png_structp png_ptr, png_info* info_ptr, uint16_t* hist)
 {
    int i;
@@ -61,7 +61,7 @@ png_set_hIST(png_structp png_ptr, png_info* info_ptr, uint16_t* hist)
 }
 #endif
 
-void PNGAPI
+void
 png_set_IHDR(png_structp png_ptr, png_info* info_ptr,
    uint32_t width, uint32_t height, int bit_depth,
    int color_type, int interlace_type, int compression_type,
@@ -145,7 +145,7 @@ png_set_IHDR(png_structp png_ptr, png_info* info_ptr,
 }
 
 #if defined(PNG_pCAL_SUPPORTED)
-void PNGAPI
+void
 png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0, int32_t X1, int type, int nparams, char* units, png_charpp params)
 {
    uint32_t length;
@@ -212,7 +212,7 @@ png_set_pCAL(png_structp png_ptr, png_info* info_ptr, char* purpose, int32_t X0,
 #endif
 
 #if defined(PNG_pHYs_SUPPORTED)
-void PNGAPI
+void
 png_set_pHYs(png_structp png_ptr, png_info* info_ptr,
    uint32_t res_x, uint32_t res_y, int unit_type)
 {
@@ -227,7 +227,7 @@ png_set_pHYs(png_structp png_ptr, png_info* info_ptr,
 }
 #endif
 
-void PNGAPI
+void
 png_set_PLTE(png_structp png_ptr, png_info* info_ptr,
    png_colorp palette, int num_palette)
 {
@@ -277,7 +277,7 @@ png_set_PLTE(png_structp png_ptr, png_info* info_ptr,
 }
 
 #if defined(PNG_sBIT_SUPPORTED)
-void PNGAPI
+void
 png_set_sBIT(png_structp png_ptr, png_info* info_ptr,
    png_color_8p sig_bit)
 {
@@ -291,7 +291,7 @@ png_set_sBIT(png_structp png_ptr, png_info* info_ptr,
 #endif
 
 #if defined(PNG_sRGB_SUPPORTED)
-void PNGAPI
+void
 png_set_sRGB(png_structp png_ptr, png_info* info_ptr, int intent)
 {
    png_debug1(1, "in %s storage function\n", "sRGB");
@@ -302,7 +302,7 @@ png_set_sRGB(png_structp png_ptr, png_info* info_ptr, int intent)
    info_ptr->valid |= PNG_INFO_sRGB;
 }
 
-void PNGAPI
+void
 png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_info* info_ptr,
    int intent)
 {
@@ -315,7 +315,7 @@ png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_info* info_ptr,
 #endif
 
 #if defined(PNG_tRNS_SUPPORTED)
-void PNGAPI
+void
 png_set_tRNS(png_structp png_ptr, png_info* info_ptr,
    uint8_t* trans, int num_trans, png_color_16p trans_values)
 {
@@ -358,7 +358,7 @@ png_set_tRNS(png_structp png_ptr, png_info* info_ptr,
 #endif
 
 #if defined(PNG_sPLT_SUPPORTED)
-void PNGAPI
+void
 png_set_sPLT(png_structp png_ptr,
              png_info* info_ptr, png_sPLT_tp entries, int nentries)
 {
@@ -408,7 +408,7 @@ png_set_sPLT(png_structp png_ptr,
 #endif /* PNG_sPLT_SUPPORTED */
 
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
-void PNGAPI
+void
 png_set_unknown_chunks(png_structp png_ptr,
    png_info* info_ptr, png_unknown_chunkp unknowns, int num_unknowns)
 {
@@ -457,7 +457,7 @@ png_set_unknown_chunks(png_structp png_ptr,
     info_ptr->free_me |= PNG_FREE_UNKN;
 #endif
 }
-void PNGAPI
+void
 png_set_unknown_chunk_location(png_structp png_ptr, png_info* info_ptr,
    int chunk, int location)
 {
@@ -467,7 +467,7 @@ png_set_unknown_chunk_location(png_structp png_ptr, png_info* info_ptr,
 }
 #endif
 
-void PNGAPI
+void
 png_permit_empty_plte (png_structp png_ptr, int empty_plte_permitted)
 {
    /* This function is deprecated in favor of png_permit_mng_features()
@@ -481,7 +481,7 @@ png_permit_empty_plte (png_structp png_ptr, int empty_plte_permitted)
 }
 
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
-void PNGAPI
+void
 png_set_keep_unknown_chunks(png_structp png_ptr, int keep, uint8_t*
    chunk_list, int num_chunks)
 {
@@ -528,7 +528,7 @@ png_set_keep_unknown_chunks(png_structp png_ptr, int keep, uint8_t*
 #endif
 
 #if defined(PNG_READ_USER_CHUNKS_SUPPORTED)
-void PNGAPI
+void
 png_set_read_user_chunk_fn(png_structp png_ptr, void* user_chunk_ptr,
    png_user_chunk_ptr read_user_chunk_fn)
 {
@@ -541,7 +541,7 @@ png_set_read_user_chunk_fn(png_structp png_ptr, void* user_chunk_ptr,
 #endif
 
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
-void PNGAPI
+void
 png_set_rows(png_structp png_ptr, png_info* info_ptr, png_bytepp row_pointers)
 {
    png_debug1(1, "in %s storage function\n", "rows");
@@ -558,7 +558,7 @@ png_set_rows(png_structp png_ptr, png_info* info_ptr, png_bytepp row_pointers)
 #endif
 
 #ifdef PNG_WRITE_SUPPORTED
-void PNGAPI
+void
 png_set_compression_buffer_size(png_structp png_ptr, uint32_t size)
 {
     if (png_ptr == NULL)
@@ -572,7 +572,7 @@ png_set_compression_buffer_size(png_structp png_ptr, uint32_t size)
 }
 #endif
 
-void PNGAPI
+void
 png_set_invalid(png_structp png_ptr, png_info* info_ptr, int mask)
 {
    if (png_ptr && info_ptr)
@@ -583,7 +583,7 @@ png_set_invalid(png_structp png_ptr, png_info* info_ptr, int mask)
 #ifndef PNG_1_0_X
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
 /* this function was added to libpng 1.2.6 */
-void PNGAPI
+void
 png_set_user_limits (png_structp png_ptr, uint32_t user_width_max,
     uint32_t user_height_max)
 {

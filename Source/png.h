@@ -848,29 +848,29 @@ typedef png_row_info **png_row_infopp;
 typedef struct png_struct_def png_struct;
 typedef png_struct *png_structp;
 
-typedef void (PNGAPI *png_error_ptr) (png_structp, const char*);
-typedef void (PNGAPI *png_rw_ptr) (png_structp, uint8_t*, size_t);
-typedef void (PNGAPI* png_flush_ptr) (png_structp);
-typedef void (PNGAPI *png_read_status_ptr) (png_structp, uint32_t, int);
-typedef void (PNGAPI *png_write_status_ptr) (png_structp, uint32_t, int);
+typedef void (*png_error_ptr) (png_structp, const char*);
+typedef void (*png_rw_ptr) (png_structp, uint8_t*, size_t);
+typedef void (* png_flush_ptr) (png_structp);
+typedef void (*png_read_status_ptr) (png_structp, uint32_t, int);
+typedef void (*png_write_status_ptr) (png_structp, uint32_t, int);
 
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-typedef void (PNGAPI *png_progressive_info_ptr) (png_structp, png_infop);
-typedef void (PNGAPI *png_progressive_end_ptr) (png_structp, png_infop);
-typedef void (PNGAPI *png_progressive_row_ptr) (png_structp, uint8_t*, uint32_t, int);
+typedef void (*png_progressive_info_ptr) (png_structp, png_infop);
+typedef void (*png_progressive_end_ptr) (png_structp, png_infop);
+typedef void (*png_progressive_row_ptr) (png_structp, uint8_t*, uint32_t, int);
 #endif
 
 #if defined(PNG_READ_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED) || \
     defined(PNG_LEGACY_SUPPORTED)
-typedef void (PNGAPI *png_user_transform_ptr) (png_structp, png_row_infop, uint8_t*);
+typedef void (*png_user_transform_ptr) (png_structp, png_row_infop, uint8_t*);
 #endif
 
 #if defined(PNG_USER_CHUNKS_SUPPORTED)
-typedef int (PNGAPI *png_user_chunk_ptr) (png_structp, png_unknown_chunkp);
+typedef int (*png_user_chunk_ptr) (png_structp, png_unknown_chunkp);
 #endif
 #if defined(PNG_UNKNOWN_CHUNKS_SUPPORTED)
-typedef void (PNGAPI *png_unknown_chunk_ptr) (png_structp);
+typedef void (*png_unknown_chunk_ptr) (png_structp);
 #endif
 
 /* Transform masks for the high-level interface */
@@ -2188,23 +2188,23 @@ PNG_EXTERN void png_zfree(voidpf png_ptr, voidpf ptr);
 
 #ifdef PNG_SIZE_T
 /* Function to convert a sizeof an item to sizeof item */
-PNG_EXTERN size_t PNGAPI png_convert_size(size_t size);
+PNG_EXTERN size_t png_convert_size(size_t size);
 #endif
 
-/* Next four functions are used internally as callbacks.  PNGAPI is required
- * but not PNG_EXPORT.  PNGAPI added at libpng version 1.2.3. */
+/* Next four functions are used internally as callbacks.  is required
+ * but not PNG_EXPORT.  added at libpng version 1.2.3. */
 
-PNG_EXTERN void PNGAPI png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length);
+PNG_EXTERN void png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 #ifdef PNG_PROGRESSIVE_READ_SUPPORTED
-PNG_EXTERN void PNGAPI png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
+PNG_EXTERN void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
 #endif
 
-PNG_EXTERN void PNGAPI png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length);
+PNG_EXTERN void png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 #if !defined(PNG_NO_STDIO)
-PNG_EXTERN void PNGAPI png_default_flush(png_structp png_ptr);
+PNG_EXTERN void png_default_flush(png_structp png_ptr);
 #endif
 #endif
 #else /* PNG_1_0_X */

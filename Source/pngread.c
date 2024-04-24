@@ -17,7 +17,7 @@
 #if defined(PNG_READ_SUPPORTED)
 
 /* Create a PNG structure for reading, and allocate any memory needed. */
-png_structp PNGAPI
+png_structp
 png_create_read_struct(const char* user_png_ver, void* error_ptr,png_error_ptr error_fn, png_error_ptr warn_fn)
 {
 
@@ -27,7 +27,7 @@ png_create_read_struct(const char* user_png_ver, void* error_ptr,png_error_ptr e
 }
 
 /* Alternate create PNG structure for reading, and allocate any memory needed. */
-png_structp PNGAPI
+png_structp
 png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr error_fn, png_error_ptr warn_fn, void* mem_ptr,
    png_malloc_ptr malloc_fn, png_free_ptr free_fn)
 {
@@ -154,14 +154,14 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
    This interface is deprecated in favour of the png_create_read_struct(),
    and it will disappear as of libpng-1.3.0. */
 #undef png_read_init
-void PNGAPI
+void
 png_read_init(png_structp png_ptr)
 {
    /* We only come here via pre-1.0.7-compiled applications */
    png_read_init_2(png_ptr, "1.0.6 or earlier", 0, 0);
 }
 
-void PNGAPI
+void
 png_read_init_2(png_structp png_ptr, const char* user_png_ver, size_t png_struct_size, size_t png_info_size)
 {
    /* We only come here via pre-1.0.12-compiled applications */
@@ -205,7 +205,7 @@ png_read_init_2(png_structp png_ptr, const char* user_png_ver, size_t png_struct
 }
 #endif /* PNG_1_0_X || PNG_1_2_X */
 
-void PNGAPI
+void
 png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struct_size)
 {
 #ifdef PNG_SETJMP_SUPPORTED
@@ -293,7 +293,7 @@ png_read_init_3(png_structpp ptr_ptr, const char* user_png_ver, size_t png_struc
  * here.  The application can then have access to the signature bytes we
  * read if it is determined that this isn't a valid PNG file.
  */
-void PNGAPI
+void
 png_read_info(png_structp png_ptr, png_infop info_ptr)
 {
    if(png_ptr == NULL) return;
@@ -439,7 +439,7 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 #endif /* PNG_NO_SEQUENTIAL_READ_SUPPORTED */
 
 /* optional call to update the users info_ptr structure */
-void PNGAPI
+void
 png_read_update_info(png_structp png_ptr, png_infop info_ptr)
 {
    png_debug(1, "in png_read_update_info\n");
@@ -458,7 +458,7 @@ png_read_update_info(png_structp png_ptr, png_infop info_ptr)
  * the user to obtain a gamma-corrected palette, for example.
  * If the user doesn't call this, we will do it ourselves.
  */
-void PNGAPI
+void
 png_start_read_image(png_structp png_ptr)
 {
    png_debug(1, "in png_start_read_image\n");
@@ -469,7 +469,7 @@ png_start_read_image(png_structp png_ptr)
 #endif /* PNG_NO_SEQUENTIAL_READ_SUPPORTED */
 
 #ifndef PNG_NO_SEQUENTIAL_READ_SUPPORTED
-void PNGAPI
+void
 png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
 {
 #ifdef PNG_USE_LOCAL_ARRAYS
@@ -714,7 +714,7 @@ png_read_row(png_structp png_ptr, uint8_t* row, uint8_t* dsp_row)
  * [*] png_handle_alpha() does not exist yet, as of this version of libpng
  */
 
-void PNGAPI
+void
 png_read_rows(png_structp png_ptr, png_bytepp row,
    png_bytepp display_row, uint32_t num_rows)
 {
@@ -764,7 +764,7 @@ png_read_rows(png_structp png_ptr, png_bytepp row,
  *
  * [*] png_handle_alpha() does not exist yet, as of this version of libpng
  */
-void PNGAPI
+void
 png_read_image(png_structp png_ptr, png_bytepp image)
 {
    uint32_t i,image_height;
@@ -804,7 +804,7 @@ png_read_image(png_structp png_ptr, png_bytepp image)
  * file, will verify the end is accurate, and will read any comments
  * or time information at the end of the file, if info is not NULL.
  */
-void PNGAPI
+void
 png_read_end(png_structp png_ptr, png_infop info_ptr)
 {
    uint8_t chunk_length[4];
@@ -911,7 +911,7 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 #endif /* PNG_NO_SEQUENTIAL_READ_SUPPORTED */
 
 /* free all memory used by the read */
-void PNGAPI
+void
 png_destroy_read_struct(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr,
    png_infopp end_info_ptr_ptr)
 {
@@ -1070,7 +1070,7 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
 
 }
 
-void PNGAPI
+void
 png_set_read_status_fn(png_structp png_ptr, png_read_status_ptr read_row_fn)
 {
    if(png_ptr == NULL) return;
@@ -1080,7 +1080,7 @@ png_set_read_status_fn(png_structp png_ptr, png_read_status_ptr read_row_fn)
 
 #ifndef PNG_NO_SEQUENTIAL_READ_SUPPORTED
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
-void PNGAPI
+void
 png_read_png(png_structp png_ptr, png_infop info_ptr,
                            int transforms,
                            voidp params)

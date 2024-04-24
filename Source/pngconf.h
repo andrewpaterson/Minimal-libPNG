@@ -680,16 +680,16 @@ typedef z_stream*   png_zstreamp;
 #endif
 
 #if defined(__CYGWIN__)
-#  undef PNGAPI
-#  define PNGAPI __cdecl
+#  undef
+#  define __cdecl
 #  undef PNG_IMPEXP
 #  define PNG_IMPEXP
 #endif  
 
-/* If you define PNGAPI, e.g., with compiler option "-DPNGAPI=__stdcall",
+/* If you define, e.g., with compiler option "-DPNGAPI=__stdcall",
  * you may get warnings regarding the linkage of png_zalloc and png_zfree.
  * Don't ignore those warnings; you must also reset the default calling
- * convention in your compiler to match your PNGAPI, and you must build
+ * convention in your compiler to match your, and you must build
  * zlib and your applications the same way you build libpng.
  */
 
@@ -705,9 +705,6 @@ typedef z_stream*   png_zstreamp;
 
 
 
-#ifndef PNGAPI
-#  define PNGAPI
-#endif
 #ifndef PNG_IMPEXP
 #  define PNG_IMPEXP
 #endif
@@ -724,7 +721,7 @@ typedef z_stream*   png_zstreamp;
 #endif
 
 #ifndef PNG_EXPORT
-#  define PNG_EXPORT(type,symbol) PNG_IMPEXP type PNGAPI symbol
+#  define PNG_EXPORT(type,symbol) PNG_IMPEXP type symbol
 #endif
 
 #ifdef PNG_USE_GLOBAL_ARRAYS

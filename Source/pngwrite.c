@@ -22,7 +22,7 @@
  * write a plain PNG file.  If you have long comments, I suggest writing
  * them in png_write_end(), and compressing them.
  */
-void PNGAPI
+void
 png_write_info_before_PLTE(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_write_info_before_PLTE\n");
@@ -91,7 +91,7 @@ png_write_info_before_PLTE(png_structp png_ptr, png_info* info_ptr)
    }
 }
 
-void PNGAPI
+void
 png_write_info(png_structp png_ptr, png_info* info_ptr)
 {
 #if defined(PNG_WRITE_TEXT_SUPPORTED) || defined(PNG_WRITE_sPLT_SUPPORTED)
@@ -179,7 +179,7 @@ png_write_info(png_structp png_ptr, png_info* info_ptr)
  * in png_write_info(), do not write them again here.  If you have long
  * comments, I suggest writing them here, and compressing them.
  */
-void PNGAPI
+void
 png_write_end(png_structp png_ptr, png_info* info_ptr)
 {
    png_debug(1, "in png_write_end\n");
@@ -232,7 +232,7 @@ png_write_end(png_structp png_ptr, png_info* info_ptr)
 
 
 /* Initialize png_ptr structure, and allocate any memory needed */
-png_structp PNGAPI
+png_structp
 png_create_write_struct(const char* user_png_ver, void* error_ptr,
    png_error_ptr error_fn, png_error_ptr warn_fn)
 {
@@ -242,7 +242,7 @@ png_create_write_struct(const char* user_png_ver, void* error_ptr,
 }
 
 /* Alternate initialize png_ptr structure, and allocate any memory needed */
-png_structp PNGAPI
+png_structp
 png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
    png_error_ptr error_fn, png_error_ptr warn_fn, void* mem_ptr,
    png_malloc_ptr malloc_fn, png_free_ptr free_fn)
@@ -346,14 +346,14 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
 #if defined(PNG_1_0_X) || defined(PNG_1_2_X)
 /* Deprecated. */
 #undef png_write_init
-void PNGAPI
+void
 png_write_init(png_structp png_ptr)
 {
    /* We only come here via pre-1.0.7-compiled applications */
    png_write_init_2(png_ptr, "1.0.6 or earlier", 0, 0);
 }
 
-void PNGAPI
+void
 png_write_init_2(png_structp png_ptr, const char* user_png_ver,
    size_t png_struct_size, size_t png_info_size)
 {
@@ -399,7 +399,7 @@ png_write_init_2(png_structp png_ptr, const char* user_png_ver,
 #endif /* PNG_1_0_X || PNG_1_2_X */
 
 
-void PNGAPI
+void
 png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
    size_t png_struct_size)
 {
@@ -475,7 +475,7 @@ png_write_init_3(png_structpp ptr_ptr, const char* user_png_ver,
  * have called png_set_interlace_handling(), you will have to
  * "write" the image seven times.
  */
-void PNGAPI
+void
 png_write_rows(png_structp png_ptr, png_bytepp row,
    uint32_t num_rows)
 {
@@ -497,7 +497,7 @@ png_write_rows(png_structp png_ptr, png_bytepp row,
 /* Write the image.  You only need to call this function once, even
  * if you are writing an interlaced image.
  */
-void PNGAPI
+void
 png_write_image(png_structp png_ptr, png_bytepp image)
 {
    uint32_t i; /* row index */
@@ -527,7 +527,7 @@ png_write_image(png_structp png_ptr, png_bytepp image)
 }
 
 /* called by user to write a row of image data */
-void PNGAPI
+void
 png_write_row(png_structp png_ptr, uint8_t* row)
 {
    if (png_ptr == NULL)
@@ -686,7 +686,7 @@ png_write_row(png_structp png_ptr, uint8_t* row)
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 /* Set the automatic flush interval or 0 to turn flushing off */
-void PNGAPI
+void
 png_set_flush(png_structp png_ptr, int nrows)
 {
    png_debug(1, "in png_set_flush\n");
@@ -696,7 +696,7 @@ png_set_flush(png_structp png_ptr, int nrows)
 }
 
 /* flush the current output buffers now */
-void PNGAPI
+void
 png_write_flush(png_structp png_ptr)
 {
    int wrote_IDAT;
@@ -751,7 +751,7 @@ png_write_flush(png_structp png_ptr)
 #endif /* PNG_WRITE_FLUSH_SUPPORTED */
 
 /* free all memory used by the write */
-void PNGAPI
+void
 png_destroy_write_struct(png_structpp png_ptr_ptr, png_info** info_ptr_ptr)
 {
    png_structp png_ptr = NULL;
@@ -871,7 +871,7 @@ png_write_destroy(png_structp png_ptr)
 }
 
 /* Allow the application to select one or more row filters to use. */
-void PNGAPI
+void
 png_set_filter(png_structp png_ptr, int method, int filters)
 {
    png_debug(1, "in png_set_filter\n");
@@ -972,7 +972,7 @@ png_set_filter(png_structp png_ptr, int method, int filters)
  * better compression.
  */
 #if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)      /* GRR 970116 */
-void PNGAPI
+void
 png_set_filter_heuristics(png_structp png_ptr, int heuristic_method,
    int num_weights, png_doublep filter_weights,
    png_doublep filter_costs)
@@ -1090,7 +1090,7 @@ png_set_filter_heuristics(png_structp png_ptr, int heuristic_method,
 }
 #endif /* PNG_WRITE_WEIGHTED_FILTER_SUPPORTED */
 
-void PNGAPI
+void
 png_set_compression_level(png_structp png_ptr, int level)
 {
    png_debug(1, "in png_set_compression_level\n");
@@ -1100,7 +1100,7 @@ png_set_compression_level(png_structp png_ptr, int level)
    png_ptr->zlib_level = level;
 }
 
-void PNGAPI
+void
 png_set_compression_mem_level(png_structp png_ptr, int mem_level)
 {
    png_debug(1, "in png_set_compression_mem_level\n");
@@ -1110,7 +1110,7 @@ png_set_compression_mem_level(png_structp png_ptr, int mem_level)
    png_ptr->zlib_mem_level = mem_level;
 }
 
-void PNGAPI
+void
 png_set_compression_strategy(png_structp png_ptr, int strategy)
 {
    png_debug(1, "in png_set_compression_strategy\n");
@@ -1120,7 +1120,7 @@ png_set_compression_strategy(png_structp png_ptr, int strategy)
    png_ptr->zlib_strategy = strategy;
 }
 
-void PNGAPI
+void
 png_set_compression_window_bits(png_structp png_ptr, int window_bits)
 {
    if (png_ptr == NULL)
@@ -1141,7 +1141,7 @@ png_set_compression_window_bits(png_structp png_ptr, int window_bits)
    png_ptr->zlib_window_bits = window_bits;
 }
 
-void PNGAPI
+void
 png_set_compression_method(png_structp png_ptr, int method)
 {
    png_debug(1, "in png_set_compression_method\n");
@@ -1153,7 +1153,7 @@ png_set_compression_method(png_structp png_ptr, int method)
    png_ptr->zlib_method = method;
 }
 
-void PNGAPI
+void
 png_set_write_status_fn(png_structp png_ptr, png_write_status_ptr write_row_fn)
 {
    if (png_ptr == NULL)
@@ -1162,7 +1162,7 @@ png_set_write_status_fn(png_structp png_ptr, png_write_status_ptr write_row_fn)
 }
 
 #if defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED)
-void PNGAPI
+void
 png_set_write_user_transform_fn(png_structp png_ptr, png_user_transform_ptr
    write_user_transform_fn)
 {
@@ -1176,7 +1176,7 @@ png_set_write_user_transform_fn(png_structp png_ptr, png_user_transform_ptr
 
 
 #if defined(PNG_INFO_IMAGE_SUPPORTED)
-void PNGAPI
+void
 png_write_png(png_structp png_ptr, png_info* info_ptr,
               int transforms, voidp params)
 {

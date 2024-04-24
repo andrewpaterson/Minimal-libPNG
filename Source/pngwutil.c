@@ -16,7 +16,7 @@
  * with unsigned numbers for convenience, although one supported
  * ancillary chunk uses signed (two's complement) numbers.
  */
-void PNGAPI
+void
 png_save_uint_32(uint8_t* buf, uint32_t i)
 {
    buf[0] = (uint8_t)((i >> 24) & 0xff);
@@ -29,7 +29,7 @@ png_save_uint_32(uint8_t* buf, uint32_t i)
  * complement format.  If this isn't the case, then this routine needs to
  * be modified to write data in two's complement format.
  */
-void PNGAPI
+void
 png_save_int_32(uint8_t* buf, int32_t i)
 {
    buf[0] = (uint8_t)((i >> 24) & 0xff);
@@ -42,7 +42,7 @@ png_save_int_32(uint8_t* buf, int32_t i)
  * The parameter is declared unsigned int, not uint16_t,
  * just to avoid potential problems on pre-ANSI C compilers.
  */
-void PNGAPI
+void
 png_save_uint_16(uint8_t* buf, unsigned int i)
 {
    buf[0] = (uint8_t)((i >> 8) & 0xff);
@@ -58,7 +58,7 @@ png_save_uint_16(uint8_t* buf, unsigned int i)
  * png_write_chunk_start(), png_write_chunk_data(), and png_write_chunk_end()
  * functions instead.
  */
-void PNGAPI
+void
 png_write_chunk(png_structp png_ptr, uint8_t* chunk_name,
    uint8_t* data, size_t length)
 {
@@ -72,7 +72,7 @@ png_write_chunk(png_structp png_ptr, uint8_t* chunk_name,
  * The total_length is the sum of the lengths of all the data you will be
  * passing in png_write_chunk_data().
  */
-void PNGAPI
+void
 png_write_chunk_start(png_structp png_ptr, uint8_t* chunk_name,
    uint32_t length)
 {
@@ -96,7 +96,7 @@ png_write_chunk_start(png_structp png_ptr, uint8_t* chunk_name,
  * sum of the lengths from these calls *must* add up to the total_length
  * given to png_write_chunk_start().
  */
-void PNGAPI
+void
 png_write_chunk_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    /* write the data, and run the CRC over it */
@@ -109,7 +109,7 @@ png_write_chunk_data(png_structp png_ptr, uint8_t* data, size_t length)
 }
 
 /* Finish a chunk started with png_write_chunk_start(). */
-void PNGAPI
+void
 png_write_chunk_end(png_structp png_ptr)
 {
    uint8_t buf[4];

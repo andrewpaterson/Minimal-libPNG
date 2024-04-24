@@ -119,7 +119,7 @@ png_destroy_struct_2(void* struct_ptr, png_free_ptr free_fn,
    need to allocate exactly 64K, so whatever you call here must
    have the ability to do that. */
 
-void* PNGAPI
+void*
 png_malloc(png_structp png_ptr, uint32_t size)
 {
    void* ret;
@@ -137,7 +137,7 @@ png_malloc(png_structp png_ptr, uint32_t size)
    return (ret);
 }
 
-void* PNGAPI
+void*
 png_malloc_default(png_structp png_ptr, uint32_t size)
 {
    void* ret;
@@ -188,7 +188,7 @@ png_malloc_default(png_structp png_ptr, uint32_t size)
 
 /* Free a pointer allocated by png_malloc().  If ptr is NULL, return
    without taking any action. */
-void PNGAPI
+void
 png_free(png_structp png_ptr, void* ptr)
 {
    if (png_ptr == NULL || ptr == NULL)
@@ -202,7 +202,7 @@ png_free(png_structp png_ptr, void* ptr)
    }
    else png_free_default(png_ptr, ptr);
 }
-void PNGAPI
+void
 png_free_default(png_structp png_ptr, void* ptr)
 {
    if (png_ptr == NULL || ptr == NULL)
@@ -230,7 +230,7 @@ png_free_default(png_structp png_ptr, void* ptr)
  * instead of issuing a png_error, if it fails to allocate the requested
  * memory.
  */
-void* PNGAPI
+void*
 png_malloc_warn(png_structp png_ptr, uint32_t size)
 {
    void* ptr;
@@ -245,7 +245,7 @@ png_malloc_warn(png_structp png_ptr, uint32_t size)
 }
 #endif
 
-void* PNGAPI
+void*
 png_memcpy_check (png_structp png_ptr, void* s1, void* s2,
    uint32_t length)
 {
@@ -258,7 +258,7 @@ png_memcpy_check (png_structp png_ptr, void* s1, void* s2,
    return(png_memcpy (s1, s2, size));
 }
 
-void* PNGAPI
+void*
 png_memset_check (png_structp png_ptr, void* s1, int value,
    uint32_t length)
 {
@@ -276,7 +276,7 @@ png_memset_check (png_structp png_ptr, void* s1, int value,
 /* This function is called when the application wants to use another method
  * of allocating and freeing memory.
  */
-void PNGAPI
+void
 png_set_mem_fn(png_structp png_ptr, void* mem_ptr, png_malloc_ptr
   malloc_fn, png_free_ptr free_fn)
 {
@@ -291,7 +291,7 @@ png_set_mem_fn(png_structp png_ptr, void* mem_ptr, png_malloc_ptr
  * functions.  The application should free any memory associated with this
  * pointer before png_write_destroy and png_read_destroy are called.
  */
-void* PNGAPI
+void*
 png_get_mem_ptr(png_structp png_ptr)
 {
    if(png_ptr == NULL) return (NULL);

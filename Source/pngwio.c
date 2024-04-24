@@ -39,7 +39,7 @@ png_write_data(png_structp png_ptr, uint8_t* data, size_t length)
    not writing to a standard C stream, you should create a replacement
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
-void PNGAPI
+void
 png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    uint32_t check;
@@ -63,7 +63,7 @@ png_flush(png_structp png_ptr)
 }
 
 #if !defined(PNG_NO_STDIO)
-void PNGAPI
+void
 png_default_flush(png_structp png_ptr)
 {
    FILE* io_ptr;
@@ -97,7 +97,7 @@ png_default_flush(png_structp png_ptr)
                    PNG_WRITE_FLUSH_SUPPORTED is not defined at libpng compile
                    time, output_flush_fn will be ignored, although it must be
                    supplied for compatibility. */
-void PNGAPI
+void
 png_set_write_fn(png_structp png_ptr, void* io_ptr,
    png_rw_ptr write_data_fn, png_flush_ptr output_flush_fn)
 {
