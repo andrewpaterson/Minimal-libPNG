@@ -1735,11 +1735,6 @@ extern PNG_EXPORT(void*,png_memcpy_check) PNGARG((png_structp png_ptr,
 extern PNG_EXPORT(void*,png_memset_check) PNGARG((png_structp png_ptr,
    void* s1, int value, uint32_t size));
 
-#if defined(USE_FAR_KEYWORD)  /* memory model conversion function */
-extern void *png_far_to_near PNGARG((png_structp png_ptr,void* ptr,
-   int check));
-#endif /* USE_FAR_KEYWORD */
-
 /* Fatal error in PNG image of libpng - can't continue */
 extern PNG_EXPORT(void,png_error) PNGARG((png_structp png_ptr,
    const char* error_message));

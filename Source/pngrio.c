@@ -40,7 +40,6 @@ png_read_data(png_structp png_ptr, uint8_t* data, size_t length)
    not reading from a standard C stream, you should create a replacement
    read_data function and use it at run time with png_set_read_fn(), rather
    than changing the library. */
-#ifndef USE_FAR_KEYWORD
 void PNGAPI
 png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
@@ -56,54 +55,6 @@ png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
    if (check != length)
       png_error(png_ptr, "Read Error");
 }
-#else
-/* this is the model-independent version. Since the standard I/O library
-   can't handle far buffers in the medium and small models, we have to copy
-   the data.
-*/
-
-#define NEAR_BUF_SIZE 1024
-#define MIN(a,b) (a <= b ? a : b)
-
-static void PNGAPI
-png_default_read_data(png_structp png_ptr, uint8_t* data, size_t length)
-{
-   int check;
-   uint8_t *n_data;
-   FILE* io_ptr;
-
-   if(png_ptr == NULL) return;
-   /* Check if data really is near. If so, use usual code. */
-   n_data = (uint8_t *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE*)CVT_PTR(png_ptr->io_ptr);
-   if ((uint8_t*)n_data == data)
-   {
-      check = fread(n_data, 1, length, io_ptr);
-   }
-   else
-   {
-      uint8_t buf[NEAR_BUF_SIZE];
-      size_t read, remaining, err;
-      check = 0;
-      remaining = length;
-      do
-      {
-         read = MIN(NEAR_BUF_SIZE, remaining);
-         err = fread(buf, (size_t)1, read, io_ptr);
-         png_memcpy(data, buf, read); /* copy far buffer to near buffer */
-         if(err != read)
-            break;
-         else
-            check += err;
-         data += read;
-         remaining -= read;
-      }
-      while (remaining != 0);
-   }
-   if ((uint32_t)check != (uint32_t)length)
-      png_error(png_ptr, "read Error");
-}
-#endif
 #endif
 
 /* This function allows the application to supply a new input function

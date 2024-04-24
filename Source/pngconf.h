@@ -769,19 +769,6 @@ typedef z_stream*   png_zstreamp;
    (LIBPNG_WAS_COMPILED_WITH__PNG_SETJMP_NOT_SUPPORTED)
 #endif
 
-#if defined(USE_FAR_KEYWORD)  /* memory model independent fns */
-/* use this to make far-to-near assignments */
-#  define CHECK   1
-#  define NOCHECK 0
-#  define CVT_PTR(ptr) (png_far_to_near(png_ptr,ptr,CHECK))
-#  define CVT_PTR_NOCHECK(ptr) (png_far_to_near(png_ptr,ptr,NOCHECK))
-#  define png_strcpy  _fstrcpy
-#  define png_strncpy _fstrncpy   /* Added to v 1.2.6 */
-#  define png_strlen  _fstrlen
-#  define png_memcmp  _fmemcmp    /* SJT: added */
-#  define png_memcpy  _fmemcpy
-#  define png_memset  _fmemset
-#else /* use the usual functions */
 #  define CVT_PTR(ptr)         (ptr)
 #  define CVT_PTR_NOCHECK(ptr) (ptr)
 #  define png_strcpy  strcpy
@@ -790,7 +777,6 @@ typedef z_stream*   png_zstreamp;
 #  define png_memcmp  memcmp      /* SJT: added */
 #  define png_memcpy  memcpy
 #  define png_memset  memset
-#endif
 /* End of memory model independent support */
 
 /* Just a little check that someone hasn't tried to define something

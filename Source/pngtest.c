@@ -269,7 +269,6 @@ static int wrote_question = 0;
    read_data function and use it at run time with png_set_read_fn(), rather
    than changing the library. */
 
-#ifndef USE_FAR_KEYWORD
 static void
 pngtest_read_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
@@ -285,55 +284,6 @@ pngtest_read_data(png_structp png_ptr, uint8_t* data, size_t length)
       png_error(png_ptr, "Read Error!");
    }
 }
-#else
-/* this is the model-independent version. Since the standard I/O library
-   can't handle far buffers in the medium and small models, we have to copy
-   the data.
-*/
-
-#define NEAR_BUF_SIZE 1024
-#define MIN(a,b) (a <= b ? a : b)
-
-static void
-pngtest_read_data(png_structp png_ptr, uint8_t* data, size_t length)
-{
-   int check;
-   uint8_t *n_data;
-   FILE* io_ptr;
-
-   /* Check if data really is near. If so, use usual code. */
-   n_data = (uint8_t *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE*)CVT_PTR(png_ptr->io_ptr);
-   if ((uint8_t*)n_data == data)
-   {
-      READFILE(io_ptr, n_data, length, check);
-   }
-   else
-   {
-      uint8_t buf[NEAR_BUF_SIZE];
-      size_t read, remaining, err;
-      check = 0;
-      remaining = length;
-      do
-      {
-         read = MIN(NEAR_BUF_SIZE, remaining);
-         READFILE(io_ptr, buf, 1, err);
-         png_memcpy(data, buf, read); /* copy far buffer to near buffer */
-         if(err != read)
-            break;
-         else
-            check += err;
-         data += read;
-         remaining -= read;
-      }
-      while (remaining != 0);
-   }
-   if (check != length)
-   {
-      png_error(png_ptr, "read Error");
-   }
-}
-#endif /* USE_FAR_KEYWORD */
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
 static void
@@ -346,9 +296,7 @@ pngtest_flush(png_structp png_ptr)
    not writing to a standard C stream, you should create a replacement
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
-#ifndef USE_FAR_KEYWORD
-static void
-pngtest_write_data(png_structp png_ptr, uint8_t* data, size_t length)
+static void pngtest_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
    uint32_t check;
 
@@ -358,56 +306,6 @@ pngtest_write_data(png_structp png_ptr, uint8_t* data, size_t length)
       png_error(png_ptr, "Write Error");
    }
 }
-#else
-/* this is the model-independent version. Since the standard I/O library
-   can't handle far buffers in the medium and small models, we have to copy
-   the data.
-*/
-
-#define NEAR_BUF_SIZE 1024
-#define MIN(a,b) (a <= b ? a : b)
-
-static void
-pngtest_write_data(png_structp png_ptr, uint8_t* data, size_t length)
-{
-   uint32_t check;
-   uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "uint8_t*" */
-   FILE* io_ptr;
-
-   /* Check if data really is near. If so, use usual code. */
-   near_data = (uint8_t *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE*)CVT_PTR(png_ptr->io_ptr);
-   if ((uint8_t*)near_data == data)
-   {
-      WRITEFILE(io_ptr, near_data, length, check);
-   }
-   else
-   {
-      uint8_t buf[NEAR_BUF_SIZE];
-      size_t written, remaining, err;
-      check = 0;
-      remaining = length;
-      do
-      {
-         written = MIN(NEAR_BUF_SIZE, remaining);
-         png_memcpy(buf, data, written); /* copy far buffer to near buffer */
-         WRITEFILE(io_ptr, buf, written, err);
-         if (err != written)
-            break;
-         else
-            check += err;
-         data += written;
-         remaining -= written;
-      }
-      while (remaining != 0);
-   }
-   if (check != length)
-   {
-      png_error(png_ptr, "Write Error");
-   }
-}
-
-#endif /* USE_FAR_KEYWORD */
 
 /* This function is called when there is a warning, but the library thinks
  * it can continue anyway.  Replacement functions don't have to do anything
@@ -585,12 +483,6 @@ test_one_file(const char *inname, const char *outname)
    uint32_t width, height;
    int num_pass, pass;
    int bit_depth, color_type;
-#ifdef PNG_SETJMP_SUPPORTED
-#ifdef USE_FAR_KEYWORD
-   jmp_buf jmpbuf;
-#endif
-#endif
-
    char inbuf[256], outbuf[256];
 
    row_buf = NULL;
@@ -645,11 +537,7 @@ test_one_file(const char *inname, const char *outname)
 
 #ifdef PNG_SETJMP_SUPPORTED
    png_debug(0, "Setting jmpbuf for read struct\n");
-#ifdef USE_FAR_KEYWORD
-   if (setjmp(jmpbuf))
-#else
    if (setjmp(png_jmpbuf(read_ptr)))
-#endif
    {
       fprintf(STDERR, "%s -> %s: libpng read error\n", inname, outname);
       if (row_buf)
@@ -663,17 +551,10 @@ test_one_file(const char *inname, const char *outname)
       FCLOSE(fpout);
       return (1);
    }
-#ifdef USE_FAR_KEYWORD
-   png_memcpy(png_jmpbuf(read_ptr),jmpbuf,sizeof(jmp_buf));
-#endif
 
 #ifdef PNG_WRITE_SUPPORTED
    png_debug(0, "Setting jmpbuf for write struct\n");
-#ifdef USE_FAR_KEYWORD
-   if (setjmp(jmpbuf))
-#else
    if (setjmp(png_jmpbuf(write_ptr)))
-#endif
    {
       fprintf(STDERR, "%s -> %s: libpng write error\n", inname, outname);
       png_destroy_read_struct(&read_ptr, &read_info_ptr, &end_info_ptr);
@@ -685,9 +566,6 @@ test_one_file(const char *inname, const char *outname)
       FCLOSE(fpout);
       return (1);
    }
-#ifdef USE_FAR_KEYWORD
-   png_memcpy(png_jmpbuf(write_ptr),jmpbuf,sizeof(jmp_buf));
-#endif
 #endif
 #endif
 

@@ -39,7 +39,6 @@ png_write_data(png_structp png_ptr, uint8_t* data, size_t length)
    not writing to a standard C stream, you should create a replacement
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
-#ifndef USE_FAR_KEYWORD
 void PNGAPI
 png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
 {
@@ -50,55 +49,6 @@ png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
    if (check != length)
       png_error(png_ptr, "Write Error");
 }
-#else
-/* this is the model-independent version. Since the standard I/O library
-   can't handle far buffers in the medium and small models, we have to copy
-   the data.
-*/
-
-#define NEAR_BUF_SIZE 1024
-#define MIN(a,b) (a <= b ? a : b)
-
-void PNGAPI
-png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
-{
-   uint32_t check;
-   uint8_t *near_data;  /* Needs to be "uint8_t *" instead of "uint8_t*" */
-   FILE* io_ptr;
-
-   if(png_ptr == NULL) return;
-   /* Check if data really is near. If so, use usual code. */
-   near_data = (uint8_t *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE*)CVT_PTR(png_ptr->io_ptr);
-   if ((uint8_t*)near_data == data)
-   {
-      check = fwrite(near_data, 1, length, io_ptr);
-   }
-   else
-   {
-      uint8_t buf[NEAR_BUF_SIZE];
-      size_t written, remaining, err;
-      check = 0;
-      remaining = length;
-      do
-      {
-         written = MIN(NEAR_BUF_SIZE, remaining);
-         png_memcpy(buf, data, written); /* copy far buffer to near buffer */
-         err = fwrite(buf, 1, written, io_ptr);
-         if (err != written)
-            break;
-         else
-            check += err;
-         data += written;
-         remaining -= written;
-      }
-      while (remaining != 0);
-   }
-   if (check != length)
-      png_error(png_ptr, "Write Error");
-}
-
-#endif
 #endif
 
 /* This function is called to output any data pending writing (normally
@@ -184,32 +134,4 @@ png_set_write_fn(png_structp png_ptr, void* io_ptr,
          "the same structure.  Resetting read_data_fn to NULL.");
    }
 }
-
-#if defined(USE_FAR_KEYWORD)
-#if defined(_MSC_VER)
-void *png_far_to_near(png_structp png_ptr,void* ptr, int check)
-{
-   void *near_ptr;
-   void *far_ptr;
-   FP_OFF(near_ptr) = FP_OFF(ptr);
-   far_ptr = (void *)near_ptr;
-   if(check != 0)
-      if(FP_SEG(ptr) != FP_SEG(far_ptr))
-         png_error(png_ptr,"segment lost in conversion");
-   return(near_ptr);
-}
-#  else
-void *png_far_to_near(png_structp png_ptr,void* ptr, int check)
-{
-   void *near_ptr;
-   void *far_ptr;
-   near_ptr = (void *)ptr;
-   far_ptr = (void *)near_ptr;
-   if(check != 0)
-      if(far_ptr != ptr)
-         png_error(png_ptr,"segment lost in conversion");
-   return(near_ptr);
-}
-#   endif
-#   endif
 #endif /* PNG_WRITE_SUPPORTED */

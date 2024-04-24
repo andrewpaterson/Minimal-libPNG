@@ -211,15 +211,7 @@ png_default_error(png_structp png_ptr, const char* error_message)
 #ifdef PNG_SETJMP_SUPPORTED
    if (png_ptr)
    {
-#  ifdef USE_FAR_KEYWORD
-   {
-      jmp_buf jmpbuf;
-      png_memcpy(jmpbuf,png_ptr->jmpbuf,sizeof(jmp_buf));
-      longjmp(jmpbuf, 1);
-   }
-#  else
-   longjmp(png_ptr->jmpbuf, 1);
-#  endif
+       longjmp(png_ptr->jmpbuf, 1);
    }
 #else
    PNG_ABORT();

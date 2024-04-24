@@ -34,13 +34,6 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
 #endif /* PNG_USER_MEM_SUPPORTED */
 
    png_structp png_ptr;
-
-#ifdef PNG_SETJMP_SUPPORTED
-#ifdef USE_FAR_KEYWORD
-   jmp_buf jmpbuf;
-#endif
-#endif
-
    int i;
 
    png_debug(1, "in png_create_read_struct\n");
@@ -66,11 +59,7 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
 #endif
 
 #ifdef PNG_SETJMP_SUPPORTED
-#ifdef USE_FAR_KEYWORD
-   if (setjmp(jmpbuf))
-#else
    if (setjmp(png_ptr->jmpbuf))
-#endif
    {
       png_free(png_ptr, png_ptr->zbuf);
       png_ptr->zbuf=NULL;
@@ -82,9 +71,6 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
 #endif
       return (NULL);
    }
-#ifdef USE_FAR_KEYWORD
-   png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
-#endif
 #endif
 
 #ifdef PNG_USER_MEM_SUPPORTED
@@ -157,14 +143,8 @@ png_create_read_struct_2(const char* user_png_ver, void* error_ptr,png_error_ptr
 /* Applications that neglect to set up their own setjmp() and then encounter
    a png_error() will longjmp here.  Since the jmpbuf is then meaningless we
    abort instead of returning. */
-#ifdef USE_FAR_KEYWORD
-   if (setjmp(jmpbuf))
-      PNG_ABORT();
-   png_memcpy(png_ptr->jmpbuf,jmpbuf,sizeof(jmp_buf));
-#else
    if (setjmp(png_ptr->jmpbuf))
       PNG_ABORT();
-#endif
 #endif
    return (png_ptr);
 }
