@@ -515,8 +515,7 @@ void png_info_destroy(png_structp png_ptr, png_info* info_ptr)
  * functions.  The application should free any memory associated with this
  * pointer before png_write_destroy() or png_read_destroy() are called.
  */
-void*
-png_get_io_ptr(png_structp png_ptr)
+void* png_get_io_ptr(png_structp png_ptr)
 {
    if(png_ptr == NULL) return (NULL);
    return (png_ptr->io_ptr);
@@ -530,8 +529,7 @@ png_get_io_ptr(png_structp png_ptr)
  * PNG_NO_STDIO, you must use a function of your own because "FILE *" isn't
  * necessarily available.
  */
-void
-png_init_io(png_structp png_ptr, FILE* fp)
+void png_init_io(png_structp png_ptr, FILE* fp)
 {
    png_debug(1, "in png_init_io\n");
    if(png_ptr == NULL) return;

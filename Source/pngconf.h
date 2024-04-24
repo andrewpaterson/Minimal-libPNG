@@ -97,20 +97,10 @@
  * a largish chunk of memory (32K), those who are not as concerned
  * with dithering quality can decrease some or all of these.
  */
-#ifndef PNG_DITHER_RED_BITS
-#  define PNG_DITHER_RED_BITS 5
-#endif
-#ifndef PNG_DITHER_GREEN_BITS
-#  define PNG_DITHER_GREEN_BITS 5
-#endif
-#ifndef PNG_DITHER_BLUE_BITS
-#  define PNG_DITHER_BLUE_BITS 5
-#endif
+#define PNG_DITHER_RED_BITS 5
+#define PNG_DITHER_GREEN_BITS 5
+#define PNG_DITHER_BLUE_BITS 5
 
-/* The following uses const char * instead of char * for error
- * and warning message functions, so some compilers won't complain.
- * If you do not want to use const, define PNG_NO_CONST here.
- */
 
 /* The following defines give you the ability to remove code from the
  * library that you will not be using.  I wish I could figure out how to
