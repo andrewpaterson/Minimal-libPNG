@@ -13,7 +13,6 @@
  * in pngtrans.c.
  */
 
-#define PNG_INTERNAL
 #include "png.h"
 
 #if defined(PNG_READ_SUPPORTED)

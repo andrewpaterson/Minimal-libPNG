@@ -1915,8 +1915,6 @@ extern void png_save_uint_16(uint8_t* buf, unsigned int i);
  * be found in the files where the functions are located.
  */
 
-#if defined(PNG_INTERNAL)
-
 /* Various modes of operation.  Note that after an init, mode is set to
  * zero automatically when the structure is created.
  */
@@ -2418,8 +2416,6 @@ void png_read_push_finish_row(png_structp png_ptr);
 
 
 /* Maintainer: Put new private prototypes here ^ and in libpngpf.3 */
-
-#endif /* PNG_INTERNAL */
 
 #ifdef __cplusplus
 }

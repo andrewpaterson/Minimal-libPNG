@@ -105,8 +105,6 @@
 #endif
 
 /* Other defines for things like memory and the like can go here.  */
-#ifdef PNG_INTERNAL
-
 #include <stdlib.h>
 
 /* Other defines specific to compilers can go here.  Try to keep
@@ -136,8 +134,6 @@
 #ifndef PNG_DITHER_BLUE_BITS
 #  define PNG_DITHER_BLUE_BITS 5
 #endif
-
-#endif /* PNG_INTERNAL */
 
 /* The following uses const char * instead of char * for error
  * and warning message functions, so some compilers won't complain.
@@ -578,11 +574,6 @@ typedef char*      png_zcharp;
 typedef char**     png_zcharpp;
 typedef z_stream*   png_zstreamp;
 #endif /* defined(PNG_1_2_X) */
-
-
-/* User may want to use these so they are not in PNG_INTERNAL. Any library
- * functions that are passed far data must be model independent.
- */
 
 #ifndef PNG_ABORT
 #  define PNG_ABORT() abort()

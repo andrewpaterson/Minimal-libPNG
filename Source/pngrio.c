@@ -15,7 +15,6 @@
  * libpng use it at run time with png_set_read_fn(...).
  */
 
-#define PNG_INTERNAL
 #include "png.h"
 
 #if defined(PNG_READ_SUPPORTED)

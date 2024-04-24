@@ -8,7 +8,6 @@
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  */
 
-#define PNG_INTERNAL
 #define PNG_NO_EXTERN
 #include "png.h"
 

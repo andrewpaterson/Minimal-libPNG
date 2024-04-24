@@ -11,7 +11,6 @@
  * libpng itself during the course of reading an image.
  */
 
-#define PNG_INTERNAL
 #include "png.h"
 
 #if defined(PNG_READ_SUPPORTED)

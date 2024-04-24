@@ -9,7 +9,6 @@
  */
 
 /* get internal access to png.h */
-#define PNG_INTERNAL
 #include "png.h"
 #ifdef PNG_WRITE_SUPPORTED
 

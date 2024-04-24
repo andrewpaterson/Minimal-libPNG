@@ -13,7 +13,6 @@
  * info struct and allows us to change the structure in the future.
  */
 
-#define PNG_INTERNAL
 #include "png.h"
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)

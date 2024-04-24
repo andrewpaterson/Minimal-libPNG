@@ -15,7 +15,6 @@
  * them at run time with png_set_write_fn(...).
  */
 
-#define PNG_INTERNAL
 #include "png.h"
 #ifdef PNG_WRITE_SUPPORTED
 

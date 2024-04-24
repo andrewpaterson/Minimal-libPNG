@@ -11,7 +11,6 @@
  * read a PNG file or stream.
  */
 
-#define PNG_INTERNAL
 #include "png.h"
 
 #if defined(PNG_READ_SUPPORTED)
