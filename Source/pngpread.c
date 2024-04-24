@@ -120,9 +120,6 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_bKGD_SUPPORTED)
       PNG_bKGD;
 #endif
-#if defined(PNG_READ_gAMA_SUPPORTED)
-      PNG_gAMA;
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       PNG_hIST;
 #endif
@@ -255,17 +252,6 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
       png_ptr->zstream.next_out = png_ptr->row_buf;
       return;
    }
-#if defined(PNG_READ_gAMA_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_gAMA, 4))
-   {
-      if (png_ptr->push_length + 4 > png_ptr->buffer_size)
-      {
-         png_push_save_buffer(png_ptr);
-         return;
-      }
-      png_handle_gAMA(png_ptr, info_ptr, png_ptr->push_length);
-   }
-#endif
 #if defined(PNG_READ_sBIT_SUPPORTED)
    else if (!png_memcmp(png_ptr->chunk_name, png_sBIT, 4))
    {

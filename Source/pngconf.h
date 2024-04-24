@@ -243,24 +243,6 @@
 #  define PNG_DITHER_BLUE_BITS 5
 #endif
 
-/* This controls how fine the gamma correction becomes when you
- * are only interested in 8 bits anyway.  Increasing this value
- * results in more memory being used, and more pow() functions
- * being called to fill in the gamma tables.  Don't set this value
- * less then 8, and even that may not work (I haven't tested it).
- */
-
-#ifndef PNG_MAX_GAMMA_8
-#  define PNG_MAX_GAMMA_8 11
-#endif
-
-/* This controls how much a difference in gamma we can tolerate before
- * we actually start doing gamma conversion.
- */
-#ifndef PNG_GAMMA_THRESHOLD
-#  define PNG_GAMMA_THRESHOLD 0.05
-#endif
-
 #endif /* PNG_INTERNAL */
 
 /* The following uses const char * instead of char * for error
@@ -360,9 +342,6 @@
 #  endif
 #  ifndef PNG_NO_READ_FILLER
 #    define PNG_READ_FILLER_SUPPORTED
-#  endif
-#  ifndef PNG_NO_READ_GAMMA
-#    define PNG_READ_GAMMA_SUPPORTED
 #  endif
 #  ifndef PNG_NO_READ_GRAY_TO_RGB
 #    define PNG_READ_GRAY_TO_RGB_SUPPORTED
@@ -574,10 +553,6 @@
 #  define PNG_READ_bKGD_SUPPORTED
 #  define PNG_bKGD_SUPPORTED
 #endif
-#ifndef PNG_NO_READ_gAMA
-#  define PNG_READ_gAMA_SUPPORTED
-#  define PNG_gAMA_SUPPORTED
-#endif
 #ifndef PNG_NO_READ_hIST
 #  define PNG_READ_hIST_SUPPORTED
 #  define PNG_hIST_SUPPORTED
@@ -637,12 +612,6 @@
 #  define PNG_WRITE_bKGD_SUPPORTED
 #  ifndef PNG_bKGD_SUPPORTED
 #    define PNG_bKGD_SUPPORTED
-#  endif
-#endif
-#ifndef PNG_NO_WRITE_gAMA
-#  define PNG_WRITE_gAMA_SUPPORTED
-#  ifndef PNG_gAMA_SUPPORTED
-#    define PNG_gAMA_SUPPORTED
 #  endif
 #endif
 #ifndef PNG_NO_WRITE_hIST

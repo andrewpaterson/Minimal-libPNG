@@ -769,50 +769,13 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #endif
       }
    }
-#if defined(PNG_FIXED_POINT_SUPPORTED)
-#if defined(PNG_gAMA_SUPPORTED)
-   {
-      png_fixed_point gamma;
+    png_colorp palette;
+    int num_palette;
 
-      if (png_get_gAMA_fixed(read_ptr, read_info_ptr, &gamma))
-      {
-         png_set_gAMA_fixed(write_ptr, write_info_ptr, gamma);
-      }
-   }
-#endif
-#else /* Use floating point versions */
-#if defined(PNG_FLOATING_POINT_SUPPORTED)
-#if defined(PNG_gAMA_SUPPORTED)
-   {
-      double gamma;
-
-      if (png_get_gAMA(read_ptr, read_info_ptr, &gamma))
-      {
-         png_set_gAMA(write_ptr, write_info_ptr, gamma);
-      }
-   }
-#endif
-#endif /* floating point */
-#endif /* fixed point */
-#if defined(PNG_sRGB_SUPPORTED)
-   {
-      int intent;
-
-      if (png_get_sRGB(read_ptr, read_info_ptr, &intent))
-      {
-         png_set_sRGB(write_ptr, write_info_ptr, intent);
-      }
-   }
-#endif
-   {
-      png_colorp palette;
-      int num_palette;
-
-      if (png_get_PLTE(read_ptr, read_info_ptr, &palette, &num_palette))
-      {
-         png_set_PLTE(write_ptr, write_info_ptr, palette, num_palette);
-      }
-   }
+    if (png_get_PLTE(read_ptr, read_info_ptr, &palette, &num_palette))
+    {
+        png_set_PLTE(write_ptr, write_info_ptr, palette, num_palette);
+    }
 #if defined(PNG_bKGD_SUPPORTED)
    {
       png_color_16p background;

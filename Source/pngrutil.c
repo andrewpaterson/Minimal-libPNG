@@ -376,86 +376,6 @@ png_handle_IEND(png_structp png_ptr, png_infop info_ptr, uint32_t length)
       return;
 }
 
-#if defined(PNG_READ_gAMA_SUPPORTED)
-void /* PRIVATE */
-png_handle_gAMA(png_structp png_ptr, png_infop info_ptr, uint32_t length)
-{
-   png_fixed_point igamma;
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-   float file_gamma;
-#endif
-   uint8_t buf[4];
-
-   png_debug(1, "in png_handle_gAMA\n");
-
-   if (!(png_ptr->mode & PNG_HAVE_IHDR))
-      png_error(png_ptr, "Missing IHDR before gAMA");
-   else if (png_ptr->mode & PNG_HAVE_IDAT)
-   {
-      png_warning(png_ptr, "Invalid gAMA after IDAT");
-      png_crc_finish(png_ptr, length);
-      return;
-   }
-   else if (png_ptr->mode & PNG_HAVE_PLTE)
-      /* Should be an error, but we can cope with it */
-      png_warning(png_ptr, "Out of place gAMA chunk");
-
-   if (info_ptr != NULL && (info_ptr->valid & PNG_INFO_gAMA)
-#if defined(PNG_READ_sRGB_SUPPORTED)
-      && !(info_ptr->valid & PNG_INFO_sRGB)
-#endif
-      )
-   {
-      png_warning(png_ptr, "Duplicate gAMA chunk");
-      png_crc_finish(png_ptr, length);
-      return;
-   }
-
-   if (length != 4)
-   {
-      png_warning(png_ptr, "Incorrect gAMA chunk length");
-      png_crc_finish(png_ptr, length);
-      return;
-   }
-
-   png_crc_read(png_ptr, buf, 4);
-   if (png_crc_finish(png_ptr, 0))
-      return;
-
-   igamma = (png_fixed_point)png_get_uint_32(buf);
-   /* check for zero gamma */
-   if (igamma == 0)
-      {
-         png_warning(png_ptr,
-           "Ignoring gAMA chunk with gamma=0");
-         return;
-      }
-
-#if defined(PNG_READ_sRGB_SUPPORTED)
-   if (info_ptr != NULL && (info_ptr->valid & PNG_INFO_sRGB))
-      if (PNG_OUT_OF_RANGE(igamma, 45500L, 500))
-      {
-         png_warning(png_ptr,
-           "Ignoring incorrect gAMA value when sRGB is also present");
-#ifndef PNG_NO_CONSOLE_IO
-         fprintf(stderr, "gamma = (%d/100000)\n", (int)igamma);
-#endif
-         return;
-      }
-#endif /* PNG_READ_sRGB_SUPPORTED */
-
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-   file_gamma = (float)igamma / (float)100000.0;
-#  ifdef PNG_READ_GAMMA_SUPPORTED
-     png_ptr->gamma = file_gamma;
-#  endif
-     png_set_gAMA(png_ptr, info_ptr, file_gamma);
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-   png_set_gAMA_fixed(png_ptr, info_ptr, igamma);
-#endif
-}
-#endif
 
 #if defined(PNG_READ_sBIT_SUPPORTED)
 void /* PRIVATE */
@@ -569,34 +489,6 @@ png_handle_sRGB(png_structp png_ptr, png_infop info_ptr, uint32_t length)
       png_warning(png_ptr, "Unknown sRGB intent");
       return;
    }
-
-#if defined(PNG_READ_gAMA_SUPPORTED) && defined(PNG_READ_GAMMA_SUPPORTED)
-   if (info_ptr != NULL && (info_ptr->valid & PNG_INFO_gAMA))
-   {
-   png_fixed_point igamma;
-#ifdef PNG_FIXED_POINT_SUPPORTED
-      igamma=info_ptr->int_gamma;
-#else
-#  ifdef PNG_FLOATING_POINT_SUPPORTED
-      igamma=(png_fixed_point)(info_ptr->gamma * 100000.);
-#  endif
-#endif
-      if (PNG_OUT_OF_RANGE(igamma, 45500L, 500))
-      {
-         png_warning(png_ptr,
-           "Ignoring incorrect gAMA value when sRGB is also present");
-#ifndef PNG_NO_CONSOLE_IO
-#  ifdef PNG_FIXED_POINT_SUPPORTED
-         fprintf(stderr,"incorrect gamma=(%d/100000)\n",(int)png_ptr->int_gamma);
-#  else
-#    ifdef PNG_FLOATING_POINT_SUPPORTED
-         fprintf(stderr,"incorrect gamma=%f\n",png_ptr->gamma);
-#    endif
-#  endif
-#endif
-      }
-   }
-#endif /* PNG_READ_gAMA_SUPPORTED */
    png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, intent);
 }
 #endif /* PNG_READ_sRGB_SUPPORTED */

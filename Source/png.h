@@ -666,14 +666,6 @@ typedef struct png_info_struct
     * and initialize the appropriate fields below.
     */
 
-#if defined(PNG_gAMA_SUPPORTED) && defined(PNG_FLOATING_POINT_SUPPORTED)
-   /* The gAMA chunk describes the gamma characteristics of the system
-    * on which the image was created, normally in the range [1.0, 2.5].
-    * Data is valid if (valid & PNG_INFO_gAMA) is non-zero.
-    */
-   float gamma; /* gamma value of image, if (valid & PNG_INFO_gAMA) */
-#endif
-
 #if defined(PNG_sRGB_SUPPORTED)
     /* GR-P, 0.96a */
     /* Data valid if (valid & PNG_INFO_sRGB) non-zero. */
@@ -778,11 +770,6 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
    /* Data valid if (valid & PNG_INFO_IDAT) non-zero */
    png_bytepp row_pointers;        /* the image bits */
 #endif
-
-#if defined(PNG_FIXED_POINT_SUPPORTED) && defined(PNG_gAMA_SUPPORTED)
-   png_fixed_point int_gamma; /* gamma of image, if (valid & PNG_INFO_gAMA) */
-#endif
-
 } png_info;
 
 typedef png_info *png_infop;
@@ -1062,9 +1049,6 @@ struct png_struct_def
    float background_gamma;
 #  endif
    png_color_16 background;   /* background color in screen gamma space */
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-   png_color_16 background_1; /* background normalized to gamma 1.0 */
-#endif
 #endif /* PNG_bKGD_SUPPORTED */
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
@@ -1073,7 +1057,7 @@ struct png_struct_def
    uint32_t flush_rows;    /* number of rows written since last flush */
 #endif
 
-#if defined(PNG_READ_GAMMA_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
+#if defined(PNG_READ_BACKGROUND_SUPPORTED)
    int gamma_shift;      /* number of "insignificant" bits 16-bit gamma */
 #ifdef PNG_FLOATING_POINT_SUPPORTED
    float gamma;          /* file gamma value */
@@ -1081,7 +1065,7 @@ struct png_struct_def
 #endif
 #endif
 
-#if defined(PNG_READ_GAMMA_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
+#if defined(PNG_READ_BACKGROUND_SUPPORTED)
    png_bytep gamma_table;     /* gamma table for 8-bit depth files */
    png_bytep gamma_from_1;    /* converts from 1.0 to screen */
    png_bytep gamma_to_1;      /* converts from file to 1.0 */
@@ -1090,7 +1074,7 @@ struct png_struct_def
    png_uint_16pp gamma_16_to_1; /* converts from file to 1.0 */
 #endif
 
-#if defined(PNG_READ_GAMMA_SUPPORTED) || defined(PNG_sBIT_SUPPORTED)
+#if defined(PNG_sBIT_SUPPORTED)
    png_color_8 sig_bit;       /* significant bits in each available channel */
 #endif
 
@@ -1171,7 +1155,7 @@ struct png_struct_def
    uint32_t mng_features_permitted;
 
 /* New member added in libpng-1.0.7 */
-#if defined(PNG_READ_GAMMA_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED)
+#if defined(PNG_READ_BACKGROUND_SUPPORTED)
    png_fixed_point int_gamma;
 #endif
 
@@ -1437,13 +1421,6 @@ extern PNG_EXPORT(void,png_set_dither) PNGARG((png_structp png_ptr,
    png_uint_16p histogram, int full_dither));
 #endif
 
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-/* Handle gamma correction. Screen_gamma=(display_exponent) */
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-extern PNG_EXPORT(void,png_set_gamma) PNGARG((png_structp png_ptr,
-   double screen_gamma, double default_file_gamma));
-#endif
-#endif
 extern PNG_EXPORT(void,png_permit_empty_plte) PNGARG((png_structp png_ptr, int empty_plte_permitted));
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
@@ -1932,24 +1909,6 @@ extern PNG_EXPORT(uint32_t,png_get_bKGD) PNGARG((png_structp png_ptr,
 #if defined(PNG_bKGD_SUPPORTED)
 extern PNG_EXPORT(void,png_set_bKGD) PNGARG((png_structp png_ptr,
    png_infop info_ptr, png_color_16p background));
-#endif
-
-#if defined(PNG_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-extern PNG_EXPORT(uint32_t,png_get_gAMA) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, double *file_gamma));
-#endif
-extern PNG_EXPORT(uint32_t,png_get_gAMA_fixed) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_fixed_point *int_file_gamma));
-#endif
-
-#if defined(PNG_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-extern PNG_EXPORT(void,png_set_gAMA) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, double file_gamma));
-#endif
-extern PNG_EXPORT(void,png_set_gAMA_fixed) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_fixed_point int_file_gamma));
 #endif
 
 #if defined(PNG_hIST_SUPPORTED)
@@ -2579,16 +2538,6 @@ PNG_EXTERN void png_write_IDAT PNGARG((png_structp png_ptr, png_bytep data,
 
 PNG_EXTERN void png_write_IEND PNGARG((png_structp png_ptr));
 
-#if defined(PNG_WRITE_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-PNG_EXTERN void png_write_gAMA PNGARG((png_structp png_ptr, double file_gamma));
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-PNG_EXTERN void png_write_gAMA_fixed PNGARG((png_structp png_ptr, png_fixed_point
-    file_gamma));
-#endif
-#endif
-
 #if defined(PNG_WRITE_sBIT_SUPPORTED)
 PNG_EXTERN void png_write_sBIT PNGARG((png_structp png_ptr, png_color_8p sbit,
    int color_type));
@@ -2641,10 +2590,6 @@ PNG_EXTERN void png_write_finish_row PNGARG((png_structp png_ptr));
 
 /* Internal use only.   Called before first row of data */
 PNG_EXTERN void png_write_start_row PNGARG((png_structp png_ptr));
-
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-PNG_EXTERN void png_build_gamma_table PNGARG((png_structp png_ptr));
-#endif
 
 /* combine a row of data, dealing with alpha, etc. if requested */
 PNG_EXTERN void png_combine_row PNGARG((png_structp png_ptr, png_bytep row,
@@ -2775,23 +2720,8 @@ PNG_EXTERN void png_do_shift PNGARG((png_row_infop row_info, png_bytep row,
 #endif
 
 #if defined(PNG_READ_BACKGROUND_SUPPORTED)
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-PNG_EXTERN void png_do_background PNGARG((png_row_infop row_info, png_bytep row,
-   png_color_16p trans_values, png_color_16p background,
-   png_color_16p background_1,
-   png_bytep gamma_table, png_bytep gamma_from_1, png_bytep gamma_to_1,
-   png_uint_16pp gamma_16, png_uint_16pp gamma_16_from_1,
-   png_uint_16pp gamma_16_to_1, int gamma_shift));
-#else
 PNG_EXTERN void png_do_background PNGARG((png_row_infop row_info, png_bytep row,
    png_color_16p trans_values, png_color_16p background));
-#endif
-#endif
-
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-PNG_EXTERN void png_do_gamma PNGARG((png_row_infop row_info, png_bytep row,
-   png_bytep gamma_table, png_uint_16pp gamma_16_table,
-   int gamma_shift));
 #endif
 
 #if defined(PNG_READ_EXPAND_SUPPORTED)
@@ -2815,11 +2745,6 @@ PNG_EXTERN void png_handle_IEND PNGARG((png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_READ_bKGD_SUPPORTED)
 PNG_EXTERN void png_handle_bKGD PNGARG((png_structp png_ptr, png_infop info_ptr,
-   uint32_t length));
-#endif
-
-#if defined(PNG_READ_gAMA_SUPPORTED)
-PNG_EXTERN void png_handle_gAMA PNGARG((png_structp png_ptr, png_infop info_ptr,
    uint32_t length));
 #endif
 

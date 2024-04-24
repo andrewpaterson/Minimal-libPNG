@@ -353,9 +353,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_bKGD_SUPPORTED)
       PNG_bKGD;
 #endif
-#if defined(PNG_READ_gAMA_SUPPORTED)
-      PNG_gAMA;
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       PNG_hIST;
 #endif
@@ -437,10 +434,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_bKGD_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_bKGD, 4))
          png_handle_bKGD(png_ptr, info_ptr, length);
-#endif
-#if defined(PNG_READ_gAMA_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_gAMA, 4))
-         png_handle_gAMA(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
@@ -862,9 +855,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_bKGD_SUPPORTED)
       PNG_bKGD;
 #endif
-#if defined(PNG_READ_gAMA_SUPPORTED)
-      PNG_gAMA;
-#endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       PNG_hIST;
 #endif
@@ -927,10 +917,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_bKGD_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_bKGD, 4))
          png_handle_bKGD(png_ptr, info_ptr, length);
-#endif
-#if defined(PNG_READ_gAMA_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_gAMA, 4))
-         png_handle_gAMA(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_hIST_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_hIST, 4))
@@ -1056,9 +1042,6 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
    png_free(png_ptr, png_ptr->palette_lookup);
    png_free(png_ptr, png_ptr->dither_index);
 #endif
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-   png_free(png_ptr, png_ptr->gamma_table);
-#endif
 #if defined(PNG_READ_BACKGROUND_SUPPORTED)
    png_free(png_ptr, png_ptr->gamma_from_1);
    png_free(png_ptr, png_ptr->gamma_to_1);
@@ -1093,40 +1076,6 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
    if (png_ptr->flags & PNG_FLAG_FREE_HIST)
       png_free(png_ptr, png_ptr->hist);
    png_ptr->flags &= ~PNG_FLAG_FREE_HIST;
-#endif
-#endif
-#if defined(PNG_READ_GAMMA_SUPPORTED)
-   if (png_ptr->gamma_16_table != NULL)
-   {
-      int i;
-      int istop = (1 << (8 - png_ptr->gamma_shift));
-      for (i = 0; i < istop; i++)
-      {
-         png_free(png_ptr, png_ptr->gamma_16_table[i]);
-      }
-   png_free(png_ptr, png_ptr->gamma_16_table);
-   }
-#if defined(PNG_READ_BACKGROUND_SUPPORTED)
-   if (png_ptr->gamma_16_from_1 != NULL)
-   {
-      int i;
-      int istop = (1 << (8 - png_ptr->gamma_shift));
-      for (i = 0; i < istop; i++)
-      {
-         png_free(png_ptr, png_ptr->gamma_16_from_1[i]);
-      }
-   png_free(png_ptr, png_ptr->gamma_16_from_1);
-   }
-   if (png_ptr->gamma_16_to_1 != NULL)
-   {
-      int i;
-      int istop = (1 << (8 - png_ptr->gamma_shift));
-      for (i = 0; i < istop; i++)
-      {
-         png_free(png_ptr, png_ptr->gamma_16_to_1[i]);
-      }
-   png_free(png_ptr, png_ptr->gamma_16_to_1);
-   }
 #endif
 #endif
 

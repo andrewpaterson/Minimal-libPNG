@@ -31,70 +31,6 @@ png_set_bKGD(png_structp png_ptr, png_infop info_ptr, png_color_16p background)
 }
 #endif
 
-#if defined(PNG_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-void PNGAPI
-png_set_gAMA(png_structp png_ptr, png_infop info_ptr, double file_gamma)
-{
-   double gamma;
-   png_debug1(1, "in %s storage function\n", "gAMA");
-   if (png_ptr == NULL || info_ptr == NULL)
-      return;
-
-   /* Check for overflow */
-   if (file_gamma > 21474.83)
-   {
-      png_warning(png_ptr, "Limiting gamma to 21474.83");
-      gamma=21474.83;
-   }
-   else
-      gamma=file_gamma;
-   info_ptr->gamma = (float)gamma;
-#ifdef PNG_FIXED_POINT_SUPPORTED
-   info_ptr->int_gamma = (int)(gamma*100000.+.5);
-#endif
-   info_ptr->valid |= PNG_INFO_gAMA;
-   if(gamma == 0.0)
-      png_warning(png_ptr, "Setting gamma=0");
-}
-#endif
-void PNGAPI
-png_set_gAMA_fixed(png_structp png_ptr, png_infop info_ptr, png_fixed_point
-   int_gamma)
-{
-   png_fixed_point gamma;
-
-   png_debug1(1, "in %s storage function\n", "gAMA");
-   if (png_ptr == NULL || info_ptr == NULL)
-      return;
-
-   if (int_gamma > (png_fixed_point) PNG_UINT_31_MAX)
-   {
-     png_warning(png_ptr, "Limiting gamma to 21474.83");
-     gamma=PNG_UINT_31_MAX;
-   }
-   else
-   {
-     if (int_gamma < 0)
-     {
-       png_warning(png_ptr, "Setting negative gamma to zero");
-       gamma=0;
-     }
-     else
-       gamma=int_gamma;
-   }
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-   info_ptr->gamma = (float)(gamma/100000.);
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-   info_ptr->int_gamma = gamma;
-#endif
-   info_ptr->valid |= PNG_INFO_gAMA;
-   if(gamma == 0)
-      png_warning(png_ptr, "Setting gamma=0");
-}
-#endif
-
 #if defined(PNG_hIST_SUPPORTED)
 void PNGAPI
 png_set_hIST(png_structp png_ptr, png_infop info_ptr, png_uint_16p hist)
@@ -385,30 +321,11 @@ void PNGAPI
 png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_infop info_ptr,
    int intent)
 {
-#if defined(PNG_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-   float file_gamma;
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-   png_fixed_point int_file_gamma;
-#endif
-#endif
    png_debug1(1, "in %s storage function\n", "sRGB_gAMA_and_cHRM");
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
    png_set_sRGB(png_ptr, info_ptr, intent);
-
-#if defined(PNG_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-   file_gamma = (float).45455;
-   png_set_gAMA(png_ptr, info_ptr, file_gamma);
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-   int_file_gamma = 45455L;
-   png_set_gAMA_fixed(png_ptr, info_ptr, int_file_gamma);
-#endif
-#endif
 }
 #endif
 

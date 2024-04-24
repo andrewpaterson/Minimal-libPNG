@@ -230,39 +230,6 @@ png_get_bKGD(png_structp png_ptr, png_infop info_ptr,
 }
 #endif
 
-
-#if defined(PNG_gAMA_SUPPORTED)
-#ifdef PNG_FLOATING_POINT_SUPPORTED
-uint32_t PNGAPI
-png_get_gAMA(png_structp png_ptr, png_infop info_ptr, double *file_gamma)
-{
-   if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_gAMA)
-      && file_gamma != NULL)
-   {
-      png_debug1(1, "in %s retrieval function\n", "gAMA");
-      *file_gamma = (double)info_ptr->gamma;
-      return (PNG_INFO_gAMA);
-   }
-   return (0);
-}
-#endif
-#ifdef PNG_FIXED_POINT_SUPPORTED
-uint32_t PNGAPI
-png_get_gAMA_fixed(png_structp png_ptr, png_infop info_ptr,
-    png_fixed_point *int_file_gamma)
-{
-   if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_gAMA)
-      && int_file_gamma != NULL)
-   {
-      png_debug1(1, "in %s retrieval function\n", "gAMA");
-      *int_file_gamma = info_ptr->int_gamma;
-      return (PNG_INFO_gAMA);
-   }
-   return (0);
-}
-#endif
-#endif
-
 #if defined(PNG_sRGB_SUPPORTED)
 uint32_t PNGAPI
 png_get_sRGB(png_structp png_ptr, png_infop info_ptr, int *file_srgb_intent)
