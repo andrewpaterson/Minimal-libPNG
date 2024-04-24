@@ -63,8 +63,8 @@
  * large file), zlib needs to know how big of a chunk it can use, and
  * libpng thus makes sure to check any memory allocation to verify it
  * will fit into memory.
-#define PNG_MAX_MALLOC_64K
  */
+#define PNG_MAX_MALLOC_64K
 #if defined(MAXSEG_64K) && !defined(PNG_MAX_MALLOC_64K)
 #  define PNG_MAX_MALLOC_64K
 #endif
