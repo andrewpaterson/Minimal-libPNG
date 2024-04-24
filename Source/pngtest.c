@@ -64,11 +64,6 @@ static float t_start, t_stop, t_decode, t_encode, t_misc;
 #include <time.h>
 #endif
 
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-static int tIME_chunk_present=0;
-static char tIME_string[30] = "no tIME chunk present in file";
-#endif
-
 static int verbose = 0;
 
 int test_one_file PNGARG((PNG_CONST char *inname, PNG_CONST char *outname));
@@ -874,23 +869,7 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
       }
    }
 #endif
-#if defined(PNG_tIME_SUPPORTED)
-   {
-      png_timep mod_time;
 
-      if (png_get_tIME(read_ptr, read_info_ptr, &mod_time))
-      {
-         png_set_tIME(write_ptr, write_info_ptr, mod_time);
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-         /* we have to use png_strcpy instead of "=" because the string
-            pointed to by png_convert_to_rfc1123() gets free'ed before
-            we use it */
-         png_strcpy(tIME_string,png_convert_to_rfc1123(read_ptr, mod_time));
-         tIME_chunk_present++;
-#endif /* PNG_TIME_RFC1123_SUPPORTED */
-      }
-   }
-#endif
 #if defined(PNG_tRNS_SUPPORTED)
    {
       png_bytep trans;
@@ -1003,23 +982,6 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
    png_debug(0, "Reading and writing end_info data\n");
 
    png_read_end(read_ptr, end_info_ptr);
-#if defined(PNG_tIME_SUPPORTED)
-   {
-      png_timep mod_time;
-
-      if (png_get_tIME(read_ptr, end_info_ptr, &mod_time))
-      {
-         png_set_tIME(write_ptr, write_end_info_ptr, mod_time);
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-         /* we have to use png_strcpy instead of "=" because the string
-            pointed to by png_convert_to_rfc1123() gets free'ed before
-            we use it */
-         png_strcpy(tIME_string,png_convert_to_rfc1123(read_ptr, mod_time));
-         tIME_chunk_present++;
-#endif /* PNG_TIME_RFC1123_SUPPORTED */
-      }
-   }
-#endif
 #if defined(PNG_WRITE_UNKNOWN_CHUNKS_SUPPORTED)
    {
       png_unknown_chunkp unknowns;

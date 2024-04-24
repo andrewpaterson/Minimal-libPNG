@@ -412,21 +412,6 @@ png_set_sRGB_gAMA_and_cHRM(png_structp png_ptr, png_infop info_ptr,
 }
 #endif
 
-
-#if defined(PNG_tIME_SUPPORTED)
-void PNGAPI
-png_set_tIME(png_structp png_ptr, png_infop info_ptr, png_timep mod_time)
-{
-   png_debug1(1, "in %s storage function\n", "tIME");
-   if (png_ptr == NULL || info_ptr == NULL ||
-       (png_ptr->mode & PNG_WROTE_tIME))
-      return;
-
-   png_memcpy(&(info_ptr->mod_time), mod_time, sizeof (png_time));
-   info_ptr->valid |= PNG_INFO_tIME;
-}
-#endif
-
 #if defined(PNG_tRNS_SUPPORTED)
 void PNGAPI
 png_set_tRNS(png_structp png_ptr, png_infop info_ptr,

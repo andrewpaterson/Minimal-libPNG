@@ -141,9 +141,6 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_sPLT_SUPPORTED)
       PNG_sPLT;
 #endif
-#if defined(PNG_READ_tIME_SUPPORTED)
-      PNG_tIME;
-#endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
       PNG_tRNS;
 #endif
@@ -355,17 +352,6 @@ png_push_read_chunk(png_structp png_ptr, png_infop info_ptr)
          return;
       }
       png_handle_pCAL(png_ptr, info_ptr, png_ptr->push_length);
-   }
-#endif
-#if defined(PNG_READ_tIME_SUPPORTED)
-   else if (!png_memcmp(png_ptr->chunk_name, png_tIME, 4))
-   {
-      if (png_ptr->push_length + 4 > png_ptr->buffer_size)
-      {
-         png_push_save_buffer(png_ptr);
-         return;
-      }
-      png_handle_tIME(png_ptr, info_ptr, png_ptr->push_length);
    }
 #endif
    else

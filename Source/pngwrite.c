@@ -147,13 +147,6 @@ png_write_info(png_structp png_ptr, png_infop info_ptr)
       png_write_pHYs(png_ptr, info_ptr->x_pixels_per_unit,
          info_ptr->y_pixels_per_unit, info_ptr->phys_unit_type);
 #endif
-#if defined(PNG_WRITE_tIME_SUPPORTED)
-   if (info_ptr->valid & PNG_INFO_tIME)
-   {
-      png_write_tIME(png_ptr, &(info_ptr->mod_time));
-      png_ptr->mode |= PNG_WROTE_tIME;
-   }
-#endif
 #if defined(PNG_WRITE_sPLT_SUPPORTED)
    if (info_ptr->valid & PNG_INFO_sPLT)
      for (i = 0; i < (int)info_ptr->splt_palettes_num; i++)
@@ -205,12 +198,6 @@ png_write_end(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_WRITE_TEXT_SUPPORTED)
       int i; /* local index variable */
 #endif
-#if defined(PNG_WRITE_tIME_SUPPORTED)
-      /* check to see if user has supplied a time chunk */
-      if ((info_ptr->valid & PNG_INFO_tIME) &&
-         !(png_ptr->mode & PNG_WROTE_tIME))
-         png_write_tIME(png_ptr, &(info_ptr->mod_time));
-#endif
 
 #if defined(PNG_WRITE_UNKNOWN_CHUNKS_SUPPORTED)
    if (info_ptr->unknown_chunks_num)
@@ -247,30 +234,6 @@ png_write_end(png_structp png_ptr, png_infop info_ptr)
 #endif
 }
 
-#if defined(PNG_WRITE_tIME_SUPPORTED)
-/* "time.h" functions are not supported on WindowsCE */
-void PNGAPI
-png_convert_from_struct_tm(png_timep ptime, struct tm *ttime)
-{
-   png_debug(1, "in png_convert_from_struct_tm\n");
-   ptime->year = (uint16_t)(1900 + ttime->tm_year);
-   ptime->month = (uint8_t)(ttime->tm_mon + 1);
-   ptime->day = (uint8_t)ttime->tm_mday;
-   ptime->hour = (uint8_t)ttime->tm_hour;
-   ptime->minute = (uint8_t)ttime->tm_min;
-   ptime->second = (uint8_t)ttime->tm_sec;
-}
-
-void PNGAPI
-png_convert_from_time_t(png_timep ptime, time_t ttime)
-{
-   struct tm *tbuf;
-
-   png_debug(1, "in png_convert_from_time_t\n");
-   tbuf = gmtime(&ttime);
-   png_convert_from_struct_tm(ptime, tbuf);
-}
-#endif
 
 /* Initialize png_ptr structure, and allocate any memory needed */
 png_structp PNGAPI
@@ -895,11 +858,6 @@ png_write_destroy(png_structp png_ptr)
    png_free(png_ptr, png_ptr->up_row);
    png_free(png_ptr, png_ptr->avg_row);
    png_free(png_ptr, png_ptr->paeth_row);
-
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-   png_free(png_ptr, png_ptr->time_buffer);
-#endif
-
 #if defined(PNG_WRITE_WEIGHTED_FILTER_SUPPORTED)
    png_free(png_ptr, png_ptr->prev_filters);
    png_free(png_ptr, png_ptr->filter_weights);

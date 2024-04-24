@@ -439,22 +439,6 @@ png_get_sBIT(png_structp png_ptr, png_infop info_ptr, png_color_8p *sig_bit)
 }
 #endif
 
-
-#if defined(PNG_tIME_SUPPORTED)
-uint32_t PNGAPI
-png_get_tIME(png_structp png_ptr, png_infop info_ptr, png_timep *mod_time)
-{
-   if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_tIME)
-       && mod_time != NULL)
-   {
-      png_debug1(1, "in %s retrieval function\n", "tIME");
-      *mod_time = &(info_ptr->mod_time);
-      return (PNG_INFO_tIME);
-   }
-   return (0);
-}
-#endif
-
 #if defined(PNG_tRNS_SUPPORTED)
 uint32_t PNGAPI
 png_get_tRNS(png_structp png_ptr, png_infop info_ptr,

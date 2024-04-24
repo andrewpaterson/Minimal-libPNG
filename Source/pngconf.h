@@ -469,10 +469,6 @@
 #  endif
 #endif
 
-#ifndef PNG_NO_STDIO
-#  define PNG_TIME_RFC1123_SUPPORTED
-#endif
-
 /* This adds extra functions in pngget.c for accessing data from the
  * info pointer (added in version 0.99)
  * png_get_image_width()
@@ -606,10 +602,6 @@
 #  define PNG_READ_sRGB_SUPPORTED
 #  define PNG_sRGB_SUPPORTED
 #endif
-#ifndef PNG_NO_READ_tIME
-#  define PNG_READ_tIME_SUPPORTED
-#  define PNG_tIME_SUPPORTED
-#endif
 #ifndef PNG_NO_READ_tRNS
 #  define PNG_READ_tRNS_SUPPORTED
 #  define PNG_tRNS_SUPPORTED
@@ -689,12 +681,6 @@
 #    define PNG_sRGB_SUPPORTED
 #  endif
 #endif
-#ifndef PNG_NO_WRITE_tIME
-#  define PNG_WRITE_tIME_SUPPORTED
-#  ifndef PNG_tIME_SUPPORTED
-#    define PNG_tIME_SUPPORTED
-#  endif
-#endif
 #ifndef PNG_NO_WRITE_tRNS
 #  define PNG_WRITE_tRNS_SUPPORTED
 #  ifndef PNG_tRNS_SUPPORTED
@@ -722,13 +708,6 @@
 #ifndef PNG_NO_INFO_IMAGE
 #  define PNG_INFO_IMAGE_SUPPORTED
 #endif
-
-/* need the time information for reading tIME chunks */
-#if defined(PNG_tIME_SUPPORTED)
-     /* "time.h" functions are not supported on WindowsCE */
-#    include <time.h>
-#endif
-
 
 /* Suggest testing for specific compiler first before testing for
  * .  The Watcom compiler defines both __MEDIUM__ and M_I86MM,

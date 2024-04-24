@@ -374,9 +374,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_sRGB_SUPPORTED)
       PNG_sRGB;
 #endif
-#if defined(PNG_READ_tIME_SUPPORTED)
-      PNG_tIME;
-#endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
       PNG_tRNS;
 #endif
@@ -468,10 +465,6 @@ png_read_info(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_sPLT_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_sPLT, 4))
          png_handle_sPLT(png_ptr, info_ptr, length);
-#endif
-#if defined(PNG_READ_tIME_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_tIME, 4))
-         png_handle_tIME(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_tRNS, 4))
@@ -890,9 +883,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_sRGB_SUPPORTED)
       PNG_sRGB;
 #endif
-#if defined(PNG_READ_tIME_SUPPORTED)
-      PNG_tIME;
-#endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
       PNG_tRNS;
 #endif
@@ -961,10 +951,6 @@ png_read_end(png_structp png_ptr, png_infop info_ptr)
 #if defined(PNG_READ_sRGB_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_sRGB, 4))
          png_handle_sRGB(png_ptr, info_ptr, length);
-#endif
-#if defined(PNG_READ_tIME_SUPPORTED)
-      else if (!png_memcmp(png_ptr->chunk_name, png_tIME, 4))
-         png_handle_tIME(png_ptr, info_ptr, length);
 #endif
 #if defined(PNG_READ_tRNS_SUPPORTED)
       else if (!png_memcmp(png_ptr->chunk_name, png_tRNS, 4))
@@ -1142,9 +1128,6 @@ png_read_destroy(png_structp png_ptr, png_infop info_ptr, png_infop end_info_ptr
    png_free(png_ptr, png_ptr->gamma_16_to_1);
    }
 #endif
-#endif
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-   png_free(png_ptr, png_ptr->time_buffer);
 #endif
 
    inflateEnd(&png_ptr->zstream);

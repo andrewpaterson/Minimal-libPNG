@@ -680,13 +680,6 @@ typedef struct png_info_struct
    uint8_t srgb_intent; /* sRGB rendering intent [0, 1, 2, or 3] */
 #endif
 
-#if defined(PNG_tIME_SUPPORTED)
-   /* The tIME chunk holds the last time the displayed image data was
-    * modified.  See the png_time struct for the contents of this struct.
-    */
-   png_time mod_time;
-#endif
-
 #if defined(PNG_sBIT_SUPPORTED)
    /* The sBIT chunk specifies the number of significant high-order bits
     * in the pixel data.  Values are in the range [1, bit_depth], and are
@@ -1151,10 +1144,6 @@ struct png_struct_def
    png_uint_16p inv_filter_costs;    /* 1/relative filter calculation cost */
 #endif
 
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-   png_charp time_buffer;            /* String to hold RFC 1123 time text */
-#endif
-
 /* New members added in libpng-1.0.6 */
 
 #ifdef PNG_FREE_ME_SUPPORTED
@@ -1326,11 +1315,6 @@ extern PNG_EXPORT(void,png_write_info) PNGARG((png_structp png_ptr,
 /* read the information before the actual image data. */
 extern PNG_EXPORT(void,png_read_info) PNGARG((png_structp png_ptr,
    png_infop info_ptr));
-#endif
-
-#if defined(PNG_TIME_RFC1123_SUPPORTED)
-extern PNG_EXPORT(png_charp,png_convert_to_rfc1123)
-   PNGARG((png_structp png_ptr, png_timep ptime));
 #endif
 
 #if defined(PNG_READ_EXPAND_SUPPORTED)
@@ -2048,16 +2032,6 @@ extern PNG_EXPORT(void,png_set_sPLT) PNGARG((png_structp png_ptr,
    png_infop info_ptr, png_sPLT_tp entries, int nentries));
 #endif
 
-#if defined(PNG_tIME_SUPPORTED)
-extern PNG_EXPORT(uint32_t,png_get_tIME) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_timep *mod_time));
-#endif
-
-#if defined(PNG_tIME_SUPPORTED)
-extern PNG_EXPORT(void,png_set_tIME) PNGARG((png_structp png_ptr,
-   png_infop info_ptr, png_timep mod_time));
-#endif
-
 #if defined(PNG_tRNS_SUPPORTED)
 extern PNG_EXPORT(uint32_t,png_get_tRNS) PNGARG((png_structp png_ptr,
    png_infop info_ptr, png_bytep *trans, int *num_trans,
@@ -2662,11 +2636,6 @@ PNG_EXTERN void png_write_pHYs PNGARG((png_structp png_ptr,
    int unit_type));
 #endif
 
-#if defined(PNG_WRITE_tIME_SUPPORTED)
-PNG_EXTERN void png_write_tIME PNGARG((png_structp png_ptr,
-   png_timep mod_time));
-#endif
-
 /* Called when finished processing a row of data */
 PNG_EXTERN void png_write_finish_row PNGARG((png_structp png_ptr));
 
@@ -2881,11 +2850,6 @@ extern void png_handle_sPLT PNGARG((png_structp png_ptr, png_infop info_ptr,
 
 #if defined(PNG_READ_sRGB_SUPPORTED)
 PNG_EXTERN void png_handle_sRGB PNGARG((png_structp png_ptr, png_infop info_ptr,
-   uint32_t length));
-#endif
-
-#if defined(PNG_READ_tIME_SUPPORTED)
-PNG_EXTERN void png_handle_tIME PNGARG((png_structp png_ptr, png_infop info_ptr,
    uint32_t length));
 #endif
 
