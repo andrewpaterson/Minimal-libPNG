@@ -960,7 +960,6 @@ extern uint32_t zlibCompileFlags(void);
 
 	One-time table building (smaller code, but not thread-safe if true):
 		12: BUILDFIXED -- build static block decoding tables when needed
-		13: DYNAMIC_CRC_TABLE -- build CRC calculation tables when needed
 		14,15: 0 (reserved)
 
 	Library content (indicates missing functionality):

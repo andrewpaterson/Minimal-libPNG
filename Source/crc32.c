@@ -11,39 +11,18 @@
 
 /* @(#) $Id$ */
 
-/*
-  Note on the use of DYNAMIC_CRC_TABLE: there is no mutex or semaphore
-  protection on the static variables used to control the first-use generation
-  of the crc tables.  Therefore, if you #define DYNAMIC_CRC_TABLE, you should
-  first call get_crc_table() to initialize the tables before allowing more than
-  one thread to use crc32().
- */
-
 
 #include "zutil.h"
 
+#define TBLS 1
+#include "crc32.h"
 
-
-/* Definitions for doing the crc four data bytes at a time. */
-#ifdef BYFOUR
-#  define REV(w) (((w)>>24)+(((w)>>8)&0xff00)+ \
-                (((w)&0xff00)<<8)+(((w)&0xff)<<24))
-   static uint32_t crc32_little (uint32_t,                        const uint8_t *, unsigned);
-   static uint32_t crc32_big (uint32_t,                        const uint8_t *, unsigned);
-#  define TBLS 8
-#else
-#  define TBLS 1
-#endif /* BYFOUR */
+#define GF2_DIM 32      /* dimension of GF(2) vectors (length of CRC) */
 
 /* Local functions for crc concatenation */
 static uint32_t gf2_matrix_times (uint32_t *mat, uint32_t vec);
 static void gf2_matrix_square (uint32_t *square, uint32_t *mat);
 
-
-/* ========================================================================
- * Tables of CRC-32s of all single-byte values, made by make_crc_table().
- */
-#include "crc32.h"
 
 /* =========================================================================
  * This function can be used by asm versions of crc32()
@@ -63,122 +42,28 @@ uint32_t crc32(crc, buf, len)
     const uint8_t *buf;
     unsigned len;
 {
-    if (buf == Z_NULL) return 0UL;
-
-#ifdef DYNAMIC_CRC_TABLE
-    if (crc_table_empty)
-        make_crc_table();
-#endif /* DYNAMIC_CRC_TABLE */
-
-#ifdef BYFOUR
-    if (sizeof(void *) == sizeof(ptrdiff_t)) {
-        uint32_t endian;
-
-        endian = 1;
-        if (*((uint8_t *)(&endian)))
-            return crc32_little(crc, buf, len);
-        else
-            return crc32_big(crc, buf, len);
+    if (buf == Z_NULL)
+    {
+        return 0UL;
     }
-#endif /* BYFOUR */
+
     crc = crc ^ 0xffffffffUL;
-    while (len >= 8) {
+    while (len >= 8) 
+    {
         DO8;
         len -= 8;
     }
-    if (len) do {
-        DO1;
-    } while (--len);
+    if (len)
+    {
+        do
+        {
+            DO1;
+        }
+        while (--len);
+    }
     return crc ^ 0xffffffffUL;
 }
 
-#ifdef BYFOUR
-
-/* ========================================================================= */
-#define DOLIT4 c ^= *buf4++; \
-        c = crc_table[3][c & 0xff] ^ crc_table[2][(c >> 8) & 0xff] ^ \
-            crc_table[1][(c >> 16) & 0xff] ^ crc_table[0][c >> 24]
-#define DOLIT32 DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4
-
-/* ========================================================================= */
-static uint32_t crc32_little(crc, buf, len)
-    uint32_t crc;
-    const uint8_t *buf;
-    unsigned len;
-{
-    register uint32_t c;
-    register const uint32_t *buf4;
-
-    c = (uint32_t)crc;
-    c = ~c;
-    while (len && ((ptrdiff_t)buf & 3)) {
-        c = crc_table[0][(c ^ *buf++) & 0xff] ^ (c >> 8);
-        len--;
-    }
-
-    buf4 = (const uint32_t *)(const void *)buf;
-    while (len >= 32) {
-        DOLIT32;
-        len -= 32;
-    }
-    while (len >= 4) {
-        DOLIT4;
-        len -= 4;
-    }
-    buf = (const uint8_t *)buf4;
-
-    if (len) do {
-        c = crc_table[0][(c ^ *buf++) & 0xff] ^ (c >> 8);
-    } while (--len);
-    c = ~c;
-    return (uint32_t)c;
-}
-
-/* ========================================================================= */
-#define DOBIG4 c ^= *++buf4; \
-        c = crc_table[4][c & 0xff] ^ crc_table[5][(c >> 8) & 0xff] ^ \
-            crc_table[6][(c >> 16) & 0xff] ^ crc_table[7][c >> 24]
-#define DOBIG32 DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4
-
-/* ========================================================================= */
-static uint32_t crc32_big(crc, buf, len)
-    uint32_t crc;
-    const uint8_t *buf;
-    unsigned len;
-{
-    register uint32_t c;
-    register const uint32_t *buf4;
-
-    c = REV((uint32_t)crc);
-    c = ~c;
-    while (len && ((ptrdiff_t)buf & 3)) {
-        c = crc_table[4][(c >> 24) ^ *buf++] ^ (c << 8);
-        len--;
-    }
-
-    buf4 = (const uint32_t *)(const void *)buf;
-    buf4--;
-    while (len >= 32) {
-        DOBIG32;
-        len -= 32;
-    }
-    while (len >= 4) {
-        DOBIG4;
-        len -= 4;
-    }
-    buf4++;
-    buf = (const uint8_t *)buf4;
-
-    if (len) do {
-        c = crc_table[4][(c >> 24) ^ *buf++] ^ (c << 8);
-    } while (--len);
-    c = ~c;
-    return (uint32_t)(REV(c));
-}
-
-#endif /* BYFOUR */
-
-#define GF2_DIM 32      /* dimension of GF(2) vectors (length of CRC) */
 
 /* ========================================================================= */
 static uint32_t gf2_matrix_times(mat, vec)
