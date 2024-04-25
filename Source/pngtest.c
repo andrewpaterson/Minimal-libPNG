@@ -372,9 +372,6 @@ png_debug_free(png_structp png_ptr, void* ptr)
       fprintf(STDERR, "NULL pointer to png_debug_free.\n");
    if (ptr == 0)
    {
-#if 0 /* This happens all the time. */
-      fprintf(STDERR, "WARNING: freeing NULL pointer\n");
-#endif
       return;
    }
 

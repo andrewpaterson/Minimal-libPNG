@@ -537,15 +537,6 @@ void png_init_io(png_structp png_ptr, FILE* fp)
 }
 #endif
 
-
-#if 0
-/* Signature string for a PNG file. */
-uint8_t*
-png_sig_bytes(void)
-{
-   return ((uint8_t*)"\211\120\116\107\015\012\032\012");
-}
-#endif
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */
 
 char*
