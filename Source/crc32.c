@@ -19,14 +19,8 @@
   one thread to use crc32().
  */
 
-#ifdef MAKECRCH
-#  include <stdio.h>
-#  ifndef DYNAMIC_CRC_TABLE
-#    define DYNAMIC_CRC_TABLE
-#  endif /* !DYNAMIC_CRC_TABLE */
-#endif /* MAKECRCH */
 
-#include "zutil.h"      /* for STDC  */
+#include "zutil.h"
 
 
 

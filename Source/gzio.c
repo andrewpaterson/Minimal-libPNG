@@ -8,6 +8,7 @@
  /* @(#) $Id$ */
 
 #include "stdio.h"
+#include "stdarg.h"
 #include "zutil.h"
 
 
@@ -408,10 +409,10 @@ gz_stream* s;
 	}
 	if (s->file != NULL && fclose(s->file))
 	{
-#ifdef ESPIPE
-		if (errno != ESPIPE) /* fclose is broken for pipes in HP/UX */
-#endif
+		if (errno != ESPIPE)
+		{
 			err = Z_ERRNO;
+		}
 	}
 	if (s->z_err < 0) err = s->z_err;
 
@@ -435,10 +436,19 @@ unsigned len;
 	uint8_t* start = (uint8_t*)buf; /* starting point for crc computation */
 	uint8_t* next_out; /* == stream.next_out but not forced far (for MSDOS) */
 
-	if (s == NULL || s->mode != 'r') return Z_STREAM_ERROR;
+	if (s == NULL || s->mode != 'r')
+	{
+		return Z_STREAM_ERROR;
+	}
 
-	if (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO) return -1;
-	if (s->z_err == Z_STREAM_END) return 0;  /* EOF */
+	if (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO)
+	{
+		return -1;
+	}
+	if (s->z_err == Z_STREAM_END)
+	{
+		return 0;  /* EOF */
+	}
 
 	next_out = (uint8_t*)buf;
 	s->stream.next_out = (uint8_t*)buf;
@@ -478,8 +488,7 @@ unsigned len;
 			}
 			if (s->stream.avail_out > 0)
 			{
-				s->stream.avail_out -=
-					(uint32_t)fread(next_out, 1, s->stream.avail_out, s->file);
+				s->stream.avail_out -= (uint32_t)fread(next_out, 1, s->stream.avail_out, s->file);
 			}
 			len -= s->stream.avail_out;
 			s->in += len;
@@ -538,9 +547,10 @@ unsigned len;
 	}
 	s->crc = crc32(s->crc, start, (uint32_t)(s->stream.next_out - start));
 
-	if (len == s->stream.avail_out &&
-		(s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO))
+	if (len == s->stream.avail_out && (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO))
+	{
 		return -1;
+	}
 	return (int)(len - s->stream.avail_out);
 }
 
@@ -567,11 +577,17 @@ gzFile file;
 {
 	gz_stream* s = (gz_stream*)file;
 
-	if (s == NULL || s->mode != 'r' || c == EOF || s->back != EOF) return EOF;
+	if (s == NULL || s->mode != 'r' || c == EOF || s->back != EOF)
+	{
+		return EOF;
+	}
 	s->back = c;
 	s->out--;
 	s->last = (s->z_err == Z_STREAM_END);
-	if (s->last) s->z_err = Z_OK;
+	if (s->last)
+	{
+		s->z_err = Z_OK;
+	}
 	s->z_eof = 0;
 	return c;
 }
@@ -592,7 +608,10 @@ char* buf;
 int len;
 {
 	char* b = buf;
-	if (buf == Z_NULL || len <= 0) return Z_NULL;
+	if (buf == Z_NULL || len <= 0)
+	{
+		return Z_NULL;
+	}
 
 	while (--len > 0 && gzread(file, buf, 1) == 1 && *buf++ != '\n');
 	*buf = '\0';
@@ -648,8 +667,6 @@ unsigned len;
    control of the format string, as in fprintf. gzprintf returns the number of
    uncompressed bytes actually written (0 in case of error).
 */
-#ifdef STDC
-#include <stdarg.h>
 
 int gzprintf(gzFile file, const char* format, /* args */ ...)
 {
@@ -665,44 +682,7 @@ int gzprintf(gzFile file, const char* format, /* args */ ...)
 		return 0;
 	return gzwrite(file, buf, (unsigned)len);
 }
-#else /* not ANSI C */
 
-int gzprintf(file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
-			 a11, a12, a13, a14, a15, a16, a17, a18, a19, a20)
-	gzFile file;
-const char* format;
-int a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
-a11, a12, a13, a14, a15, a16, a17, a18, a19, a20;
-{
-	char buf[Z_PRINTF_BUFSIZE];
-	int len;
-
-	buf[sizeof(buf) - 1] = 0;
-#ifdef NO_snprintf
-#  ifdef HAS_sprintf_void
-	sprintf(buf, format, a1, a2, a3, a4, a5, a6, a7, a8,
-			a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
-	for (len = 0; len < sizeof(buf); len++)
-		if (buf[len] == 0) break;
-#  else
-	len = sprintf(buf, format, a1, a2, a3, a4, a5, a6, a7, a8,
-				  a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
-#  endif
-#else
-#  ifdef HAS_snprintf_void
-	snprintf(buf, sizeof(buf), format, a1, a2, a3, a4, a5, a6, a7, a8,
-			 a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
-	len = strlen(buf);
-#  else
-	len = snprintf(buf, sizeof(buf), format, a1, a2, a3, a4, a5, a6, a7, a8,
-				   a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
-#  endif
-#endif
-	if (len <= 0 || len >= sizeof(buf) || buf[sizeof(buf) - 1] != 0)
-		return 0;
-	return gzwrite(file, buf, len);
-}
-#endif
 
 /* ===========================================================================
 	  Writes c, converted to an uint8_t, into the compressed file.
