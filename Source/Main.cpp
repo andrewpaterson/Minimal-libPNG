@@ -8,13 +8,13 @@
 */
 bool LoadPNG(char* file_name)
 {
-	png_structp			png_ptr;
-	png_info*			info_ptr;
-	unsigned int		sig_read = 0;
-	FILE*				fp;
-	uint8_t**			row_pointers;
-	int					iWidth;
-	int					iHeight;
+	png_structp		png_ptr;
+	png_info*		info_ptr;
+	unsigned int	sig_read = 0;
+	FILE*			fp;
+	uint8_t**		row_pointers;
+	int				iWidth;
+	int				iHeight;
 
 	if ((fp = fopen(file_name, "rb")) == NULL)
 	{
