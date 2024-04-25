@@ -2,3 +2,4 @@
 /Source/Debug
 /Debug/*
 /Source/*.lst
+/Source/*.obj

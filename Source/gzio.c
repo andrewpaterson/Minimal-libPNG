@@ -994,11 +994,6 @@ gzFile file;
 	return destroy((gz_stream*)file);
 }
 
-#ifdef STDC
-#  define zstrerror(errnum) strerror(errnum)
-#else
-#  define zstrerror(errnum) ""
-#endif
 
 /* ===========================================================================
 	 Returns the error message for the last error which occurred on the
@@ -1022,7 +1017,7 @@ int* errnum;
 	*errnum = s->z_err;
 	if (*errnum == Z_OK) return (const char*)"";
 
-	m = (char*)(*errnum == Z_ERRNO ? zstrerror(errno) : s->stream.msg);
+	m = (char*)(*errnum == Z_ERRNO ? strerror(errno) : s->stream.msg);
 
 	if (m == NULL || *m == '\0') m = (char*)ERR_MSG(s->z_err);
 

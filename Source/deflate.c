@@ -232,11 +232,15 @@ int stream_size;
 	if (strm == Z_NULL) return Z_STREAM_ERROR;
 
 	strm->msg = Z_NULL;
-	if (strm->zalloc == (alloc_func)0) {
+	if (strm->zalloc == (alloc_func)0) 
+	{
 		strm->zalloc = zcalloc;
 		strm->opaque = (void*)0;
 	}
-	if (strm->zfree == (free_func)0) strm->zfree = zcfree;
+	if (strm->zfree == (free_func)0)
+	{
+		strm->zfree = zcfree;
+	}
 
 #ifdef FASTEST
 	if (level != 0) level = 1;

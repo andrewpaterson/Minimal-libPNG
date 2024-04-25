@@ -76,28 +76,14 @@ uint32_t zlibCompileFlags()
 #ifdef FASTEST
     flags += 1L << 21;
 #endif
-#ifdef STDC
-#  ifdef NO_vsnprintf
-        flags += 1L << 25;
-#    ifdef HAS_vsprintf_void
-        flags += 1L << 26;
+#ifdef NO_vsnprintf
+    flags += 1L << 25;
+#ifdef HAS_vsprintf_void
+    flags += 1L << 26;
 #    endif
-#  else
-#    ifdef HAS_vsnprintf_void
-        flags += 1L << 26;
-#    endif
-#  endif
 #else
-        flags += 1L << 24;
-#  ifdef NO_snprintf
-        flags += 1L << 25;
-#    ifdef HAS_sprintf_void
-        flags += 1L << 26;
-#    endif
-#  else
-#    ifdef HAS_snprintf_void
-        flags += 1L << 26;
-#    endif
+#    ifdef HAS_vsnprintf_void
+    flags += 1L << 26;
 #  endif
 #endif
     return flags;
@@ -130,11 +116,6 @@ const char * zError(err)
 
 #ifndef MY_ZCALLOC /* Any system without a special alloc function */
 
-#ifndef STDC
-extern void *  malloc (uint32_t size);
-extern void *  calloc (uint32_t items, uint32_t size);
-extern void   free   (void * ptr);
-#endif
 
 void * zcalloc (opaque, items, size)
     void * opaque;

@@ -15,10 +15,9 @@
 
 #include "zlib.h"
 
-#ifdef STDC
-#  include <string.h>
-#  include <stdlib.h>
-#endif
+#include <string.h>
+#include <stdlib.h>
+
 #ifdef NO_ERRNO_H
     extern int errno;
 #endif

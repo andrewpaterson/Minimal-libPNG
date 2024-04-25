@@ -293,13 +293,8 @@ void _tr_stored_block(deflate_state *s, char *buf, uint32_t stored_len, int eof)
 #ifndef DEBUG
 /* Inline versions of _tr_tally for speed: */
 
-#if defined(GEN_TREES_H) || !defined(STDC)
-  extern uint8_t _length_code[];
-  extern uint8_t _dist_code[];
-#else
-  extern const uint8_t _length_code[];
-  extern const uint8_t _dist_code[];
-#endif
+extern const uint8_t _length_code[];
+extern const uint8_t _dist_code[];
 
 #define _tr_tally_lit(s, c, flush) \
   { uint8_t cc = (c); \

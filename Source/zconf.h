@@ -15,7 +15,6 @@
  * than 64k bytes at a time (needed on systems with 16-bit int).
  */
 
-#define STDC
 #define MAX_MEM_LEVEL 8
 
 
