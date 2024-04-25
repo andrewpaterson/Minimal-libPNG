@@ -88,20 +88,35 @@ static const uint8_t bl_order[BL_CODES]
 
 struct static_tree_desc_s {
     const ct_data *static_tree;  /* static tree or NULL */
-    const int32_t *extra_bits;      /* extra bits for each code or NULL */
+    const int32_t *extra_bits;   /* extra bits for each code or NULL */
     int     extra_base;          /* base index for extra_bits */
     int     elems;               /* max number of elements in the tree */
     int     max_length;          /* max bit length for the codes */
 };
 
 static static_tree_desc  static_l_desc =
-{static_ltree, extra_lbits, LITERALS+1, L_CODES, MAX_BITS};
+{
+    static_ltree, 
+    (void*)extra_lbits,
+    LITERALS+1, 
+    L_CODES, MAX_BITS
+};
 
 static static_tree_desc  static_d_desc =
-{static_dtree, extra_dbits, 0,          D_CODES, MAX_BITS};
+{
+    static_dtree, 
+    (void*)extra_dbits, 
+    0,          
+    D_CODES, MAX_BITS
+};
 
 static static_tree_desc  static_bl_desc =
-{(const ct_data *)0, extra_blbits, 0,   BL_CODES, MAX_BL_BITS};
+{
+    (const ct_data *)0,
+    (void*)extra_blbits,
+    0,   
+    BL_CODES, MAX_BL_BITS
+};
 
 /* ===========================================================================
  * Local (static) routines in this file.

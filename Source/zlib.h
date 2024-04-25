@@ -1279,15 +1279,6 @@ extern uint32_t crc32(uint32_t crc, const uint8_t* buf, uint32_t len);
 		if (crc != original_crc) error();
 */
 
-extern uint32_t crc32_combine(uint32_t crc1, uint32_t crc2, int32_t len2);
-/*
-		Combine two CRC-32 check values into one.  For two sequences of bytes,
-	seq1 and seq2 with lengths len1 and len2, CRC-32 check values were
-	calculated for each, crc1 and crc2.  crc32_combine() returns the CRC-32
-	check value of seq1 and seq2 concatenated, requiring only crc1, crc2, and
-	len2.
-*/
-
 
 /* various hacks, don't look :) */
 

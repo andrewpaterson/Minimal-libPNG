@@ -80,9 +80,9 @@ typedef struct static_tree_desc_s  static_tree_desc;
 
 typedef struct tree_desc_s 
 {
-    ct_data *dyn_tree;           /* the dynamic tree */
-    int     max_code;            /* largest code with non zero frequency */
-    static_tree_desc *stat_desc; /* the corresponding static tree */
+    ct_data*            dyn_tree;         /* the dynamic tree */
+    int                 max_code;         /* largest code with non zero frequency */
+    static_tree_desc*   stat_desc;        /* the corresponding static tree */
 } tree_desc;
 
 /* A uint16_t is an index in the character window. We use short instead of int to
@@ -94,7 +94,7 @@ typedef struct internal_state
     z_streamp   strm;      /* pointer back to this zlib stream */
     int         status;        /* as the name implies */
     uint8_t*    pending_buf;  /* output still pending */
-    uint32_t         pending_buf_size; /* size of pending_buf */
+    uint32_t    pending_buf_size; /* size of pending_buf */
     uint8_t*    pending_out;  /* next pending byte to output to the stream */
     uint32_t    pending;      /* nb of bytes in the pending buffer */
     int         wrap;          /* bit 0 true for zlib, bit 1 true for gzip */
