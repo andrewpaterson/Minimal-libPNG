@@ -23,11 +23,13 @@
     <ClCompile Include="compress.c" />
     <ClCompile Include="crc32.c" />
     <ClCompile Include="deflate.c" />
+    <ClCompile Include="FreeList.cpp" />
     <ClCompile Include="gzio.c" />
     <ClCompile Include="infback.c" />
     <ClCompile Include="inffast.c" />
     <ClCompile Include="inflate.c" />
     <ClCompile Include="inftrees.c" />
+    <ClCompile Include="IntegerHelper.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="png.c" />
     <ClCompile Include="pngerror.c" />
@@ -52,16 +54,24 @@
   <ItemGroup>
     <ClInclude Include="crc32.h" />
     <ClInclude Include="deflate.h" />
+    <ClInclude Include="FreeList.h" />
     <ClInclude Include="inffast.h" />
     <ClInclude Include="inffixed.h" />
     <ClInclude Include="inflate.h" />
     <ClInclude Include="inftrees.h" />
+    <ClInclude Include="IntegerHelper.h" />
     <ClInclude Include="png.h" />
     <ClInclude Include="pngconf.h" />
+    <ClInclude Include="PrimitiveTypes.h" />
+    <ClInclude Include="StdLong.h" />
     <ClInclude Include="trees.h" />
     <ClInclude Include="zconf.h" />
     <ClInclude Include="zlib.h" />
     <ClInclude Include="zutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="clean.bat" />
+    <None Include="make.bat" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6AC2878F-B1E1-4C7A-8C62-2D1D3CAFC13E}</ProjectGuid>

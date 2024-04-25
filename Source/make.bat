@@ -12,4 +12,5 @@ wdc816cc.exe  -bs -DUSING_816 -ml -wr -wu -so -sp -lt -pb -pp -px -o uncompr.obj
 wdc816cc.exe  -bs -DUSING_816 -ml -wr -wu -so -sp -lt -pb -pp -px -o inflate.obj inflate.c || exit /b
 wdc816cc.exe  -bs -DUSING_816 -ml -wr -wu -so -sp -lt -pb -pp -px -o inffast.obj inffast.c || exit /b
 wdc816cc.exe  -bs -DUSING_816 -ml -wr -wu -so -sp -lt -pb -pp -px -o inftrees.obj inftrees.c || exit /b
-wdcln.exe -C20000,00000 -g -t -sz -HB -obin\LibPNG.bin adler32.obj compress.obj deflate.obj trees.obj crc32.obj zutil.obj uncompr.obj inflate.obj inffast.obj inftrees.obj -lcl -lml || exit /b
+wdc816cc.exe  -bs -DUSING_816 -ml -wr -wu -so -sp -lt -pb -pp -px -o inthelp.obj IntegerHelper.cpp || exit /b
+wdcln.exe -C20000,00000 -D30000,10000 -g -t -sz -HB -oLibPNG.bin adler32.obj compress.obj deflate.obj trees.obj crc32.obj zutil.obj uncompr.obj inflate.obj inffast.obj inftrees.obj inthelp.obj -lcl -lml || exit /b

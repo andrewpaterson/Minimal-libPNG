@@ -1,48 +1,173 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="adler32.c" />
-    <ClCompile Include="compress.c" />
-    <ClCompile Include="crc32.c" />
-    <ClCompile Include="deflate.c" />
-    <ClCompile Include="gzio.c" />
-    <ClCompile Include="infback.c" />
-    <ClCompile Include="inffast.c" />
-    <ClCompile Include="inflate.c" />
-    <ClCompile Include="inftrees.c" />
-    <ClCompile Include="png.c" />
-    <ClCompile Include="pngerror.c" />
-    <ClCompile Include="pngget.c" />
-    <ClCompile Include="pngmem.c" />
-    <ClCompile Include="pngpread.c" />
-    <ClCompile Include="pngread.c" />
-    <ClCompile Include="pngrio.c" />
-    <ClCompile Include="pngrtran.c" />
-    <ClCompile Include="pngrutil.c" />
-    <ClCompile Include="pngset.c" />
-    <ClCompile Include="pngtest.c" />
-    <ClCompile Include="pngtrans.c" />
-    <ClCompile Include="pngwio.c" />
-    <ClCompile Include="pngwrite.c" />
-    <ClCompile Include="pngwtran.c" />
-    <ClCompile Include="pngwutil.c" />
-    <ClCompile Include="trees.c" />
-    <ClCompile Include="uncompr.c" />
-    <ClCompile Include="zutil.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="png.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngerror.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngget.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngmem.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngpread.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngread.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngrio.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngrtran.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngrutil.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngset.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngtest.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngtrans.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngwio.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngwrite.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngwtran.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="pngwutil.c">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="compress.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="crc32.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="deflate.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="gzio.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="infback.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="inffast.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="inflate.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="inftrees.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="adler32.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="trees.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="uncompr.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="zutil.c">
+      <Filter>ZLib</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeList.cpp">
+      <Filter>LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="IntegerHelper.cpp">
+      <Filter>Base\Math\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="crc32.h" />
-    <ClInclude Include="deflate.h" />
-    <ClInclude Include="inffast.h" />
-    <ClInclude Include="inffixed.h" />
-    <ClInclude Include="inflate.h" />
-    <ClInclude Include="inftrees.h" />
-    <ClInclude Include="png.h" />
-    <ClInclude Include="pngconf.h" />
-    <ClInclude Include="trees.h" />
-    <ClInclude Include="zconf.h" />
-    <ClInclude Include="zlib.h" />
-    <ClInclude Include="zutil.h" />
+    <ClInclude Include="png.h">
+      <Filter>LibPNG</Filter>
+    </ClInclude>
+    <ClInclude Include="pngconf.h">
+      <Filter>LibPNG</Filter>
+    </ClInclude>
+    <ClInclude Include="inftrees.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="crc32.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="deflate.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="inffast.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="inffixed.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="inflate.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="trees.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="zconf.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="zutil.h">
+      <Filter>ZLib</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeList.h">
+      <Filter>LibPNG</Filter>
+    </ClInclude>
+    <ClInclude Include="IntegerHelper.h">
+      <Filter>Base\Math\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveTypes.h">
+      <Filter>Base\Data\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="StdLong.h">
+      <Filter>Base\Data\Primitive</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LibPNG">
+      <UniqueIdentifier>{7f920d9e-711b-4dba-ad7a-9b53216f0d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZLib">
+      <UniqueIdentifier>{93ef740d-e926-4916-bcf1-cf4355d67fd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{54030a90-d378-4ead-9634-1681a33579a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Math">
+      <UniqueIdentifier>{777898b5-24e0-4526-aff8-e3b2590acb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Math\Primitive">
+      <UniqueIdentifier>{5077bf06-bb32-4549-bc47-ebd0b2763905}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Data">
+      <UniqueIdentifier>{cb3ae397-5db0-4c4e-b315-f757733c38e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Data\Primitive">
+      <UniqueIdentifier>{b7b7d579-1848-4102-8262-c96187b11473}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="clean.bat" />
+    <None Include="make.bat" />
   </ItemGroup>
 </Project>
