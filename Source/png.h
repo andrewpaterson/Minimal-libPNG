@@ -148,7 +148,7 @@
  *    and minor numbers; the shared-library major version number will be
  *    used for changes in backward compatibility, as it is intended.  The
  *    PNG_LIBPNG_VER macro, which is not used within libpng but is available
- *    for applications, is an unsigned integer of the form xyyzz corresponding
+ *    for applications, is an uint32_t integer of the form xyyzz corresponding
  *    to the source version x.y.z (leading zeros in y and z).  Beta versions
  *    were given the previous public release number plus a letter, until
  *    version 1.0.6j; from then on they were given the upcoming public
@@ -293,7 +293,7 @@
  *    upward through 1.2.16 are Y2K compliant.  It is my belief that earlier
  *    versions were also Y2K compliant.
  *
- *    Libpng only has three year fields.  One is a 2-byte unsigned integer
+ *    Libpng only has three year fields.  One is a 2-byte uint32_t integer
  *    that will hold years up to 65535.  The other two hold the date in text
  *    format, and will hold years up to 9999.
  *
@@ -325,7 +325,7 @@
  *    stated that it works with 4-digit years, and the APIs have been
  *    documented as such.
  *
- *    The tIME chunk itself is also Y2K compliant.  It uses a 2-byte unsigned
+ *    The tIME chunk itself is also Y2K compliant.  It uses a 2-byte uint32_t
  *    integer to hold the year, and can hold years as large as 65535.
  *
  *    zlib, upon which libpng depends, is also Y2K compliant.  It contains
@@ -1846,10 +1846,10 @@ extern void png_save_uint_32(uint8_t* buf, uint32_t i);
 extern void png_save_int_32(uint8_t* buf, int32_t i);
 
 /* Place a 16-bit number into a buffer in PNG byte order.
- * The parameter is declared unsigned int, not uint16_t,
+ * The parameter is declared uint32_t, not uint16_t,
  * just to avoid potential problems on pre-ANSI C compilers.
  */
-extern void png_save_uint_16(uint8_t* buf, unsigned int i);
+extern void png_save_uint_16(uint8_t* buf, uint32_t i);
 /* No png_save_int_16 -- may be added if there's a real need for it. */
 
 /* ************************************************************************* */

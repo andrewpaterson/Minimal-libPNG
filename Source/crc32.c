@@ -9,9 +9,6 @@
  * factor of two increase in speed on a Power PC G4 (PPC7455) using gcc -O3.
  */
 
-/* @(#) $Id$ */
-
-
 #include "zutil.h"
 
 #define TBLS 1
@@ -40,7 +37,7 @@ const uint32_t *get_crc_table()
 uint32_t crc32(crc, buf, len)
     uint32_t crc;
     const uint8_t *buf;
-    unsigned len;
+    uint32_t len;
 {
     if (buf == Z_NULL)
     {

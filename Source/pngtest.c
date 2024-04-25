@@ -316,7 +316,7 @@ png_debug_free(png_structp png_ptr, void* ptr)
          }
          if (pinfo->next == NULL)
          {
-            fprintf(STDERR, "Pointer %x not found\n", (unsigned int)ptr);
+            fprintf(STDERR, "Pointer %x not found\n", (uint32_t)ptr);
             break;
          }
          ppinfo = &pinfo->next;

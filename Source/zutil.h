@@ -144,7 +144,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 
-void * zcalloc (void * opaque, unsigned items, unsigned size);
+void * zcalloc (void * opaque, uint32_t items, uint32_t size);
 void   zcfree  (void * opaque, void * ptr);
 
 #define ZALLOC(strm, items, size) \

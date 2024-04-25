@@ -32,24 +32,24 @@ const char inflate_copyright[] =
 int inflate_table(type, lens, codes, table, bits, work)
 codetype type;
 uint16_t *lens;
-unsigned codes;
+uint32_t codes;
 code **table;
-unsigned *bits;
+uint32_t *bits;
 uint16_t *work;
 {
-    unsigned len;               /* a code's length in bits */
-    unsigned sym;               /* index of code symbols */
-    unsigned min, max;          /* minimum and maximum code lengths */
-    unsigned root;              /* number of index bits for root table */
-    unsigned curr;              /* number of index bits for current table */
-    unsigned drop;              /* code bits to drop for sub-table */
+    uint32_t len;               /* a code's length in bits */
+    uint32_t sym;               /* index of code symbols */
+    uint32_t min, max;          /* minimum and maximum code lengths */
+    uint32_t root;              /* number of index bits for root table */
+    uint32_t curr;              /* number of index bits for current table */
+    uint32_t drop;              /* code bits to drop for sub-table */
     int left;                   /* number of prefix codes available */
-    unsigned used;              /* code entries in table used */
-    unsigned huff;              /* Huffman code */
-    unsigned incr;              /* for incrementing code, index */
-    unsigned fill;              /* index for replicating entries */
-    unsigned low;               /* low bits for current root entry */
-    unsigned mask;              /* mask for low root bits */
+    uint32_t used;              /* code entries in table used */
+    uint32_t huff;              /* Huffman code */
+    uint32_t incr;              /* for incrementing code, index */
+    uint32_t fill;              /* index for replicating entries */
+    uint32_t low;               /* low bits for current root entry */
+    uint32_t mask;              /* mask for low root bits */
     code this;                  /* table entry for duplication */
     code *next;             /* next available space in table */
     const uint16_t *base;     /* base value table to use */
@@ -204,7 +204,7 @@ uint16_t *work;
     next = *table;              /* current table to fill in */
     curr = root;                /* current table index bits */
     drop = 0;                   /* current bits to drop from code for index */
-    low = (unsigned)(-1);       /* trigger new sub-table when len > root */
+    low = (uint32_t)(-1);       /* trigger new sub-table when len > root */
     used = 1U << root;          /* use root table entries */
     mask = used - 1;            /* mask for comparing low */
 

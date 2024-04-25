@@ -24,11 +24,11 @@ png_get_uint_31(png_structp png_ptr, uint8_t* buf)
 {
    uint32_t i = png_get_uint_32(buf);
    if (i > PNG_UINT_31_MAX)
-     png_error(png_ptr, "PNG unsigned integer out of range.");
+     png_error(png_ptr, "PNG uint32_t integer out of range.");
    return (i);
 }
 #ifndef PNG_READ_BIG_ENDIAN_SUPPORTED
-/* Grab an unsigned 32-bit integer from a buffer in big-endian format. */
+/* Grab an uint32_t 32-bit integer from a buffer in big-endian format. */
 uint32_t
 png_get_uint_32(uint8_t* buf)
 {
@@ -54,7 +54,7 @@ png_get_int_32(uint8_t* buf)
    return (i);
 }
 
-/* Grab an unsigned 16-bit integer from a buffer in big-endian format. */
+/* Grab an uint32_t 16-bit integer from a buffer in big-endian format. */
 uint16_t
 png_get_uint_16(uint8_t* buf)
 {
@@ -718,7 +718,7 @@ void png_handle_tRNS(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 #if defined(PNG_READ_hIST_SUPPORTED)
 void png_handle_hIST(png_structp png_ptr, png_info* info_ptr, uint32_t length)
 {
-   unsigned int num, i;
+   uint32_t num, i;
    uint16_t readbuf[PNG_MAX_PALETTE_LENGTH];
 
    png_debug(1, "in png_handle_hIST\n");
@@ -745,8 +745,8 @@ void png_handle_hIST(png_structp png_ptr, png_info* info_ptr, uint32_t length)
    }
 
    num = length / 2 ;
-   if (num != (unsigned int) png_ptr->num_palette || num >
-      (unsigned int) PNG_MAX_PALETTE_LENGTH)
+   if (num != (uint32_t) png_ptr->num_palette || num >
+      (uint32_t) PNG_MAX_PALETTE_LENGTH)
    {
       png_warning(png_ptr, "Incorrect hIST chunk length");
       png_crc_finish(png_ptr, length);

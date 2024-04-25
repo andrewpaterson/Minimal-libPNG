@@ -151,10 +151,10 @@ static int  build_bl_tree  (deflate_state *s);
 static void send_all_trees (deflate_state *s, int lcodes, int dcodes, int blcodes);
 static void compress_block (deflate_state *s, ct_data *ltree, ct_data *dtree);
 static void set_data_type  (deflate_state *s);
-static unsigned bi_reverse (unsigned value, int length);
+static uint32_t bi_reverse (uint32_t value, int length);
 static void bi_windup      (deflate_state *s);
 static void bi_flush       (deflate_state *s);
-static void copy_block     (deflate_state *s, char *buf, unsigned len, int header);
+static void copy_block     (deflate_state *s, char *buf, uint32_t len, int header);
 
 #ifdef GEN_TREES_H
 static void gen_trees_header (void);
@@ -302,7 +302,7 @@ static void tr_static_init()
     /* The static distance tree is trivial: */
     for (n = 0; n < D_CODES; n++) {
         static_dtree[n].Len = 5;
-        static_dtree[n].Code = bi_reverse((unsigned)n, 5);
+        static_dtree[n].Code = bi_reverse((uint32_t)n, 5);
     }
     static_init_done = 1;
 
@@ -552,7 +552,7 @@ static void gen_bitlen(s, desc)
         while (n != 0) {
             m = s->heap[--h];
             if (m > max_code) continue;
-            if ((unsigned) tree[m].Len != (unsigned) bits) {
+            if ((uint32_t) tree[m].Len != (uint32_t) bits) {
                 Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
                 s->opt_len += ((int32_t)bits - (int32_t)tree[m].Len)
                               *(int32_t)tree[m].Freq;
@@ -872,7 +872,7 @@ void _tr_stored_block(s, buf, stored_len, eof)
     s->compressed_len = (s->compressed_len + 3 + 7) & (uint32_t)~7L;
     s->compressed_len += (stored_len + 4) << 3;
 #endif
-    copy_block(s, buf, (unsigned)stored_len, 1); /* with header */
+    copy_block(s, buf, (uint32_t)stored_len, 1); /* with header */
 }
 
 /* ===========================================================================
@@ -1018,8 +1018,8 @@ void _tr_flush_block(s, buf, stored_len, eof)
  */
 int _tr_tally (s, dist, lc)
     deflate_state *s;
-    unsigned dist;  /* distance of matched string */
-    unsigned lc;    /* match length-MIN_MATCH or unmatched char (if dist==0) */
+    uint32_t dist;  /* distance of matched string */
+    uint32_t lc;    /* match length-MIN_MATCH or unmatched char (if dist==0) */
 {
     s->d_buf[s->last_lit] = (uint16_t)dist;
     s->l_buf[s->last_lit++] = (uint8_t)lc;
@@ -1071,10 +1071,10 @@ static void compress_block(s, ltree, dtree)
     ct_data *ltree; /* literal tree */
     ct_data *dtree; /* distance tree */
 {
-    unsigned dist;      /* distance of matched string */
+    uint32_t dist;      /* distance of matched string */
     int lc;             /* match length or unmatched char (if dist == 0) */
-    unsigned lx = 0;    /* running index in l_buf */
-    unsigned code;      /* the code to send */
+    uint32_t lx = 0;    /* running index in l_buf */
+    uint32_t code;      /* the code to send */
     int extra;          /* number of extra bits to send */
 
     if (s->last_lit != 0) do {
@@ -1140,11 +1140,11 @@ static void set_data_type(s)
  * method would use a table)
  * IN assertion: 1 <= len <= 15
  */
-static unsigned bi_reverse(code, len)
-    unsigned code; /* the value to invert */
+static uint32_t bi_reverse(code, len)
+    uint32_t code; /* the value to invert */
     int len;       /* its bit length */
 {
-    register unsigned res = 0;
+    register uint32_t res = 0;
     do {
         res |= code & 1;
         code >>= 1, res <<= 1;
@@ -1194,7 +1194,7 @@ static void bi_windup(s)
 static void copy_block(s, buf, len, header)
     deflate_state *s;
     char    *buf;    /* the input data */
-    unsigned len;     /* its length */
+    uint32_t len;     /* its length */
     int      header;  /* true if block header must be written */
 {
     bi_windup(s);        /* align on byte boundary */

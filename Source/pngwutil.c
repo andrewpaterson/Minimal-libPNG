@@ -12,7 +12,7 @@
 #ifdef PNG_WRITE_SUPPORTED
 
 /* Place a 32-bit number into a buffer in PNG byte order.  We work
- * with unsigned numbers for convenience, although one supported
+ * with uint32_t numbers for convenience, although one supported
  * ancillary chunk uses signed (two's complement) numbers.
  */
 void
@@ -38,11 +38,11 @@ png_save_int_32(uint8_t* buf, int32_t i)
 }
 
 /* Place a 16-bit number into a buffer in PNG byte order.
- * The parameter is declared unsigned int, not uint16_t,
+ * The parameter is declared uint32_t, not uint16_t,
  * just to avoid potential problems on pre-ANSI C compilers.
  */
 void
-png_save_uint_16(uint8_t* buf, unsigned int i)
+png_save_uint_16(uint8_t* buf, uint32_t i)
 {
    buf[0] = (uint8_t)((i >> 8) & 0xff);
    buf[1] = (uint8_t)(i & 0xff);
@@ -338,7 +338,7 @@ void png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length)
    if (!(png_ptr->mode & PNG_HAVE_IDAT) &&
        png_ptr->compression_type == PNG_COMPRESSION_TYPE_BASE)
    {
-      unsigned int z_cmf = data[0];  /* zlib compression method and flags */
+      uint32_t z_cmf = data[0];  /* zlib compression method and flags */
       if ((z_cmf & 0x0f) == 8 && (z_cmf & 0xf0) <= 0x70)
       {
          /* Avoid memory underflows and multiplication overflows. */
@@ -350,8 +350,8 @@ void png_write_IDAT(png_structp png_ptr, uint8_t* data, size_t length)
             uint32_t uncompressed_idat_size = png_ptr->height *
                ((png_ptr->width *
                png_ptr->channels * png_ptr->bit_depth + 15) >> 3);
-            unsigned int z_cinfo = z_cmf >> 4;
-            unsigned int half_z_window_size = 1 << (z_cinfo + 7);
+            uint32_t z_cinfo = z_cmf >> 4;
+            uint32_t half_z_window_size = 1 << (z_cinfo + 7);
             while (uncompressed_idat_size <= half_z_window_size &&
                    half_z_window_size >= 256)
             {

@@ -80,34 +80,34 @@ struct inflate_state {
     int wrap;                   /* bit 0 true for zlib, bit 1 true for gzip */
     int havedict;               /* true if dictionary provided */
     int flags;                  /* gzip header method and flags (0 if zlib) */
-    unsigned dmax;              /* zlib header max distance (INFLATE_STRICT) */
+    uint32_t dmax;              /* zlib header max distance (INFLATE_STRICT) */
     uint32_t check;        /* protected copy of check value */
     uint32_t total;        /* protected copy of output count */
     gz_headerp head;            /* where to save gzip header information */
         /* sliding window */
-    unsigned wbits;             /* log base 2 of requested window size */
-    unsigned wsize;             /* window size or zero if not using window */
-    unsigned whave;             /* valid bytes in the window */
-    unsigned write;             /* window write index */
+    uint32_t wbits;             /* log base 2 of requested window size */
+    uint32_t wsize;             /* window size or zero if not using window */
+    uint32_t whave;             /* valid bytes in the window */
+    uint32_t write;             /* window write index */
     uint8_t *window;  /* allocated sliding window, if needed */
         /* bit accumulator */
     uint32_t hold;         /* input bit accumulator */
-    unsigned bits;              /* number of bits in "in" */
+    uint32_t bits;              /* number of bits in "in" */
         /* for string and stored block copying */
-    unsigned length;            /* literal or length of data to copy */
-    unsigned offset;            /* distance back to copy string from */
+    uint32_t length;            /* literal or length of data to copy */
+    uint32_t offset;            /* distance back to copy string from */
         /* for table and code decoding */
-    unsigned extra;             /* extra bits needed */
+    uint32_t extra;             /* extra bits needed */
         /* fixed and dynamic code tables */
     code const *lencode;    /* starting table for length/literal codes */
     code const *distcode;   /* starting table for distance codes */
-    unsigned lenbits;           /* index bits for lencode */
-    unsigned distbits;          /* index bits for distcode */
+    uint32_t lenbits;           /* index bits for lencode */
+    uint32_t distbits;          /* index bits for distcode */
         /* dynamic table building */
-    unsigned ncode;             /* number of code length code lengths */
-    unsigned nlen;              /* number of length code lengths */
-    unsigned ndist;             /* number of distance code lengths */
-    unsigned have;              /* number of code lengths in lens[] */
+    uint32_t ncode;             /* number of code length code lengths */
+    uint32_t nlen;              /* number of length code lengths */
+    uint32_t ndist;             /* number of distance code lengths */
+    uint32_t have;              /* number of code lengths in lens[] */
     code *next;             /* next available space in codes[] */
     uint16_t lens[320];   /* temporary storage for code lengths */
     uint16_t work[288];   /* work area for code table building */

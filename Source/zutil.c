@@ -138,8 +138,8 @@ extern void   free   (void * ptr);
 
 void * zcalloc (opaque, items, size)
     void * opaque;
-    unsigned items;
-    unsigned size;
+    uint32_t items;
+    uint32_t size;
 {
     if (opaque) items += size - size; /* make compiler happy */
     return sizeof(uint32_t) > 2 ? (void *)malloc(items * size) :

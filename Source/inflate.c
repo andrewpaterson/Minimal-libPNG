@@ -46,7 +46,7 @@
  * - Unroll last copy for window match in inflate_fast()
  * - Use local copies of window variables in inflate_fast() for speed
  * - Pull out common write == 0 case for speed in inflate_fast()
- * - Make op and len in inflate_fast() unsigned for consistency
+ * - Make op and len in inflate_fast() uint32_t for consistency
  * - Add  to lcode and dcode declarations in inflate_fast()
  * - Simplified bad distance check in inflate_fast()
  * - Added inflateBackInit(), inflateBack(), and inflateBackEnd() in new
@@ -67,7 +67,7 @@
  * - Changed type of window in inflateBackInit() to uint8_t *
  *
  * 1.2.beta7    27 Jan 2003
- * - Changed many types to unsigned or uint16_t to avoid warnings
+ * - Changed many types to uint32_t or uint16_t to avoid warnings
  * - Added inflateCopy() function
  *
  * 1.2.0        9 Mar 2003
@@ -93,11 +93,11 @@
 
 /* function prototypes */
 static void fixedtables (struct inflate_state *state);
-static int updatewindow (z_streamp strm, unsigned out);
+static int updatewindow (z_streamp strm, uint32_t out);
 #ifdef BUILDFIXED
    void makefixed (void);
 #endif
-static unsigned syncsearch (unsigned *have, uint8_t *buf, unsigned len);
+static uint32_t syncsearch (uint32_t *have, uint8_t *buf, uint32_t len);
 
 int inflateReset(strm)
 z_streamp strm;
@@ -178,7 +178,7 @@ int stream_size;
         strm->state = Z_NULL;
         return Z_STREAM_ERROR;
     }
-    state->wbits = (unsigned)windowBits;
+    state->wbits = (uint32_t)windowBits;
     state->window = Z_NULL;
     return inflateReset(strm);
 }
@@ -211,7 +211,7 @@ struct inflate_state *state;
 
     /* build fixed huffman tables if first call (may not be thread safe) */
     if (virgin) {
-        unsigned sym, bits;
+        uint32_t sym, bits;
         static code *next;
 
         /* literal/length table */
@@ -267,7 +267,7 @@ struct inflate_state *state;
  */
 void makefixed()
 {
-    unsigned low, size;
+    uint32_t low, size;
     struct inflate_state state;
 
     fixedtables(&state);
@@ -321,10 +321,10 @@ void makefixed()
  */
 static int updatewindow(strm, out)
 z_streamp strm;
-unsigned out;
+uint32_t out;
 {
     struct inflate_state *state;
-    unsigned copy, dist;
+    uint32_t copy, dist;
 
     state = (struct inflate_state *)strm->state;
 
@@ -441,19 +441,19 @@ unsigned out;
    not enough available input to do that, then return from inflate(). */
 #define NEEDBITS(n) \
     do { \
-        while (bits < (unsigned)(n)) \
+        while (bits < (uint32_t)(n)) \
             PULLBYTE(); \
     } while (0)
 
 /* Return the low n bits of the bit accumulator (n < 16) */
 #define BITS(n) \
-    ((unsigned)hold & ((1U << (n)) - 1))
+    ((uint32_t)hold & ((1U << (n)) - 1))
 
 /* Remove n bits from the bit accumulator */
 #define DROPBITS(n) \
     do { \
         hold >>= (n); \
-        bits -= (unsigned)(n); \
+        bits -= (uint32_t)(n); \
     } while (0)
 
 /* Remove zero to seven bits as needed to go to a byte boundary */
@@ -557,15 +557,15 @@ int flush;
     struct inflate_state *state;
     uint8_t *next;    /* next input */
     uint8_t *put;     /* next output */
-    unsigned have, left;        /* available input and output */
+    uint32_t have, left;        /* available input and output */
     uint32_t hold;         /* bit buffer */
-    unsigned bits;              /* bits in bit buffer */
-    unsigned in, out;           /* save starting available input and output */
-    unsigned copy;              /* number of stored or match bytes to copy */
+    uint32_t bits;              /* bits in bit buffer */
+    uint32_t in, out;           /* save starting available input and output */
+    uint32_t copy;              /* number of stored or match bytes to copy */
     uint8_t *from;    /* where to copy match bytes from */
     code this;                  /* current decoding table entry */
     code last;                  /* parent table entry */
-    unsigned len;               /* length to copy for repeats, bits to drop */
+    uint32_t len;               /* length to copy for repeats, bits to drop */
     int ret;                    /* return code */
 #ifdef GUNZIP
     uint8_t hbuf[4];      /* buffer for gzip header crc calculation */
@@ -667,9 +667,9 @@ int flush;
         case EXLEN:
             if (state->flags & 0x0400) {
                 NEEDBITS(16);
-                state->length = (unsigned)(hold);
+                state->length = (uint32_t)(hold);
                 if (state->head != Z_NULL)
-                    state->head->extra_len = (unsigned)hold;
+                    state->head->extra_len = (uint32_t)hold;
                 if (state->flags & 0x0200) CRC2(state->check, hold);
                 INITBITS();
             }
@@ -703,7 +703,7 @@ int flush;
                 if (have == 0) goto inf_leave;
                 copy = 0;
                 do {
-                    len = (unsigned)(next[copy++]);
+                    len = (uint32_t)(next[copy++]);
                     if (state->head != Z_NULL &&
                             state->head->name != Z_NULL &&
                             state->length < state->head->name_max)
@@ -724,7 +724,7 @@ int flush;
                 if (have == 0) goto inf_leave;
                 copy = 0;
                 do {
-                    len = (unsigned)(next[copy++]);
+                    len = (uint32_t)(next[copy++]);
                     if (state->head != Z_NULL &&
                             state->head->comment != Z_NULL &&
                             state->length < state->head->comm_max)
@@ -811,7 +811,7 @@ int flush;
                 state->mode = BAD;
                 break;
             }
-            state->length = (unsigned)hold & 0xffff;
+            state->length = (uint32_t)hold & 0xffff;
             Tracev((stderr, "inflate:       stored length %u\n",
                     state->length));
             INITBITS();
@@ -876,7 +876,7 @@ int flush;
             while (state->have < state->nlen + state->ndist) {
                 for (;;) {
                     this = state->lencode[BITS(state->lenbits)];
-                    if ((unsigned)(this.bits) <= bits) break;
+                    if ((uint32_t)(this.bits) <= bits) break;
                     PULLBYTE();
                 }
                 if (this.val < 16) {
@@ -955,7 +955,7 @@ int flush;
             }
             for (;;) {
                 this = state->lencode[BITS(state->lenbits)];
-                if ((unsigned)(this.bits) <= bits) break;
+                if ((uint32_t)(this.bits) <= bits) break;
                 PULLBYTE();
             }
             if (this.op && (this.op & 0xf0) == 0) {
@@ -963,13 +963,13 @@ int flush;
                 for (;;) {
                     this = state->lencode[last.val +
                             (BITS(last.bits + last.op) >> last.bits)];
-                    if ((unsigned)(last.bits + this.bits) <= bits) break;
+                    if ((uint32_t)(last.bits + this.bits) <= bits) break;
                     PULLBYTE();
                 }
                 DROPBITS(last.bits);
             }
             DROPBITS(this.bits);
-            state->length = (unsigned)this.val;
+            state->length = (uint32_t)this.val;
             if ((int)(this.op) == 0) {
                 Tracevv((stderr, this.val >= 0x20 && this.val < 0x7f ?
                         "inflate:         literal '%c'\n" :
@@ -987,7 +987,7 @@ int flush;
                 state->mode = BAD;
                 break;
             }
-            state->extra = (unsigned)(this.op) & 15;
+            state->extra = (uint32_t)(this.op) & 15;
             state->mode = LENEXT;
         case LENEXT:
             if (state->extra) {
@@ -1000,7 +1000,7 @@ int flush;
         case DIST:
             for (;;) {
                 this = state->distcode[BITS(state->distbits)];
-                if ((unsigned)(this.bits) <= bits) break;
+                if ((uint32_t)(this.bits) <= bits) break;
                 PULLBYTE();
             }
             if ((this.op & 0xf0) == 0) {
@@ -1008,7 +1008,7 @@ int flush;
                 for (;;) {
                     this = state->distcode[last.val +
                             (BITS(last.bits + last.op) >> last.bits)];
-                    if ((unsigned)(last.bits + this.bits) <= bits) break;
+                    if ((uint32_t)(last.bits + this.bits) <= bits) break;
                     PULLBYTE();
                 }
                 DROPBITS(last.bits);
@@ -1019,8 +1019,8 @@ int flush;
                 state->mode = BAD;
                 break;
             }
-            state->offset = (unsigned)this.val;
-            state->extra = (unsigned)(this.op) & 15;
+            state->offset = (uint32_t)this.val;
+            state->extra = (uint32_t)(this.op) & 15;
             state->mode = DISTEXT;
         case DISTEXT:
             if (state->extra) {
@@ -1235,13 +1235,13 @@ gz_headerp head;
    called again with more data and the *have state.  *have is initialized to
    zero for the first call.
  */
-static unsigned syncsearch(have, buf, len)
-unsigned *have;
+static uint32_t syncsearch(have, buf, len)
+uint32_t *have;
 uint8_t *buf;
-unsigned len;
+uint32_t len;
 {
-    unsigned got;
-    unsigned next;
+    uint32_t got;
+    uint32_t next;
 
     got = *have;
     next = 0;
@@ -1261,7 +1261,7 @@ unsigned len;
 int inflateSync(strm)
 z_streamp strm;
 {
-    unsigned len;               /* number of bytes to look at or looked at */
+    uint32_t len;               /* number of bytes to look at or looked at */
     uint32_t in, out;      /* temporary to save total_in and total_out */
     uint8_t buf[4];       /* to restore bit buffer to byte string */
     struct inflate_state *state;
@@ -1326,7 +1326,7 @@ z_streamp source;
     struct inflate_state *state;
     struct inflate_state *copy;
     uint8_t *window;
-    unsigned wsize;
+    uint32_t wsize;
 
     /* check input */
     if (dest == Z_NULL || source == Z_NULL || source->state == Z_NULL ||

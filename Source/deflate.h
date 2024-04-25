@@ -8,10 +8,8 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) $Id$ */
-
-#ifndef DEFLATE_H
-#define DEFLATE_H
+#ifndef __DEFLATE_H__
+#define __DEFLATE_H__
 
 #include "zutil.h"
 
@@ -87,12 +85,8 @@ typedef struct tree_desc_s
     static_tree_desc *stat_desc; /* the corresponding static tree */
 } tree_desc;
 
-typedef uint16_t Pos;
-typedef Pos Posf;
-typedef unsigned IPos;
-
-/* A Pos is an index in the character window. We use short instead of int to
- * save space in the various tables. IPos is used only for parameter passing.
+/* A uint16_t is an index in the character window. We use short instead of int to
+ * save space in the various tables. uint32_t is used only for parameter passing.
  */
 
 typedef struct internal_state 
@@ -130,13 +124,13 @@ typedef struct internal_state
      * is directly used as sliding window.
      */
 
-    Posf*       prev;
+    uint16_t*       prev;
     /* Link to older string with same hash index. To limit the size of this
      * array to 64K, this link is maintained only for the last 32K strings.
      * An index in this array is thus a window index modulo 32K.
      */
 
-    Posf*       head; /* Heads of the hash chains or NIL. */
+    uint16_t*       head; /* Heads of the hash chains or NIL. */
 
     uint32_t    ins_h;          /* hash index of string to be inserted */
     uint32_t    hash_size;      /* number of elements in hash table */
@@ -156,7 +150,7 @@ typedef struct internal_state
      */
 
     uint32_t    match_length;           /* length of best match */
-    IPos        prev_match;             /* previous match */
+    uint32_t        prev_match;             /* previous match */
     int         match_available;         /* set if previous match exists */
     uint32_t    strstart;               /* start of string to insert */
     uint32_t    match_start;            /* start of matching string */
@@ -285,13 +279,12 @@ typedef struct internal_state
 
         /* in trees.c */
 void _tr_init        (deflate_state *s);
-int  _tr_tally       (deflate_state *s, unsigned dist, unsigned lc);
+int  _tr_tally       (deflate_state *s, uint32_t dist, uint32_t lc);
 void _tr_flush_block (deflate_state *s, char *buf, uint32_t stored_len, int eof);
 void _tr_align       (deflate_state *s);
 void _tr_stored_block(deflate_state *s, char *buf, uint32_t stored_len, int eof);
 
-#define d_code(dist) \
-   ((dist) < 256 ? _dist_code[dist] : _dist_code[256+((dist)>>7)])
+#define d_code(dist) ((dist) < 256 ? _dist_code[dist] : _dist_code[256+((dist)>>7)])
 /* Mapping from a distance to a distance code. dist is the distance - 1 and
  * must not have side effects. _dist_code[256] and _dist_code[257] are never
  * used.
@@ -308,14 +301,14 @@ void _tr_stored_block(deflate_state *s, char *buf, uint32_t stored_len, int eof)
   extern const uint8_t _dist_code[];
 #endif
 
-# define _tr_tally_lit(s, c, flush) \
+#define _tr_tally_lit(s, c, flush) \
   { uint8_t cc = (c); \
     s->d_buf[s->last_lit] = 0; \
     s->l_buf[s->last_lit++] = cc; \
     s->dyn_ltree[cc].Freq++; \
     flush = (s->last_lit == s->lit_bufsize-1); \
    }
-# define _tr_tally_dist(s, distance, length, flush) \
+#define _tr_tally_dist(s, distance, length, flush) \
   { uint8_t len = (length); \
     uint16_t dist = (distance); \
     s->d_buf[s->last_lit] = dist; \
@@ -327,8 +320,8 @@ void _tr_stored_block(deflate_state *s, char *buf, uint32_t stored_len, int eof)
   }
 #else
 # define _tr_tally_lit(s, c, flush) flush = _tr_tally(s, 0, c)
-# define _tr_tally_dist(s, distance, length, flush) \
-              flush = _tr_tally(s, distance, length)
+# define _tr_tally_dist(s, distance, length, flush) flush = _tr_tally(s, distance, length)
 #endif
 
-#endif /* DEFLATE_H */
+#endif // __DEFLATE_H__
+

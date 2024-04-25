@@ -865,8 +865,8 @@ extern int inflateBackInit (z_streamp strm, int windowBits,
 	match the version of the header file.
 */
 
-typedef unsigned (*in_func) (void*, uint8_t**);
-typedef int (*out_func) (void*, uint8_t*, unsigned);
+typedef uint32_t (*in_func) (void*, uint8_t**);
+typedef int (*out_func) (void*, uint8_t*, uint32_t);
 
 extern int inflateBack(z_streamp strm, in_func in, void* in_desc, out_func out, void* out_desc);
 /*
@@ -1087,7 +1087,7 @@ extern int gzsetparams(gzFile file, int level, int strategy);
 	opened for writing.
 */
 
-extern int    gzread(gzFile file, void* buf, unsigned len);
+extern int    gzread(gzFile file, void* buf, uint32_t len);
 /*
 		Reads the given number of uncompressed bytes from the compressed file.
 	If the input file was not in gzip format, gzread copies the given number
@@ -1095,7 +1095,7 @@ extern int    gzread(gzFile file, void* buf, unsigned len);
 		gzread returns the number of uncompressed bytes actually read (0 for
 	end of file, -1 for error). */
 
-extern int    gzwrite(gzFile file, void const* buf, unsigned len);
+extern int    gzwrite(gzFile file, void const* buf, uint32_t len);
 /*
 		Writes the given number of uncompressed bytes into the compressed file.
 	gzwrite returns the number of uncompressed bytes actually written

@@ -3,8 +3,6 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id$ */
-
 #include "zlib.h"
 
 /* ===========================================================================
@@ -25,24 +23,31 @@ int compress2 (dest, destLen, source, sourceLen, level)
     uint32_t sourceLen;
     int level;
 {
-    z_stream stream;
-    int err;
+    z_stream    stream;
+    int         err;
 
     stream.next_in = (uint8_t*)source;
     stream.avail_in = (uint32_t)sourceLen;
     stream.next_out = dest;
     stream.avail_out = (uint32_t)*destLen;
-    if ((uint32_t)stream.avail_out != *destLen) return Z_BUF_ERROR;
+    if ((uint32_t)stream.avail_out != *destLen)
+    {
+        return Z_BUF_ERROR;
+    }
 
     stream.zalloc = (alloc_func)0;
     stream.zfree = (free_func)0;
     stream.opaque = (void *)0;
 
     err = deflateInit(&stream, level);
-    if (err != Z_OK) return err;
+    if (err != Z_OK)
+    {
+        return err;
+    }
 
     err = deflate(&stream, Z_FINISH);
-    if (err != Z_STREAM_END) {
+    if (err != Z_STREAM_END) 
+    {
         deflateEnd(&stream);
         return err == Z_OK ? Z_BUF_ERROR : err;
     }
@@ -72,3 +77,4 @@ uint32_t compressBound (sourceLen)
 {
     return sourceLen + (sourceLen >> 12) + (sourceLen >> 14) + 11;
 }
+

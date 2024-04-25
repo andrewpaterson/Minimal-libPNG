@@ -430,7 +430,7 @@ gz_stream* s;
 int gzread(file, buf, len)
 gzFile file;
 void* buf;
-unsigned len;
+uint32_t len;
 {
 	gz_stream* s = (gz_stream*)file;
 	uint8_t* start = (uint8_t*)buf; /* starting point for crc computation */
@@ -626,7 +626,7 @@ int len;
 int gzwrite(file, buf, len)
 gzFile file;
 void const* buf;
-unsigned len;
+uint32_t len;
 {
 	gz_stream* s = (gz_stream*)file;
 
@@ -680,7 +680,7 @@ int gzprintf(gzFile file, const char* format, /* args */ ...)
 	va_end(va);
 	if (len <= 0 || len >= (int)sizeof(buf) || buf[sizeof(buf) - 1] != 0)
 		return 0;
-	return gzwrite(file, buf, (unsigned)len);
+	return gzwrite(file, buf, (uint32_t)len);
 }
 
 
@@ -707,7 +707,7 @@ int gzputs(file, s)
 gzFile file;
 const char* s;
 {
-	return gzwrite(file, (char*)s, (unsigned)strlen(s));
+	return gzwrite(file, (char*)s, (uint32_t)strlen(s));
 }
 
 
