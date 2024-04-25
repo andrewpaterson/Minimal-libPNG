@@ -11,10 +11,6 @@
 
 #include "zutil.h"
 
-#ifdef NO_DEFLATE       /* for compatibility with old definition */
-#  define NO_GZCOMPRESS
-#endif
-
 #ifndef NO_DUMMY_DECL
 struct internal_state {int dummy;}; /* for buggy compilers */
 #endif
@@ -126,7 +122,8 @@ local gzFile gz_open (path, mode, fd)
     strcpy(s->path, path); /* do this early for debugging */
 
     s->mode = '\0';
-    do {
+    do 
+    {
         if (*p == 'r') s->mode = 'r';
         if (*p == 'w' || *p == 'a') s->mode = 'w';
         if (*p >= '0' && *p <= '9') {
@@ -140,23 +137,25 @@ local gzFile gz_open (path, mode, fd)
         } else {
             *m++ = *p; /* copy the mode */
         }
-    } while (*p++ && m != fmode + sizeof(fmode));
-    if (s->mode == '\0') return destroy(s), (gzFile)Z_NULL;
+    } 
+    while (*p++ && m != fmode + sizeof(fmode));
 
-    if (s->mode == 'w') {
-#ifdef NO_GZCOMPRESS
-        err = Z_STREAM_ERROR;
-#else
-        err = deflateInit2(&(s->stream), level,
-                           Z_DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, strategy);
+    if (s->mode == '\0') 
+        return destroy(s), (gzFile)Z_NULL;
+
+    if (s->mode == 'w') 
+    {
+        err = deflateInit2(&(s->stream), level, Z_DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, strategy);
         /* windowBits is passed < 0 to suppress zlib header */
 
         s->stream.next_out = s->outbuf = (uint8_t*)ALLOC(Z_BUFSIZE);
-#endif
-        if (err != Z_OK || s->outbuf == Z_NULL) {
+        if (err != Z_OK || s->outbuf == Z_NULL) 
+        {
             return destroy(s), (gzFile)Z_NULL;
         }
-    } else {
+    } 
+    else 
+    {
         s->stream.next_in  = s->inbuf = (uint8_t*)ALLOC(Z_BUFSIZE);
 
         err = inflateInit2(&(s->stream), -MAX_WBITS);
@@ -166,7 +165,8 @@ local gzFile gz_open (path, mode, fd)
          * return Z_STREAM_END. Here the gzip CRC32 ensures that 4 bytes are
          * present after the compressed stream.
          */
-        if (err != Z_OK || s->inbuf == Z_NULL) {
+        if (err != Z_OK || s->inbuf == Z_NULL) 
+        {
             return destroy(s), (gzFile)Z_NULL;
         }
     }
@@ -356,18 +356,19 @@ local int destroy (s)
 
     TRYFREE(s->msg);
 
-    if (s->stream.state != NULL) {
-        if (s->mode == 'w') {
-#ifdef NO_GZCOMPRESS
-            err = Z_STREAM_ERROR;
-#else
+    if (s->stream.state != NULL) 
+    {
+        if (s->mode == 'w') 
+        {
             err = deflateEnd(&(s->stream));
-#endif
-        } else if (s->mode == 'r') {
+        } 
+        else if (s->mode == 'r') 
+        {
             err = inflateEnd(&(s->stream));
         }
     }
-    if (s->file != NULL && fclose(s->file)) {
+    if (s->file != NULL && fclose(s->file)) 
+    {
 #ifdef ESPIPE
         if (errno != ESPIPE) /* fclose is broken for pipes in HP/UX */
 #endif
@@ -546,7 +547,6 @@ char * gzgets(file, buf, len)
 }
 
 
-#ifndef NO_GZCOMPRESS
 /* ===========================================================================
      Writes the given number of uncompressed bytes into the compressed file.
    gzwrite returns the number of bytes actually written (0 in case of error).
@@ -731,7 +731,7 @@ int gzflush (file, flush)
     fflush(s->file);
     return  s->z_err == Z_STREAM_END ? Z_OK : s->z_err;
 }
-#endif /* NO_GZCOMPRESS */
+
 
 /* ===========================================================================
       Sets the starting position for the next gzread or gzwrite on the given
@@ -749,26 +749,28 @@ int32_t gzseek (file, offset, whence)
     gz_stream *s = (gz_stream*)file;
 
     if (s == NULL || whence == SEEK_END ||
-        s->z_err == Z_ERRNO || s->z_err == Z_DATA_ERROR) {
+        s->z_err == Z_ERRNO || s->z_err == Z_DATA_ERROR) 
+    {
         return -1L;
     }
 
-    if (s->mode == 'w') {
-#ifdef NO_GZCOMPRESS
-        return -1L;
-#else
-        if (whence == SEEK_SET) {
+    if (s->mode == 'w') 
+    {
+        if (whence == SEEK_SET) 
+        {
             offset -= s->in;
         }
         if (offset < 0) return -1L;
 
         /* At this point, offset is the number of zero bytes to write. */
-        if (s->inbuf == Z_NULL) {
+        if (s->inbuf == Z_NULL) 
+        {
             s->inbuf = (uint8_t*)ALLOC(Z_BUFSIZE); /* for seeking */
             if (s->inbuf == Z_NULL) return -1L;
             zmemzero(s->inbuf, Z_BUFSIZE);
         }
-        while (offset > 0)  {
+        while (offset > 0)  
+        {
             uint32_t size = Z_BUFSIZE;
             if (offset < Z_BUFSIZE) size = (uint32_t)offset;
 
@@ -778,17 +780,18 @@ int32_t gzseek (file, offset, whence)
             offset -= size;
         }
         return s->in;
-#endif
     }
     /* Rest of function is for reading only */
 
     /* compute absolute position */
-    if (whence == SEEK_CUR) {
+    if (whence == SEEK_CUR) 
+    {
         offset += s->out;
     }
     if (offset < 0) return -1L;
 
-    if (s->transparent) {
+    if (s->transparent) 
+    {
         /* map to fseek */
         s->back = EOF;
         s->stream.avail_in = 0;
@@ -800,24 +803,30 @@ int32_t gzseek (file, offset, whence)
     }
 
     /* For a negative seek, rewind and use positive seek */
-    if (offset >= s->out) {
+    if (offset >= s->out) 
+    {
         offset -= s->out;
-    } else if (gzrewind(file) < 0) {
+    } 
+    else if (gzrewind(file) < 0) 
+    {
         return -1L;
     }
     /* offset is now the number of bytes to skip. */
 
-    if (offset != 0 && s->outbuf == Z_NULL) {
+    if (offset != 0 && s->outbuf == Z_NULL) 
+    {
         s->outbuf = (uint8_t*)ALLOC(Z_BUFSIZE);
         if (s->outbuf == Z_NULL) return -1L;
     }
-    if (offset && s->back != EOF) {
+    if (offset && s->back != EOF) 
+    {
         s->back = EOF;
         s->out++;
         offset--;
         if (s->last) s->z_err = Z_STREAM_END;
     }
-    while (offset > 0)  {
+    while (offset > 0)  
+    {
         int size = Z_BUFSIZE;
         if (offset < Z_BUFSIZE) size = (int)offset;
 
@@ -934,16 +943,13 @@ int gzclose (file)
 
     if (s == NULL) return Z_STREAM_ERROR;
 
-    if (s->mode == 'w') {
-#ifdef NO_GZCOMPRESS
-        return Z_STREAM_ERROR;
-#else
+    if (s->mode == 'w') 
+    {
         if (do_flush (file, Z_FINISH) != Z_OK)
             return destroy((gz_stream*)file);
 
         putLong (s->file, s->crc);
         putLong (s->file, (uint32_t)(s->in & 0xffffffff));
-#endif
     }
     return destroy((gz_stream*)file);
 }

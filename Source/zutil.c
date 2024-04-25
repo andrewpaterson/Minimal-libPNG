@@ -73,9 +73,6 @@ uint32_t zlibCompileFlags()
 #ifdef DYNAMIC_CRC_TABLE
     flags += 1 << 13;
 #endif
-#ifdef NO_GZCOMPRESS
-    flags += 1L << 16;
-#endif
 #ifdef NO_GZIP
     flags += 1L << 17;
 #endif
