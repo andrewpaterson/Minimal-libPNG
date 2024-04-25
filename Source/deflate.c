@@ -154,10 +154,6 @@ local const config configuration_table[10] = {
 #define EQUAL 0
 /* result of memcmp for equal strings */
 
-#ifndef NO_DUMMY_DECL
-struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
-#endif
-
 /* ===========================================================================
  * Update a hash value with the given input byte
  * IN  assertion: all calls to to UPDATE_HASH are made with consecutive
