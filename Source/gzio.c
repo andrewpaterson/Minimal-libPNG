@@ -12,16 +12,9 @@
 #include "zutil.h"
 
 
-#ifndef Z_BUFSIZE
-#  ifdef MAXSEG_64K
-#    define Z_BUFSIZE 4096 /* minimize memory usage for 16-bit DOS */
-#  else
-#    define Z_BUFSIZE 16384
-#  endif
-#endif
-#ifndef Z_PRINTF_BUFSIZE
-#  define Z_PRINTF_BUFSIZE 4096
-#endif
+#define Z_BUFSIZE 4096 /* minimize memory usage for 16-bit DOS */
+
+#define Z_PRINTF_BUFSIZE 4096
 
 #ifndef STDC
 extern void *  malloc (uint32_t size);

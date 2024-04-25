@@ -890,9 +890,6 @@ int deflateCopy(dest, source)
 z_streamp dest;
 z_streamp source;
 {
-#ifdef MAXSEG_64K
-	return Z_STREAM_ERROR;
-#else
 	deflate_state* ds;
 	deflate_state* ss;
 	uint16_t* overlay;
@@ -938,7 +935,6 @@ z_streamp source;
 	ds->bl_desc.dyn_tree = ds->bl_tree;
 
 	return Z_OK;
-#endif /* MAXSEG_64K */
 }
 
 /* ===========================================================================

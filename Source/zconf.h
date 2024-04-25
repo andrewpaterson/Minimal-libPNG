@@ -14,10 +14,8 @@
  * Compile with -DMAXSEG_64K if the alloc function cannot allocate more
  * than 64k bytes at a time (needed on systems with 16-bit int).
  */
-//#define MAXSEG_64K
 
 #define STDC
-
 #define MAX_MEM_LEVEL 8
 
 

@@ -30,10 +30,6 @@ int compress2 (dest, destLen, source, sourceLen, level)
 
     stream.next_in = (uint8_t*)source;
     stream.avail_in = (uint32_t)sourceLen;
-#ifdef MAXSEG_64K
-    /* Check for source > 64K on 16-bit machine: */
-    if ((uint32_t)stream.avail_in != sourceLen) return Z_BUF_ERROR;
-#endif
     stream.next_out = dest;
     stream.avail_out = (uint32_t)*destLen;
     if ((uint32_t)stream.avail_out != *destLen) return Z_BUF_ERROR;
