@@ -32,7 +32,6 @@ void png_write_data(png_structp png_ptr, uint8_t* data, size_t length)
       png_error(png_ptr, "Call to NULL write function");
 }
 
-#if !defined(PNG_NO_STDIO)
 /* This is the function that does the actual writing of data.  If you are
    not writing to a standard C stream, you should create a replacement
    write_data function and use it at run time with png_set_write_fn(), rather
@@ -47,7 +46,6 @@ png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length)
    if (check != length)
       png_error(png_ptr, "Write Error");
 }
-#endif
 
 /* This function is called to output any data pending writing (normally
    to disk).  After png_flush is called, there should be no data pending
@@ -59,7 +57,6 @@ void png_flush(png_structp png_ptr)
       (*(png_ptr->output_flush_fn))(png_ptr);
 }
 
-#if !defined(PNG_NO_STDIO)
 void
 png_default_flush(png_structp png_ptr)
 {
@@ -69,7 +66,6 @@ png_default_flush(png_structp png_ptr)
    if (io_ptr != NULL)
       fflush(io_ptr);
 }
-#endif
 #endif
 
 /* This function allows the application to supply new output functions for
@@ -101,24 +97,16 @@ png_set_write_fn(png_structp png_ptr, void* io_ptr,
    if(png_ptr == NULL) return;
    png_ptr->io_ptr = io_ptr;
 
-#if !defined(PNG_NO_STDIO)
    if (write_data_fn != NULL)
       png_ptr->write_data_fn = write_data_fn;
    else
       png_ptr->write_data_fn = png_default_write_data;
-#else
-   png_ptr->write_data_fn = write_data_fn;
-#endif
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
-#if !defined(PNG_NO_STDIO)
    if (output_flush_fn != NULL)
       png_ptr->output_flush_fn = output_flush_fn;
    else
       png_ptr->output_flush_fn = png_default_flush;
-#else
-   png_ptr->output_flush_fn = output_flush_fn;
-#endif
 #endif /* PNG_WRITE_FLUSH_SUPPORTED */
 
    /* It is an error to read while writing a png file */

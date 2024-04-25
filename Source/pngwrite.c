@@ -279,7 +279,6 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
          (user_png_ver[0] == '1' && user_png_ver[2] != png_libpng_ver[2]) ||
          (user_png_ver[0] == '0' && user_png_ver[2] < '9'))
      {
-#if !defined(PNG_NO_STDIO)
         char msg[80];
         if (user_png_ver)
         {
@@ -290,7 +289,6 @@ png_create_write_struct_2(const char* user_png_ver, void* error_ptr,
         sprintf(msg, "Application  is  running with png.c from libpng-%.20s",
            png_libpng_ver);
         png_warning(png_ptr, msg);
-#endif
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
         png_ptr->flags=0;
 #endif
@@ -327,7 +325,6 @@ png_write_init_2(png_structp png_ptr, const char* user_png_ver,
 {
    /* We only come here via pre-1.0.12-compiled applications */
    if(png_ptr == NULL) return;
-#if !defined(PNG_NO_STDIO)
    if(sizeof(png_struct) > png_struct_size ||
       sizeof(png_info) > png_info_size)
    {
@@ -343,7 +340,6 @@ png_write_init_2(png_structp png_ptr, const char* user_png_ver,
          png_libpng_ver);
       png_warning(png_ptr, msg);
    }
-#endif
    if(sizeof(png_struct) > png_struct_size)
      {
        png_ptr->error_fn=NULL;

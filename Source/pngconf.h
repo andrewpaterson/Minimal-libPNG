@@ -63,23 +63,9 @@
  * unless (PNG_DEBUG > 0) has been #defined.
  *
  * #define PNG_NO_CONSOLE_IO
- * #define PNG_NO_STDIO
  */
 
-#  ifdef PNG_NO_STDIO
-#    ifndef PNG_NO_CONSOLE_IO
-#      define PNG_NO_CONSOLE_IO
-#    endif
-#    ifdef PNG_DEBUG
-#      if (PNG_DEBUG > 0)
-#        include <stdio.h>
-#      endif
-#    endif
-#  else
-/* "stdio.h" functions are not supported on WindowsCE */
-#      include <stdio.h>
-#  endif
-
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <malloc.h>

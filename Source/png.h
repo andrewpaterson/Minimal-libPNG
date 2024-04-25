@@ -1409,10 +1409,8 @@ extern void png_set_compression_method(png_structp png_ptr, int method);
  * more information.
  */
 
-#if !defined(PNG_NO_STDIO)
 /* Initialize the input/output for the PNG file to the default functions. */
 extern void png_init_io(png_structp png_ptr, FILE* fp);
-#endif
 
 /* Replace the (error and abort), and warning functions with user
  * supplied functions.  If no messages are to be printed you must still
@@ -2097,9 +2095,7 @@ void png_push_fill_buffer(png_structp png_ptr, uint8_t* buffer, size_t length);
 void png_default_write_data(png_structp png_ptr, uint8_t* data, size_t length);
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
-#if !defined(PNG_NO_STDIO)
 void png_default_flush(png_structp png_ptr);
-#endif
 #endif
 
 /* Reset the CRC variable */

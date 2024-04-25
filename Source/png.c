@@ -522,7 +522,6 @@ void* png_get_io_ptr(png_structp png_ptr)
 }
 
 #if defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED)
-#if !defined(PNG_NO_STDIO)
 /* Initialize the default input/output functions for the PNG file.  If you
  * use your own read or write routines, you can call either png_set_read_fn()
  * or png_set_write_fn() instead of png_init_io().  If you have defined
@@ -535,7 +534,6 @@ void png_init_io(png_structp png_ptr, FILE* fp)
    if(png_ptr == NULL) return;
    png_ptr->io_ptr = (void*)fp;
 }
-#endif
 
 #endif /* defined(PNG_READ_SUPPORTED) || defined(PNG_WRITE_SUPPORTED) */
 

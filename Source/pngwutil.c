@@ -652,14 +652,10 @@ size_t png_check_keyword(png_structp png_ptr, char* key, png_charpp new_key)
    {
       if (*kp < 0x20 || (*kp > 0x7E && (uint8_t)*kp < 0xA1))
       {
-#if !defined(PNG_NO_STDIO)
          char msg[40];
 
          sprintf(msg, "invalid keyword character 0x%02X", *kp);
          png_warning(png_ptr, msg);
-#else
-         png_warning(png_ptr, "invalid character in keyword");
-#endif
          *dp = ' ';
       }
       else

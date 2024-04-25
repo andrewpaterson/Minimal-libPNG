@@ -38,10 +38,6 @@
      check=(size_t)fwrite(data,(size_t)1, length, file)
 #  define FCLOSE(file) fclose(file)
 
-#if defined(PNG_NO_STDIO)
-     typedef FILE                * FILE*;
-#endif
-
 /* Makes pngtest verbose so we can find problems (needs to be before png.h) */
 #ifndef PNG_DEBUG
 #  define PNG_DEBUG 0
@@ -214,82 +210,6 @@ void count_zero_samples(png_structp png_ptr, png_row_infop row_info, uint8_t* da
 
 static int wrote_question = 0;
 
-#if defined(PNG_NO_STDIO)
-/* START of code to validate stdio-free compilation */
-/* These copies of the default read/write functions come from pngrio.c and */
-/* pngwio.c.  They allow "don't include stdio" testing of the library. */
-/* This is the function that does the actual reading of data.  If you are
-   not reading from a standard C stream, you should create a replacement
-   read_data function and use it at run time with png_set_read_fn(), rather
-   than changing the library. */
-
-static void
-pngtest_read_data(png_structp png_ptr, uint8_t* data, size_t length)
-{
-   size_t check;
-
-   /* fread() returns 0 on error, so it is OK to store this in a size_t
-    * instead of an int, which is what fread() actually returns.
-    */
-   READFILE((FILE*)png_ptr->io_ptr, data, length, check);
-
-   if (check != length)
-   {
-      png_error(png_ptr, "Read Error!");
-   }
-}
-
-#if defined(PNG_WRITE_FLUSH_SUPPORTED)
-static void
-pngtest_flush(png_structp png_ptr)
-{
-}
-#endif
-
-/* This is the function that does the actual writing of data.  If you are
-   not writing to a standard C stream, you should create a replacement
-   write_data function and use it at run time with png_set_write_fn(), rather
-   than changing the library. */
-static void pngtest_write_data(png_structp png_ptr, uint8_t* data, size_t length)
-{
-   uint32_t check;
-
-   WRITEFILE((FILE*)png_ptr->io_ptr,  data, length, check);
-   if (check != length)
-   {
-      png_error(png_ptr, "Write Error");
-   }
-}
-
-/* This function is called when there is a warning, but the library thinks
- * it can continue anyway.  Replacement functions don't have to do anything
- * here if you don't want to.  In the default configuration, png_ptr is
- * not used, but it is passed in case it may be useful.
- */
-static void
-pngtest_warning(png_structp png_ptr, const char* message)
-{
-   const char *name = "UNKNOWN (ERROR!)";
-   if (png_ptr != NULL && png_ptr->error_ptr != NULL)
-      name = png_ptr->error_ptr;
-   fprintf(STDERR, "%s: libpng warning: %s\n", name, message);
-}
-
-/* This is the default error handling function.  Note that replacements for
- * this function MUST NOT RETURN, or the program will likely crash.  This
- * function is used by default, or if the program supplies NULL for the
- * error function pointer in png_set_error_fn().
- */
-static void
-pngtest_error(png_structp png_ptr, const char* message)
-{
-   pngtest_warning(png_ptr, message);
-   /* We can return because png_error calls the default handler, which is
-    * actually OK in this case. */
-}
-#endif /* PNG_NO_STDIO */
-/* END of code to validate stdio-free compilation */
-
 /* START of code to validate memory allocation and deallocation */
 #if defined(PNG_USER_MEM_SUPPORTED) && PNG_DEBUG
 
@@ -460,10 +380,6 @@ test_one_file(const char *inname, const char *outname)
    read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, (void*)NULL,
       (png_error_ptr)NULL, (png_error_ptr)NULL);
 #endif
-#if defined(PNG_NO_STDIO)
-   png_set_error_fn(read_ptr, (void*)inname, pngtest_error,
-       pngtest_warning);
-#endif
 #ifdef PNG_WRITE_SUPPORTED
 #if defined(PNG_USER_MEM_SUPPORTED) && PNG_DEBUG
    write_ptr = png_create_write_struct_2(PNG_LIBPNG_VER_STRING, (void*)NULL,
@@ -472,10 +388,6 @@ test_one_file(const char *inname, const char *outname)
 #else
    write_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, (void*)NULL,
       (png_error_ptr)NULL, (png_error_ptr)NULL);
-#endif
-#if defined(PNG_NO_STDIO)
-   png_set_error_fn(write_ptr, (void*)inname, pngtest_error,
-       pngtest_warning);
 #endif
 #endif
    png_debug(0, "Allocating read_info, write_info and end_info structures\n");
@@ -487,22 +399,10 @@ test_one_file(const char *inname, const char *outname)
 #endif
 
    png_debug(0, "Initializing input and output streams\n");
-#if !defined(PNG_NO_STDIO)
    png_init_io(read_ptr, fpin);
 #  ifdef PNG_WRITE_SUPPORTED
    png_init_io(write_ptr, fpout);
 #  endif
-#else
-   png_set_read_fn(read_ptr, (void*)fpin, pngtest_read_data);
-#  ifdef PNG_WRITE_SUPPORTED
-   png_set_write_fn(write_ptr, (void*)fpout,  pngtest_write_data,
-#    if defined(PNG_WRITE_FLUSH_SUPPORTED)
-      pngtest_flush);
-#    else
-      NULL);
-#    endif
-#  endif
-#endif
    if(status_dots_requested == 1)
    {
 #ifdef PNG_WRITE_SUPPORTED
