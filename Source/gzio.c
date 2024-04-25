@@ -13,14 +13,7 @@
 
 
 #define Z_BUFSIZE 4096 /* minimize memory usage for 16-bit DOS */
-
 #define Z_PRINTF_BUFSIZE 4096
-
-#ifndef STDC
-extern void *  malloc (uint32_t size);
-extern void   free   (void * ptr);
-#endif
-
 #define ALLOC(size) malloc(size)
 #define TRYFREE(p) {if (p) free(p);}
 
@@ -415,7 +408,7 @@ int gzread (file, buf, len)
             uint32_t n = s->stream.avail_in;
             if (n > s->stream.avail_out) n = s->stream.avail_out;
             if (n > 0) {
-                zmemcpy(s->stream.next_out, s->stream.next_in, n);
+                memcpy(s->stream.next_out, s->stream.next_in, n);
                 next_out += n;
                 s->stream.next_out = next_out;
                 s->stream.next_in   += n;
@@ -757,7 +750,7 @@ int32_t gzseek (file, offset, whence)
         {
             s->inbuf = (uint8_t*)ALLOC(Z_BUFSIZE); /* for seeking */
             if (s->inbuf == Z_NULL) return -1L;
-            zmemzero(s->inbuf, Z_BUFSIZE);
+            memzero(s->inbuf, Z_BUFSIZE);
         }
         while (offset > 0)  
         {

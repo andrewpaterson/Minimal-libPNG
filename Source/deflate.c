@@ -191,7 +191,7 @@ local const config configuration_table[10] = {
 	*/
 #define CLEAR_HASH(s) \
     s->head[s->hash_size-1] = NIL; \
-    zmemzero((uint8_t *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
+    memzero((uint8_t *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
 
 	/* ========================================================================= */
 int deflateInit_(strm, level, version, stream_size)
@@ -329,7 +329,7 @@ uint32_t  dictLength;
 		length = MAX_DIST(s);
 		dictionary += dictLength - length; /* use the tail of the dictionary */
 	}
-	zmemcpy(s->window, dictionary, length);
+	memcpy(s->window, dictionary, length);
 	s->strstart = length;
 	s->block_start = (int32_t)length;
 
@@ -530,7 +530,7 @@ z_streamp strm;
 	if (len > strm->avail_out) len = strm->avail_out;
 	if (len == 0) return;
 
-	zmemcpy(strm->next_out, strm->state->pending_out, len);
+	memcpy(strm->next_out, strm->state->pending_out, len);
 	strm->next_out += len;
 	strm->state->pending_out += len;
 	strm->total_out += len;
@@ -901,12 +901,12 @@ z_streamp source;
 
 	ss = source->state;
 
-	zmemcpy(dest, source, sizeof(z_stream));
+	memcpy(dest, source, sizeof(z_stream));
 
 	ds = (deflate_state*)ZALLOC(dest, 1, sizeof(deflate_state));
 	if (ds == Z_NULL) return Z_MEM_ERROR;
 	dest->state = (struct internal_state*)ds;
-	zmemcpy(ds, ss, sizeof(deflate_state));
+	memcpy(ds, ss, sizeof(deflate_state));
 	ds->strm = dest;
 
 	ds->window = (uint8_t*)ZALLOC(dest, ds->w_size, 2 * sizeof(uint8_t));
@@ -920,11 +920,11 @@ z_streamp source;
 		deflateEnd(dest);
 		return Z_MEM_ERROR;
 	}
-	/* following zmemcpy do not work for 16-bit MSDOS */
-	zmemcpy(ds->window, ss->window, ds->w_size * 2 * sizeof(uint8_t));
-	zmemcpy(ds->prev, ss->prev, ds->w_size * sizeof(Pos));
-	zmemcpy(ds->head, ss->head, ds->hash_size * sizeof(Pos));
-	zmemcpy(ds->pending_buf, ss->pending_buf, (uint32_t)ds->pending_buf_size);
+	/* following memcpy do not work for 16-bit MSDOS */
+	memcpy(ds->window, ss->window, ds->w_size * 2 * sizeof(uint8_t));
+	memcpy(ds->prev, ss->prev, ds->w_size * sizeof(Pos));
+	memcpy(ds->head, ss->head, ds->hash_size * sizeof(Pos));
+	memcpy(ds->pending_buf, ss->pending_buf, (uint32_t)ds->pending_buf_size);
 
 	ds->pending_out = ds->pending_buf + (ss->pending_out - ss->pending_buf);
 	ds->d_buf = overlay + ds->lit_bufsize / sizeof(uint16_t);
@@ -964,7 +964,7 @@ unsigned size;
 		strm->adler = crc32(strm->adler, strm->next_in, len);
 	}
 #endif
-	zmemcpy(buf, strm->next_in, len);
+	memcpy(buf, strm->next_in, len);
 	strm->next_in += len;
 	strm->total_in += len;
 
@@ -1226,7 +1226,7 @@ IPos start, match;
 int length;
 {
 	/* check that the match is indeed a match */
-	if (zmemcmp(s->window + match,
+	if (memcmp(s->window + match,
 		s->window + start, length) != EQUAL) {
 		fprintf(stderr, " start %u, match %u, length %d\n",
 			start, match, length);
@@ -1284,7 +1284,7 @@ deflate_state* s;
 		 */
 		if (s->strstart >= wsize + MAX_DIST(s)) {
 
-			zmemcpy(s->window, s->window + wsize, (unsigned)wsize);
+			memcpy(s->window, s->window + wsize, (unsigned)wsize);
 			s->match_start -= wsize;
 			s->strstart -= wsize; /* we now have strstart >= MAX_DIST */
 			s->block_start -= (int32_t)wsize;

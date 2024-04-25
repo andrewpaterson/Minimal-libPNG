@@ -121,9 +121,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #  define NO_vsnprintf
 #endif
 
-#define zmemcpy memcpy
-#define zmemcmp memcmp
-#define zmemzero(dest, len) memset(dest, 0, len)
+#define memzero(dest, len) memset(dest, 0, len)
 
 /* Diagnostic functions */
 #ifdef DEBUG
