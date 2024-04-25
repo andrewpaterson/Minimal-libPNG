@@ -28,23 +28,22 @@
 
 #include "zutil.h"      /* for STDC  */
 
-#define local static
 
 
 /* Definitions for doing the crc four data bytes at a time. */
 #ifdef BYFOUR
 #  define REV(w) (((w)>>24)+(((w)>>8)&0xff00)+ \
                 (((w)&0xff00)<<8)+(((w)&0xff)<<24))
-   local uint32_t crc32_little (uint32_t,                        const uint8_t *, unsigned);
-   local uint32_t crc32_big (uint32_t,                        const uint8_t *, unsigned);
+   static uint32_t crc32_little (uint32_t,                        const uint8_t *, unsigned);
+   static uint32_t crc32_big (uint32_t,                        const uint8_t *, unsigned);
 #  define TBLS 8
 #else
 #  define TBLS 1
 #endif /* BYFOUR */
 
 /* Local functions for crc concatenation */
-local uint32_t gf2_matrix_times (uint32_t *mat, uint32_t vec);
-local void gf2_matrix_square (uint32_t *square, uint32_t *mat);
+static uint32_t gf2_matrix_times (uint32_t *mat, uint32_t vec);
+static void gf2_matrix_square (uint32_t *square, uint32_t *mat);
 
 
 /* ========================================================================
@@ -108,7 +107,7 @@ uint32_t crc32(crc, buf, len)
 #define DOLIT32 DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4; DOLIT4
 
 /* ========================================================================= */
-local uint32_t crc32_little(crc, buf, len)
+static uint32_t crc32_little(crc, buf, len)
     uint32_t crc;
     const uint8_t *buf;
     unsigned len;
@@ -148,7 +147,7 @@ local uint32_t crc32_little(crc, buf, len)
 #define DOBIG32 DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4; DOBIG4
 
 /* ========================================================================= */
-local uint32_t crc32_big(crc, buf, len)
+static uint32_t crc32_big(crc, buf, len)
     uint32_t crc;
     const uint8_t *buf;
     unsigned len;
@@ -188,7 +187,7 @@ local uint32_t crc32_big(crc, buf, len)
 #define GF2_DIM 32      /* dimension of GF(2) vectors (length of CRC) */
 
 /* ========================================================================= */
-local uint32_t gf2_matrix_times(mat, vec)
+static uint32_t gf2_matrix_times(mat, vec)
     uint32_t *mat;
     uint32_t vec;
 {
@@ -205,7 +204,7 @@ local uint32_t gf2_matrix_times(mat, vec)
 }
 
 /* ========================================================================= */
-local void gf2_matrix_square(square, mat)
+static void gf2_matrix_square(square, mat)
     uint32_t *square;
     uint32_t *mat;
 {

@@ -73,28 +73,28 @@ typedef enum {
 typedef block_state(*compress_func) (deflate_state* s, int flush);
 /* Compression function. Returns the block state after the call. */
 
-local void fill_window(deflate_state* s);
-local block_state deflate_stored(deflate_state* s, int flush);
-local block_state deflate_fast(deflate_state* s, int flush);
+static void fill_window(deflate_state* s);
+static block_state deflate_stored(deflate_state* s, int flush);
+static block_state deflate_fast(deflate_state* s, int flush);
 #ifndef FASTEST
-local block_state deflate_slow(deflate_state* s, int flush);
+static block_state deflate_slow(deflate_state* s, int flush);
 #endif
-local void lm_init(deflate_state* s);
-local void putShortMSB(deflate_state* s, uint32_t b);
-local void flush_pending(z_streamp strm);
-local int read_buf(z_streamp strm, uint8_t* buf, unsigned size);
+static void lm_init(deflate_state* s);
+static void putShortMSB(deflate_state* s, uint32_t b);
+static void flush_pending(z_streamp strm);
+static int read_buf(z_streamp strm, uint8_t* buf, unsigned size);
 #ifndef FASTEST
 #ifdef ASMV
 void match_init(void); /* asm code initialization */
 uint32_t longest_match(deflate_state* s, IPos cur_match);
 #else
-local uint32_t longest_match(deflate_state* s, IPos cur_match);
+static uint32_t longest_match(deflate_state* s, IPos cur_match);
 #endif
 #endif
-local uint32_t longest_match_fast(deflate_state* s, IPos cur_match);
+static uint32_t longest_match_fast(deflate_state* s, IPos cur_match);
 
 #ifdef DEBUG
-local  void check_match(deflate_state* s, IPos start, IPos match, int length);
+static  void check_match(deflate_state* s, IPos start, IPos match, int length);
 #endif
 
 /* ===========================================================================
@@ -126,12 +126,12 @@ typedef struct config_s {
 } config;
 
 #ifdef FASTEST
-local const config configuration_table[2] = {
+static const config configuration_table[2] = {
 	/*      good lazy nice chain */
 	/* 0 */ {0,    0,  0,    0, deflate_stored},  /* store only */
 	/* 1 */ {4,    4,  8,    4, deflate_fast} }; /* max speed, no lazy matches */
 #else
-local const config configuration_table[10] = {
+static const config configuration_table[10] = {
 	/*      good lazy nice chain */
 	/* 0 */ {0,    0,  0,    0, deflate_stored},  /* store only */
 	/* 1 */ {4,    4,  8,    4, deflate_fast}, /* max speed, no lazy matches */
@@ -508,7 +508,7 @@ uint32_t sourceLen;
  * IN assertion: the stream state is correct and there is enough room in
  * pending_buf.
  */
-local void putShortMSB(s, b)
+static void putShortMSB(s, b)
 deflate_state* s;
 uint32_t b;
 {
@@ -522,7 +522,7 @@ uint32_t b;
  * to avoid allocating a large strm->next_out buffer and copying into it.
  * (See also read_buf()).
  */
-local void flush_pending(strm)
+static void flush_pending(strm)
 z_streamp strm;
 {
 	unsigned len = strm->state->pending;
@@ -944,7 +944,7 @@ z_streamp source;
  * allocating a large strm->next_in buffer and copying from it.
  * (See also flush_pending()).
  */
-local int read_buf(strm, buf, size)
+static int read_buf(strm, buf, size)
 z_streamp strm;
 uint8_t* buf;
 unsigned size;
@@ -974,7 +974,7 @@ unsigned size;
 /* ===========================================================================
  * Initialize the "longest match" routines for a new zlib stream
  */
-local void lm_init(s)
+static void lm_init(s)
 deflate_state* s;
 {
 	s->window_size = (uint32_t)2L * s->w_size;
@@ -1015,7 +1015,7 @@ deflate_state* s;
  /* For 80x86 and 680x0, an optimized version will be provided in match.asm or
   * match.S. The code will be functionally equivalent.
   */
-local uint32_t longest_match(s, cur_match)
+static uint32_t longest_match(s, cur_match)
 deflate_state* s;
 IPos cur_match;                             /* current match */
 {
@@ -1163,7 +1163,7 @@ IPos cur_match;                             /* current match */
 /* ---------------------------------------------------------------------------
  * Optimized version for level == 1 or strategy == Z_RLE only
  */
-local uint32_t longest_match_fast(s, cur_match)
+static uint32_t longest_match_fast(s, cur_match)
 deflate_state* s;
 IPos cur_match;                             /* current match */
 {
@@ -1220,7 +1220,7 @@ IPos cur_match;                             /* current match */
 /* ===========================================================================
  * Check that the match at match_start is indeed a match.
  */
-local void check_match(s, start, match, length)
+static void check_match(s, start, match, length)
 deflate_state* s;
 IPos start, match;
 int length;
@@ -1254,7 +1254,7 @@ int length;
  *    performed for at least two bytes (required for the zip translate_eol
  *    option -- not supported here).
  */
-local void fill_window(s)
+static void fill_window(s)
 deflate_state* s;
 {
 	register unsigned n, m;
@@ -1379,7 +1379,7 @@ deflate_state* s;
  * NOTE: this function should be optimized to avoid extra copying from
  * window to pending_buf.
  */
-local block_state deflate_stored(s, flush)
+static block_state deflate_stored(s, flush)
 deflate_state* s;
 int flush;
 {
@@ -1437,7 +1437,7 @@ int flush;
  * new strings in the dictionary only for unmatched strings or for short
  * matches. It is used only for the fast compression options.
  */
-local block_state deflate_fast(s, flush)
+static block_state deflate_fast(s, flush)
 deflate_state* s;
 int flush;
 {
@@ -1546,7 +1546,7 @@ int flush;
  * evaluation for matches: a match is finally adopted only if there is
  * no better match at the next window position.
  */
-local block_state deflate_slow(s, flush)
+static block_state deflate_slow(s, flush)
 deflate_state* s;
 int flush;
 {

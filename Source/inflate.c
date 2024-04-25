@@ -35,7 +35,7 @@
  * - Change post-increments to pre-increments in inflate_fast(), PPC biased?
  * - Add compile time option, POSTINC, to use post-increments instead (Intel?)
  * - Make MATCH copy in inflate() much faster for when inflate_fast() not used
- * - Use local copies of stream next and avail values, as well as local bit
+ * - Use local copies of stream next and avail values, as well as static bit
  *   buffer and bit count in inflate()--for speed when inflate_fast() not used
  *
  * 1.2.beta4    1 Jan 2003
@@ -92,12 +92,12 @@
 #endif
 
 /* function prototypes */
-local void fixedtables (struct inflate_state *state);
-local int updatewindow (z_streamp strm, unsigned out);
+static void fixedtables (struct inflate_state *state);
+static int updatewindow (z_streamp strm, unsigned out);
 #ifdef BUILDFIXED
    void makefixed (void);
 #endif
-local unsigned syncsearch (unsigned *have, uint8_t *buf, unsigned len);
+static unsigned syncsearch (unsigned *have, uint8_t *buf, unsigned len);
 
 int inflateReset(strm)
 z_streamp strm;
@@ -201,7 +201,7 @@ int stream_size;
    used for threaded applications, since the rewriting of the tables and virgin
    may not be thread-safe.
  */
-local void fixedtables(state)
+static void fixedtables(state)
 struct inflate_state *state;
 {
 #ifdef BUILDFIXED
@@ -319,7 +319,7 @@ void makefixed()
    output will fall in the output data, making match copies simpler and faster.
    The advantage may be dependent on the size of the processor's data caches.
  */
-local int updatewindow(strm, out)
+static int updatewindow(strm, out)
 z_streamp strm;
 unsigned out;
 {
@@ -1235,7 +1235,7 @@ gz_headerp head;
    called again with more data and the *have state.  *have is initialized to
    zero for the first call.
  */
-local unsigned syncsearch(have, buf, len)
+static unsigned syncsearch(have, buf, len)
 unsigned *have;
 uint8_t *buf;
 unsigned len;

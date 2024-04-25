@@ -47,13 +47,13 @@ typedef struct gz_stream {
 } gz_stream;
 
 
-local gzFile gz_open     (const char *path, const char *mode, int  fd);
-local int    do_flush     (gzFile file, int flush);
-local int    get_byte    (gz_stream *s);
-local void   check_header(gz_stream *s);
-local int    destroy     (gz_stream *s);
-local void   putLong     (FILE *file, uint32_t x);
-local uint32_t  getLong     (gz_stream *s);
+static gzFile gz_open     (const char *path, const char *mode, int  fd);
+static int    do_flush     (gzFile file, int flush);
+static int    get_byte    (gz_stream *s);
+static void   check_header(gz_stream *s);
+static int    destroy     (gz_stream *s);
+static void   putLong     (FILE *file, uint32_t x);
+static uint32_t  getLong     (gz_stream *s);
 
 /* ===========================================================================
      Opens a gzip (.gz) file for reading or writing. The mode parameter
@@ -64,7 +64,7 @@ local uint32_t  getLong     (gz_stream *s);
    can be checked to distinguish the two cases (if errno is zero, the
    zlib error is Z_MEM_ERROR).
 */
-local gzFile gz_open (path, mode, fd)
+static gzFile gz_open (path, mode, fd)
     const char *path;
     const char *mode;
     int  fd;
@@ -236,7 +236,7 @@ int gzsetparams (file, level, strategy)
    for end of file.
    IN assertion: the stream s has been sucessfully opened for reading.
 */
-local int get_byte(s)
+static int get_byte(s)
     gz_stream *s;
 {
     if (s->z_eof) return EOF;
@@ -263,7 +263,7 @@ local int get_byte(s)
        s->stream.avail_in is zero for the first time, but may be non-zero
        for concatenated .gz files.
 */
-local void check_header(s)
+static void check_header(s)
     gz_stream *s;
 {
     int method; /* method byte */
@@ -330,7 +330,7 @@ local void check_header(s)
  * Cleanup then free the given gz_stream. Return a zlib error code.
    Try freeing in the reverse order of allocations.
  */
-local int destroy (s)
+static int destroy (s)
     gz_stream *s;
 {
     int err = Z_OK;
@@ -662,7 +662,7 @@ int gzputs(file, s)
      Flushes all pending output into the compressed file. The parameter
    flush is as in the deflate() function.
 */
-local int do_flush (file, flush)
+static int do_flush (file, flush)
     gzFile file;
     int flush;
 {
@@ -886,7 +886,7 @@ int gzdirect (file)
 /* ===========================================================================
    Outputs a long in LSB order to the given file
 */
-local void putLong (file, x)
+static void putLong (file, x)
     FILE *file;
     uint32_t x;
 {
@@ -901,7 +901,7 @@ local void putLong (file, x)
    Reads a long in LSB order from the given gz_stream. Sets z_err in case
    of error.
 */
-local uint32_t getLong (s)
+static uint32_t getLong (s)
     gz_stream *s;
 {
     uint32_t x = (uint32_t)get_byte(s);
